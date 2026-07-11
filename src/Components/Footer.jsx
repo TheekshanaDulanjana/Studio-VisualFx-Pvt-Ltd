@@ -168,10 +168,10 @@ export default function Footer() {
              Copyright © {new Date().getFullYear()} Studio VisualFx (Pvt) Ltd. All Rights Reserved.
             </p>
             <div className="flex gap-6">
-              <button onClick={() => { navigate("/privacy-policy"); window.scrollTo(0,0); }} className="text-white/50 hover:text-white text-[9px] md:text-[10px] uppercase tracking-wider ">
+              <button onClick={() => { navigate("/privacy-policy"); window.scrollTo(0,0); }} className="text-white/50 cursor-pointer hover:text-white text-[9px] md:text-[10px] uppercase tracking-wider ">
                 Privacy Policy
               </button>
-              <button onClick={() => { navigate("/terms-conditions"); window.scrollTo(0,0); }} className="text-white/50 hover:text-white text-[9px] md:text-[10px] uppercase tracking-wider">
+              <button onClick={() => { navigate("/terms-conditions"); window.scrollTo(0,0); }} className="text-white/50 hover:text-white cursor-pointer text-[9px] md:text-[10px] uppercase tracking-wider">
                 Terms & Conditions
               </button>
             </div>

@@ -15,13 +15,14 @@ export default function PrivacyPolicy() {
             </h1>
 
             <p className="text-sm text-white text-justify leading-relaxed font-roboto">
-              At our company, we are committed to protecting your privacy. 
-              This Privacy Policy outlines how we collect, use, and safeguard your
-               personal information when you visit our website or use our services.
-                We respect your privacy and are dedicated to ensuring that your personal
-                 information is handled securely and responsibly. By using our website or
-                  services, you consent to the practices described in this Privacy Policy.
-            </p>
+              At Studio VisualFX (PVT) LTD, we are committed to protecting your 
+              privacy and handling your personal information with the highest level
+               of care and professionalism. This Privacy Policy explains what
+                information we collect during the booking process, how we use it, 
+                and the measures we take to keep it secure. By using our website or 
+                engaging our services, you acknowledge and agree to the practices 
+                outlined in this Privacy Policy.
+</p>
 
           </div>
         </div>

@@ -15,14 +15,13 @@ export default function TermofCondition() {
             </h1>
 
             <p className="text-sm text-white text-justify leading-relaxed font-roboto">
-              Welcome to our website. By accessing or using our services, you agree to be
-               bound by the following terms and conditions. Please read them carefully 
-               before using our website or services. If you do not agree with any part of 
-               these terms, you may not use our website or services. We reserve the right
-                to update or modify these terms at any time without prior notice. Your 
-                continued use of our website or services after any changes constitutes 
-                your acceptance of the new terms. If you have any questions about these
-                 terms, please contact us for clarification.
+              Welcome to Studio VisualFX (PVT) LTD. These Terms & Conditions outline the terms, 
+              responsibilities, and agreements between Studio VisualFX and our clients when 
+              booking and using our videography services. Please read these terms carefully 
+              before confirming your booking. By making an advance payment or engaging our 
+              services, you acknowledge that you have read, understood, and agreed to these 
+              Terms & Conditions. Studio VisualFX reserves the right to update or modify these 
+              terms when necessary to reflect changes in our services or business practices.
             </p>
 
           </div>
