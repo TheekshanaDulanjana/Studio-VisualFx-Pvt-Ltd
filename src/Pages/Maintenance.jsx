@@ -18,7 +18,7 @@ const Maintenance = () => {
           We're putting the finishing touches on a brand-new Studio VisualFX
           experience. Stay tuned as we prepare to launch our new website.
         </p>
-
+{/* coming soon message */}
         <div className="mt-10">
           <span className="inline-block border border-white/30 rounded-full px-8 py-3 text-white text-sm tracking-widest uppercase">
             Coming Soon
