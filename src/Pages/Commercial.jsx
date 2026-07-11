@@ -1,5 +1,5 @@
 import React from "react";
-import FallbackImg from "../assets/fallback.png";
+import FallbackImg from "../assets/HeroLFallback.jpg";
 
 const Commercial = () => {
   return (

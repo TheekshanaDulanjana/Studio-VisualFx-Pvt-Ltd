@@ -39,28 +39,28 @@ const FAQItem = ({ question, answer, isOpen, onClick }) => {
 const FAQSection = () => {
   const [activeIndex, setActiveIndex] = useState(null);
 
-  const faqs = [
-    {
-      question: "Do You Offer Revisions On Designs?",
-      answer: "Yes, I Provide Revisions To Ensure The Final Design Aligns Perfectly With Your Expectations."
-    },
-    {
-      question: "What Tools Do You Use For Your Work?",
-      answer: "I primarily use Figma for design and modern web technologies like React, Tailwind CSS, and Framer Motion for development."
-    },
-    {
-      question: "Can You Help With Branding From Scratch?",
-      answer: "Absolutely. I can help create visual identities including logos, color palettes, and typography guidelines."
-    },
-    {
-      question: "How Do You Approach A New Project?",
-      answer: "My process involves discovery and research, followed by wireframing, high-fidelity design, and final implementation."
-    },
-    {
-      question: "What Is The Cost Of Your Services?",
-      answer: "Pricing varies based on project scope. Please reach out via the contact form for a personalized quote."
-    }
-  ];
+const faqs = [
+  {
+    question: "Do we need to pay in advance to booking our wedding date?",
+    answer: "Yes, for your convenience and ours, advance payment is required to reserve the relevant date."
+  },
+  {
+    question: "Can you capture every single guest on my video?",
+    answer: "I do my best to capture all the guests. I strongly suggest arranging a table round session so that I can cover everyone without missing anything."
+  },
+  {
+    question: "How long will you take to edit and deliver the video?",
+    answer: "We will send you the final video within 8-12 weeks."
+  },
+  {
+    question: "Can I get the unedited RAW footage from all your cameras?",
+    answer: "Yes, RAW footage can be provided as an optional add-on upon request."
+  },
+  {
+    question: "Do you archive the footage after you deliver my video?",
+    answer: "Yes, we can archive your footage for a limited period as an optional add-on for future access."
+  }
+];
 
   return (
     <section className="py-12 px-6 sm:px-6 md:px-12 lg:px-16 ">

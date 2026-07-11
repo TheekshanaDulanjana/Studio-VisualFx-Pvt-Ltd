@@ -1,73 +1,142 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Studio VisualFX | Creative Wedding, Event & Commercial Videos</title>
+<head>
+  <!-- ============================================================
+       CHARSET / VIEWPORT — must be the very first tags in <head>
+  ============================================================= -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="Studio VisualFX is a dynamic video production and event photography company delivering high-quality visual content for weddings, events, commercials, and music videos.">
-    <meta name="keywords" content="Studio VisualFX, Wedding Videos, Matara Wedding Videography, Cinematographic, Modern Portfolio , Photography Websites ,Videography Websites , Sasanka Dulanjana , Theekshana Dulanjana, Colombo Event Photography, Commercial Videos, Music Videos, Sri Lanka">
-    <meta name="author" content="Studio VisualFX">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://www.studiovisualfx.lk" />
+  <!-- ============================================================
+       PRECONNECT / DNS-PREFETCH — put before Analytics + Fonts
+       so the browser opens connections early
+  ============================================================= -->
+  <link rel="preconnect" href="https://www.googletagmanager.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-    <!-- Favicons -->
-    <link rel="icon" type="image/svg+xml" href="/TabIcon.svg" />
-    <link rel="icon" type="image/png" href="/TabIcon.png" />
-    <link rel="apple-touch-icon" href="/TabIcon.png" />
+  <!-- ============================================================
+       PRIMARY SEO TAGS
+       NOTE: These are the SITE-WIDE fallback tags. Since this is a
+       client-rendered React SPA, every route (/about, /film-gallery,
+       /commercial, etc.) will show THESE tags to any crawler that
+       does not execute JavaScript (Bing, Facebook, WhatsApp,
+       LinkedIn, X/Twitter). You MUST override title/description/
+       canonical/OG per route using react-helmet-async (or migrate
+       to SSR/SSG with Next.js/Astro) — see notes at the bottom.
+  ============================================================= -->
+  <title>Studio VisualFX | Wedding, Event & Commercial Videography in Sri Lanka</title>
+  <meta name="description" content="Studio VisualFX is a Sri Lanka-based video production and photography studio crafting cinematic wedding films, event coverage, commercial videos and music videos. Based in Matara, serving island-wide." />
+  <link rel="canonical" href="https://www.studiovisualfx.com/" />
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Alata&family=Alatsi&family=Belleza&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <!-- Robots: index + follow, and explicitly allow rich snippets -->
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <meta name="googlebot" content="index, follow" />
 
-    <!-- Open Graph / Facebook / WhatsApp -->
-    <meta property="og:title" content="Studio VisualFX | Creative Wedding, Event & Commercial Videos" />
-    <meta property="og:description" content="Studio VisualFX is a dynamic video production and event photography company delivering high-quality visual content for weddings, events, commercials, and music videos." />
-    <meta property="og:image" content="/livepreview.jpg" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:type" content="image/jpeg" />
-    <meta property="og:url" content="https://www.studiovisualfx.lk" />
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Studio VisualFX" />
-    <meta property="og:locale" content="en_LK" />
+  <!-- Author / Publisher -->
+  <meta name="author" content="Studio VisualFX" />
 
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Studio VisualFX | Creative Wedding, Event & Commercial Videos" />
-    <meta name="twitter:description" content="Studio VisualFX is a dynamic video production and event photography company delivering high-quality visual content for weddings, events, commercials, and music videos." />
-    <meta name="twitter:image" content="/livepreview.jpg" />
-    <meta name="twitter:image:alt" content="Studio VisualFX - Wedding, Event & Commercial Videos" />
-    <meta name="twitter:site" content="@YourTwitterHandle" />
-    <meta name="twitter:creator" content="@YourTwitterHandle" />
+  <!-- ============================================================
+       FAVICONS / PWA
+  ============================================================= -->
+  <link rel="icon" type="image/svg+xml" href="/TabIcon.svg" />
+  <link rel="icon" type="image/png" href="/TabIcon.png" />
+  <link rel="apple-touch-icon" href="/TabIcon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#000000" />
 
-    <!-- Structured Data / JSON-LD -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "Studio VisualFX",
-        "url": "https://www.studiovisualfx.lk",
-        "logo": "https://www.studiovisualfx.lk/TabIcon.png",
-        "sameAs": [
-          "https://www.facebook.com/YourPage",
-          "https://wa.me/YourNumber",
-          "https://www.instagram.com/YourPage"
-        ],
-        "description": "Studio VisualFX is a dynamic video production and event photography company delivering high-quality visual content for weddings, events, commercials, and music videos."
-      }
-    </script>
-  </head>
+  <!-- ============================================================
+       GOOGLE FONTS
+       NOTE: Loading fonts directly from Google's servers sends EU
+       visitors' IP addresses to Google at request time, which has
+       triggered GDPR fines for some EU sites (e.g. a German court
+       ruling in 2022). If you expect EU traffic, self-host these
+       fonts instead (see notes at bottom). font-display: swap is
+       added below regardless, to avoid invisible-text-on-load (FOIT).
+  ============================================================= -->
+  <link href="https://fonts.googleapis.com/css2?family=Alata&family=Alatsi&family=Belleza&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
 
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+  <!-- ============================================================
+       OPEN GRAPH (Facebook / WhatsApp / LinkedIn)
+       Image path fixed to ABSOLUTE URL — relative paths are
+       unreliable across social crawlers.
+  ============================================================= -->
+  <meta property="og:title" content="Studio VisualFX | Wedding, Event & Commercial Videography in Sri Lanka" />
+  <meta property="og:description" content="Cinematic wedding films, event coverage, commercial and music videos — crafted by Studio VisualFX, Sri Lanka." />
+  <meta property="og:image" content="https://www.studiovisualfx.com/livepreview.jpg" />
+  <meta property="og:image:secure_url" content="https://www.studiovisualfx.com/livepreview.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:alt" content="Studio VisualFX — Wedding, Event & Commercial Videography" />
+  <meta property="og:url" content="https://www.studiovisualfx.com/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Studio VisualFX" />
+  <meta property="og:locale" content="en_LK" />
+
+  <!-- ============================================================
+       TWITTER / X CARD
+       NOTE: Replace placeholder handles below with your real
+       @handle, or remove these two lines entirely if you have none
+       — a placeholder handle looks spammy to platform crawlers.
+  ============================================================= -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Studio VisualFX | Wedding, Event & Commercial Videography in Sri Lanka" />
+  <meta name="twitter:description" content="Cinematic wedding films, event coverage, commercial and music videos — crafted by Studio VisualFX, Sri Lanka." />
+  <meta name="twitter:image" content="https://www.studiovisualfx.com/livepreview.jpg" />
+  <meta name="twitter:image:alt" content="Studio VisualFX - Wedding, Event & Commercial Videos" />
+  <!-- <meta name="twitter:site" content="@YourRealHandle" /> -->
+  <!-- <meta name="twitter:creator" content="@YourRealHandle" /> -->
+
+  <!-- ============================================================
+       STRUCTURED DATA — LocalBusiness (upgraded from Organization)
+       Fill in the real phone number, address, geo-coordinates and
+       social profile URLs below. LocalBusiness is what enables
+       Google's local pack / Maps visibility, which Organization
+       alone does not do as effectively.
+  ============================================================= -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Studio VisualFX (Pvt) Ltd",
+    "image": "https://www.studiovisualfx.com/livepreview.jpg",
+    "url": "https://www.studiovisualfx.com",
+    "logo": "https://www.studiovisualfx.com/TabIcon.png",
+    "description": "Studio VisualFX is a dynamic video production and event photography company delivering high-quality visual content for weddings, events, commercials, and music videos.",
+    "telephone": "+94 77 699 6981",
+    "priceRange": "$$",
+    "address": {
+      "addressLocality": "Matara",
+      "addressRegion": "Southern Province",
+      "postalCode": "81000",
+      "addressCountry": "LK"
+    },
+
+    "sameAs": [
+      "https://facebook.com/visualfxsl",
+      "https://www.instagram.com/studiovisualfx",
+      "https://wa.me/94776996981"
+    ]
+  }
+  </script>
+
+  <!-- ============================================================
+       Google Analytics (GA4)
+       Consider loading this only after cookie consent is granted
+       if you expect EU visitors (GDPR).
+  ============================================================= -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HGGY56NJ90"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-HGGY56NJ90');
+  </script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
 </html>
-
-
-
-

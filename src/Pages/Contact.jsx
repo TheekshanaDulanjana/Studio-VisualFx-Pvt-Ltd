@@ -124,8 +124,8 @@ const Contact = () => {
                     <span className="font-belleza text-lg">Dial</span>
                   </div>
                   <div className="flex flex-col ml-6 font-roboto space-y-1">
-                    <a className="text-gray-300 hover:text-white transition" href="tel:+971569169750">+971 56 916 9750</a>
-                    <a className="text-gray-300 hover:text-white transition" href="tel:+971569169750">+971 56 916 9750</a>
+                    <a className="text-gray-300 hover:text-white transition" href="tel:+94719896981">+94 71 989 6981</a>
+                    <a className="text-gray-300 hover:text-white transition" href="tel:+94776996981">+94 77 699 6981</a>
                   </div>
                 </div>
 
@@ -135,8 +135,7 @@ const Contact = () => {
                     <span className="font-belleza text-lg">Whatsapp</span>
                   </div>
                   <div className="flex flex-col ml-6 font-roboto space-y-1">
-                    <a className="text-gray-300 hover:text-white transition" href="https://wa.me/971569169750" target="_blank" rel="noopener noreferrer">+971 56 916 9750</a>
-                    <a className="text-gray-300 hover:text-white transition" href="https://wa.me/971569169750" target="_blank" rel="noopener noreferrer">+971 56 916 9750</a>
+                    <a className="text-gray-300 hover:text-white transition" href="https://wa.me/94776996981" target="_blank" rel="noopener noreferrer">+94 77 699 6981</a>
                   </div>
                 </div>
 
@@ -146,8 +145,8 @@ const Contact = () => {
                     <span className="font-belleza text-lg">Catch us on us!</span>
                   </div>
                   <div className="ml-6 text-gray-300 font-roboto hover:text-white space-y-1">
-                    <p><a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer">Facebook</a></p>
-                    <p><a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">Instagram</a></p>
+                    <p><a href="https://facebook.com/visualfxsl" target="_blank" rel="noopener noreferrer">Facebook</a></p>
+                    <p><a href="https://www.instagram.com/studiovisualfx" target="_blank" rel="noopener noreferrer">Instagram</a></p>
                   </div>
                 </div>
 
@@ -157,7 +156,7 @@ const Contact = () => {
                     <span className="font-belleza text-lg">Email</span>
                   </div>
                   <div className="ml-6 font-roboto">
-                    <a href="mailto:studiovisualfx@gmail.com" className="text-gray-300 hover:text-white transition">studiovisualfx@gmail.com</a>
+                    <a href="mailto:svisualfx@gmail.com" className="text-gray-300 hover:text-white transition">svisualfx@gmail.com</a>
                   </div>
                 </div>
               </div>

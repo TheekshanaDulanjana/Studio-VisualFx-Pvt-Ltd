@@ -109,7 +109,7 @@ export default function Footer() {
     <li className="flex items-center justify-center md:justify-start gap-3">
       <FaFacebookF className="text-white/70" />
       <a 
-        href="https://web.facebook.com/visualfxsl" 
+        href="https://facebook.com/visualfxsl" 
         target="_blank" 
         rel="noopener noreferrer" 
         className="text-white/70 hover:text-white"
@@ -150,11 +150,11 @@ export default function Footer() {
             <ul className="space-y-2 text-sm md:text-sm font-roboto">
               <li className="flex items-center justify-center md:justify-start gap-3">
                 <FaPhone className="text-white/70" />
-                <a href="tel:+94776996981" className="text-white/70 hover:text-white">+94 77 699 6981</a>
+                <a href="tel:+94719896981" className="text-white/70 hover:text-white">94 71 989 6981</a>
               </li>
               <li className="flex items-center justify-center md:justify-start gap-3">
                 <FaEnvelope className="text-white/70" />
-                <a href="mailto:studiovisualfx@gmail.com" className="text-white/70 hover:text-white">studiovisualfx@gmail</a>
+                <a href="mailto:svisualfx@gmail.com" className="text-white/70 hover:text-white">svisualfx@gmail.com</a>
               </li>
             </ul>
           </div>

@@ -54,6 +54,15 @@ const MainApp = () => {
   const location = useLocation();
   const [pageLoading, setPageLoading] = useState(false);
 
+  useEffect(() => {
+    const measurementId = import.meta.env.VITE_GA_MEASUREMENT_ID;
+    if (typeof window.gtag === "function" && measurementId) {
+      window.gtag("config", measurementId, {
+        page_path: location.pathname + location.search,
+      });
+    }
+  }, [location]);
+
   // Page loading spinner logic
   useEffect(() => {
     setPageLoading(true);
