@@ -95,7 +95,6 @@ const MainApp = () => {
   return (
     <div className="flex flex-col min-h-screen   antialiased">
       <SmoothScroll /> 
-      <ScrollTop />
 
       <Header />
 
