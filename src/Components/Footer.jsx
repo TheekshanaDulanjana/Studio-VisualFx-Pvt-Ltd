@@ -1,4 +1,4 @@
-import { FaFacebookF, FaInstagram, FaWhatsapp, FaTiktok } from "react-icons/fa";
+import { FaFacebookF, FaInstagram, FaWhatsapp, FaTiktok, FaYoutube } from "react-icons/fa";
 import { FaPhone, FaEnvelope } from "react-icons/fa";
 import Finax from "../assets/StudioVisualFX.png";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -137,6 +137,17 @@ export default function Footer() {
         className="text-white/70 hover:text-white"
       >
         Tik Tok
+      </a>
+    </li>
+        <li className="flex items-center justify-center md:justify-start gap-3">
+      <FaYoutube className="text-white/70" />
+      <a 
+        href="https://www.youtube.com/@studiovisualfx" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        className="text-white/70 hover:text-white"
+      >
+        YouTube
       </a>
     </li>
   </ul>

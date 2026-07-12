@@ -19,23 +19,14 @@ const FilmGallery = () => {
 
   // Sample data
   const films = [
-    { coupleName: 'Ruwan + Pathum', link: 'https://youtu.be/v0pTrChjrzk?si=r-6kFeTKL8k8x2qG' },
-    { coupleName: 'Amal + Ruwan', link: 'https://youtu.be/KapXO9GBAGY?si=UxJgu_Pi_b4QlJzY' },
-    { coupleName: 'Kamal + Amal', link: 'https://youtu.be/SSu75qEX3Kg?si=KoNC0XXVRuuGo1m0' },
-    { coupleName: 'Nimal + Sulochana', link: 'https://youtu.be/v0pTrChjrzk?si=r-6kFeTKL8k8x2qG' },
-    { coupleName: 'Ruwan + Pathum', link: 'https://youtu.be/v0pTrChjrzk?si=r-6kFeTKL8k8x2qG' },
-    { coupleName: 'Amal + Ruwan', link: 'https://youtu.be/KapXO9GBAGY?si=UxJgu_Pi_b4QlJzY' },
-    { coupleName: 'Kamal + Amal', link: 'https://youtu.be/SSu75qEX3Kg?si=KoNC0XXVRuuGo1m0' },
-    { coupleName: 'Nimal + Sulochana', link: 'https://youtu.be/v0pTrChjrzk?si=r-6kFeTKL8k8x2qG' },
-    { coupleName: 'Ruwan + Pathum', link: 'https://youtu.be/v0pTrChjrzk?si=r-6kFeTKL8k8x2qG' },
-    { coupleName: 'Amal + Ruwan', link: 'https://youtu.be/KapXO9GBAGY?si=UxJgu_Pi_b4QlJzY' },
-    { coupleName: 'Kamal + Amal', link: 'https://youtu.be/SSu75qEX3Kg?si=KoNC0XXVRuuGo1m0' },
-    { coupleName: 'Nimal + Sulochana', link: 'https://youtu.be/v0pTrChjrzk?si=r-6kFeTKL8k8x2qG' },
-    { coupleName: 'Ruwan + Pathum', link: 'https://youtu.be/v0pTrChjrzk?si=r-6kFeTKL8k8x2qG' },
-    { coupleName: 'Amal + Ruwan', link: 'https://youtu.be/KapXO9GBAGY?si=UxJgu_Pi_b4QlJzY' },
-    { coupleName: 'Kamal + Amal', link: 'https://youtu.be/SSu75qEX3Kg?si=KoNC0XXVRuuGo1m0' },
-    { coupleName: 'Nimal + Sulochana', link: 'https://youtu.be/v0pTrChjrzk?si=r-6kFeTKL8k8x2qG' },
-  ];
+    { coupleName: 'Nethmi & Charuka', link: 'https://www.youtube.com/watch?v=MhENvCuxF0I' },
+    { coupleName: 'Piyumi & Darshana', link: 'https://youtu.be/7JUmj4brDds' },
+    { coupleName: 'Inesha & Randika', link: 'https://youtu.be/aplPx3YgxOc' },
+    { coupleName: 'Vihangi & Lahiru', link: 'https://youtu.be/j5-crzYuAys' },
+    { coupleName: 'Nimmi & Brinoj', link: 'https://youtu.be/v2BLa9HXxeA' },
+    { coupleName: 'Raveesha & Sahan', link: 'https://youtu.be/kkNuwRHeYR4' },
+    
+]
 
   // Filter based on search term
   const filteredFilms = films.filter(film =>
