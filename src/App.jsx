@@ -9,7 +9,6 @@ import ScrollToTop from "./Components/ScrollToTop";
 import LoadingSpinner from "./Components/LoadingSpinner";
 import WhatsappButton from "./Components/WhatsappButton";
 import SmoothScroll from './Components/SmoothScroll'; 
-import ScrollTop from './Components/ScrollToTop';
 
 // Pages
 import Home from "./Pages/Home";
@@ -90,40 +89,48 @@ const MainApp = () => {
     document.title = pageTitles[location.pathname] || "Studio VisualFX";
   }, [location.pathname]);
 
-  if (pageLoading) return <LoadingSpinner />;
-
   return (
-    <div className="flex flex-col min-h-screen   antialiased">
-      <SmoothScroll /> 
-
-      <Header />
-
-      <main className="flex-grow">
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                <section id="home"> <Home /> </section>
-                <section id="testimonials"> <Testimonials /></section>
-                <section id="faq"> <FAQ /> </section>
-                <section id="contact"> <Contact /> </section>
-              </>
-            }
-          />
-
-          <Route path="/about" element={<About />} />
-          <Route path="/film-gallery" element={<FilmGallery />} />
-          <Route path="/commercial" element={<Commercial />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/terms-conditions" element={<TermofCondition />} />
-          <Route path="*" element={<Home />} />
-        </Routes>
-      </main>
-
+    <>
       <ScrollToTop />
-      <WhatsappButton />
-      <Footer />
-    </div>
+      <div className="flex flex-col min-h-screen antialiased">
+        <SmoothScroll />
+
+        {pageLoading ? (
+          <LoadingSpinner />
+        ) : (
+          <>
+            <div className="flex flex-col min-h-screen antialiased">
+              <Header />
+
+              <main className="flex-grow">
+                <Routes>
+                  <Route
+                    path="/"
+                    element={
+                      <>
+                        <section id="home"> <Home /> </section>
+                        <section id="testimonials"> <Testimonials /></section>
+                        <section id="faq"> <FAQ /> </section>
+                        <section id="contact"> <Contact /> </section>
+                      </>
+                    }
+                  />
+
+                  <Route path="/about" element={<About />} />
+                  <Route path="/film-gallery" element={<FilmGallery />} />
+                  <Route path="/commercial" element={<Commercial />} />
+                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                  <Route path="/terms-conditions" element={<TermofCondition />} />
+                  <Route path="*" element={<Home />} />
+                </Routes>
+              </main>
+
+              <WhatsappButton />
+              <Footer />
+            </div>
+          </>
+        )}
+      </div>
+    </>
   );
 };

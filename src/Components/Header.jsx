@@ -4,6 +4,16 @@ import { Menu, X } from "lucide-react";
 import { FaArrowRight } from "react-icons/fa";
 import Logo from "../assets/StudioVisualFX.png";
 
+const resetScrollPosition = () => {
+  if (typeof window === 'undefined') return;
+
+  window.scrollTo(0, 0);
+  window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+  document.scrollingElement?.scrollTo(0, 0);
+};
+
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -41,6 +51,8 @@ const Header = () => {
 
   const scrollToSection = (id) => {
     setIsMenuOpen(false);
+
+    resetScrollPosition();
 
     if (id === "about") {
       navigate("/about");
@@ -104,7 +116,10 @@ const Header = () => {
 
           {/* Desktop CTA */}
           <button
-            onClick={() => navigate("/commercial")}
+            onClick={() => {
+              resetScrollPosition();
+              navigate("/commercial");
+            }}
             className="group hidden lg:flex items-center gap-3 bg-white 
                         text-black px-4 py-2 rounded-full 
                        hover:bg-black hover:text-white 
@@ -169,7 +184,10 @@ const Header = () => {
           {/* CTA */}
           <div className="mb-6 items-center justify-center flex">
             <button
-              onClick={() => navigate("/commercial")}
+              onClick={() => {
+                resetScrollPosition();
+                navigate("/commercial");
+              }}
               className="w-40 h-12 flex items-center justify-center gap-4 
                          bg-white text-black 
                          px-4 py-3 rounded-full 

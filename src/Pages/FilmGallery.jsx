@@ -22,6 +22,12 @@ const FilmGallery = () => {
     { coupleName: 'Nethmi & Charuka', link: 'https://www.youtube.com/watch?v=MhENvCuxF0I' },
     { coupleName: 'Piyumi & Darshana', link: 'https://youtu.be/7JUmj4brDds' },
     { coupleName: 'Inesha & Randika', link: 'https://youtu.be/aplPx3YgxOc' },
+
+    { coupleName: 'Meditha & Teran', link: 'https://www.youtube.com/watch?v=0yavt1yQGhc' },
+    { coupleName: 'Raweesha & Sahan', link: 'https://www.youtube.com/watch?v=sqs5lNAy6GE' },
+    { coupleName: 'Dilmi & Sanitha', link: 'https://www.youtube.com/watch?v=Ezo05vzfBbU' },
+
+
     { coupleName: 'Vihangi & Lahiru', link: 'https://youtu.be/j5-crzYuAys' },
     { coupleName: 'Nimmi & Brinoj', link: 'https://youtu.be/v2BLa9HXxeA' },
     { coupleName: 'Raveesha & Sahan', link: 'https://youtu.be/kkNuwRHeYR4' },

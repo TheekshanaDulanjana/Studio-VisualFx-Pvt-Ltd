@@ -66,12 +66,16 @@ export default function Footer() {
           <div className="text-center md:text-left">
             <h3 className="text-white font-belleza text-lg mb-4">Service Coverage</h3>
             <ul className="space-y-2 text-sm md:text-sm font-roboto">
+                          <li className="flex items-center justify-center md:justify-start gap-3">
+                <p className="text-white/70 hover:text-white">Colombo, Sri Lanka </p>
+              </li>
+              <li className="flex items-center justify-center md:justify-start gap-3">
+                <p className="text-white/70 hover:text-white">Galle, Sri Lanka</p>
+              </li>
               <li className="flex items-center justify-center md:justify-start gap-3">
                 <p className="text-white/70 hover:text-white">Matara, Sri Lanka</p>
               </li>
-              <li className="flex items-center justify-center md:justify-start gap-3">
-                <p className="text-white/70 hover:text-white">Colombo, Sri Lanka </p>
-              </li>
+  
             </ul>
           </div>
 

@@ -86,7 +86,7 @@ const sections = [
 ];
 
   return (
-    <div className="bg-black py-16 px-4 font-roboto">
+    <div className=" py-16 px-4 font-roboto">
       <div className="max-w-7xl mx-auto relative">
         
         {/* Vertical Center Line */}
