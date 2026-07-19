@@ -1,18 +1,115 @@
 import React, { useRef, useEffect, useState } from "react";
 import TestimonialCard from "../Components/TestimonialCard";
 
-import testimonials01 from "../assets/testimonials01.jpg";
-import testimonials02 from "../assets/testimonials02.jpg";
-import testimonials03 from "../assets/testimonials03.jpg";
-import testimonials04 from "../assets/testimonials04.jpg";
-import testimonials05 from "../assets/testimonials05.jpg";
+import MenoliPeiris from "../assets/Menoli Peiris.jpg";
+import Ramitha from "../assets/Ramitha.jpg"
+import Tharu from "../assets/Tharu.jpg"
+import Dilmi from "../assets/Dilmi.jpg"
+import Malindu from "../assets/Malindu.jpg"
+import Hirushi from "../assets/Hirushi.jpg"
+import Umesha from "../assets/Umesha.jpg"
+import Randika from "../assets/Randika.jpg"
+
+
 
 const testimonials = [
-  { username: "Kavi and Navod", image: testimonials01, eventType: "Wedding", message: "Working with this team has been a game-changer for our business. They understood our needs and delivered solutions that exceeded expectations.", date: "18 September 2025" },
-  { username: "Saman and Nadeesha", image: testimonials02, eventType: "Engagement", message: "Amazing team! They captured every moment beautifully and made us feel so comfortable.", date: "10 August 2025" },
-  { username: "Ruwan and Anjali", image: testimonials03, eventType: "Wedding", message: "Their cinematic vision is outstanding. Every shot was perfect.", date: "5 July 2025" },
-  { username: "Nimali and Roshan", image: testimonials04, eventType: "Engagement", message: "Beautifully executed and highly professional team!", date: "20 June 2025" },
-  { username: "Dilani and Kasun", image: testimonials05, eventType: "Wedding", message: "We loved every moment captured by this team!", date: "12 May 2025" },
+    //     { 
+  //   username: "Menoli Peiris", 
+  //   image: MenoliPeiris, 
+  //   eventType: "Wedding", 
+  //   message: "", 
+  //   date: "04 June 2026" 
+  // },
+  
+  { 
+    username: "Menoli Peiris", 
+    image: MenoliPeiris, 
+    eventType: "Wedding", 
+    message: "Thank you for capturing our special day so beautifully. Every moment was filmed with such creativity, professionalism, and attention to detail. We truly appreciate your hard work, dedication, and friendly approach throughout the entire journey. Your talent and passion shine through in every frame. Highly recommended to anyone looking for a talented wedding videographer!", 
+    date: "04 June 2026" 
+  },
+
+  { 
+    username: "Ramitha Nivi", 
+    image: Ramitha, 
+    eventType: "Wedding", 
+    message: "💯 Recommended the service and the commitment at the field was really appreciated. Special thing was our time frame for the shoot was  very tight and  the time management and the punctuality of the team was 🫡👌. Final outcome will be a long lasting investment and still now we both watch and feel that live experience because of you guys. The quality you maintain, always matches two three generations forward. So don’t hesitate and don’t think twice to choose Studio VisualFX.", 
+    date: "15 February 2026" 
+  },
+
+    { 
+    username: "Dilmi Mahinsala", 
+    image: Dilmi, 
+    eventType: "Wedding", 
+    message: "A huge shoutout to Sasanka & team for capturing every unforgettable moments in our wedding ❤️☺️. You were super friendly, professional, hardworking and made the whole experience perfect. Thank you so much and definitely recommend your quick and stress free service 🎥😍", 
+    date: "23 January 2026" 
+  },
+
+      { 
+    username: "Tharu Wilege", 
+    image: Tharu, 
+    eventType: "Wedding", 
+    message: "Professionalism & Reliability: A true professional, highly recommend, finished our video so quickly ♥️🫶",
+    date: "13 January 2026" 
+  },
+
+      { 
+    username: "Malindu Hansaka", 
+    image: Malindu, 
+    eventType: "Wedding", 
+    message: "Thank you for capturing our story so beautifully. Watching the video brings us right back to that. you for making us feel so comfortable in front of the camera. Your talent and hard work are unmatched. We appreciate your hard work and the incredible quality you delivered. You've truly captured the essence of our brand. you! So much gratitude for the magic you created.🙏🫂❤️‍🩹", 
+    date: "13 January 2026" 
+  },
+
+      { 
+    username: "Hirushi Kalindi", 
+    image: Hirushi, 
+    eventType: "Wedding", 
+    message: "Our wedding day was beautifully brought to life thanks to the incredible videography by Sasanka & Team. Your talent, professionalism, and eye for detail made every moment feel magical. The way you captured emotions, laughter, and every little detail was beyond our expectations. We are truly grateful for your hard work and creativity in turning our special day into a timeless film that we can relive again and again. A heartfelt thank you for making our memories last forever. Highly recommended! 🎥❤️", 
+    date: "03 September 2025" 
+  },
+
+      { 
+    username: "Umesha Kolambage", 
+    image: Umesha, 
+    eventType: "Wedding", 
+    message: "We are beyond grateful for the amazing work done by Studio VisualFX. Without question, picking u for our wedding filming was our best decision. U are very friendly & we were so easy to work with u. Our video & trailer are absolutely amazing. The trailer was absolutely breathtaking with perfect editing, music that truly reflected the emotions of the day. U captured every special moment so beautifully. Highly recommend to any couple looking for the best wedding videographer. Thank u so much for all ur hard work & capturing our day perfectly.🥰❤️🫶", 
+    date: "18 August 2025" 
+  },
+
+      { 
+    username: "Randika Suridu", 
+    image: Randika, 
+    eventType: "Wedding", 
+    message: "We're so grateful to have had such a talented and professional videographer capture our wedding day so beautifully. He turned every special moment into a lasting memory with his creative vision and attention to detail. Supportive to work with, and truly passionate about his craft-we highly recommend him to anyone looking to preserve their big day perfectly.", 
+    date: "15 July 2025" 
+  },
+
+  //     { 
+  //   username: "Menoli Peiris", 
+  //   image: MenoliPeiris, 
+  //   eventType: "Wedding", 
+  //   message: "", 
+  //   date: "04 June 2026" 
+  // },
+
+  //     { 
+  //   username: "Menoli Peiris", 
+  //   image: MenoliPeiris, 
+  //   eventType: "Wedding", 
+  //   message: "", 
+  //   date: "04 June 2026" 
+  // },
+
+  //     { 
+  //   username: "Menoli Peiris", 
+  //   image: MenoliPeiris, 
+  //   eventType: "Wedding", 
+  //   message: "", 
+  //   date: "04 June 2026" 
+  // },
+
+
 ];
 
 export default function Testimonials() {

@@ -26,7 +26,7 @@ const ServiceSection = () => {
             </h1>
             <p className="text-white font-roboto leading-relaxed max-w-xl mx-auto lg:mx-0 text-sm md:text-sm text-justify lg:text-justify">
               Mr. Sasanka Dulanjana is the driving creative force behind Studio VisualFX (Pvt) Ltd., 
-              bringing over 7 years of experience in visual storytelling to every project. With 
+              bringing over 10 years of experience in visual storytelling to every project. With 
               a keen eye for detail and a passion for cinematic excellence, he transforms ideas 
               into compelling visual narratives that captivate and inspire.
             <br /><br />

@@ -1,5 +1,5 @@
 import React from "react";
-import FallbackImg from "../assets/HeroLFallback.jpg";
+import CommercialPage from "../assets/CommercialPage.png";
 
 const Commercial = () => {
   return (
@@ -8,10 +8,10 @@ const Commercial = () => {
 
         {/* Background Image */}
         <img
-          src={FallbackImg}
+          src={CommercialPage}
           alt="Hero"
           className="absolute inset-0 w-full h-full object-cover"
-        />
+        /> 
 
         {/* Overlay */}
         <div className="absolute inset-0 bg-black/50"></div>

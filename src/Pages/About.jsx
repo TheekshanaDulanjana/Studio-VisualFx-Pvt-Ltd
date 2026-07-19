@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Profile from '../Components/Profile';
 
 export default function About() {
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className=" pt-24">
       
@@ -11,7 +16,7 @@ export default function About() {
           <div className="max-w-7xl">
             
             <h1 className="text-3xl text-white md:text-6xl leading-12 sm:leading-18 tracking-tight mb-6 font-belleza">
-              Crafting Timeless Visual Journeys <br />Through Passion, Vision, and Cinematic Creativity
+              Crafting Timeless Visual Journeys Through Passion, Vision, and Cinematic Creativity
             </h1>
 
             <p className="text-sm text-white text-justify leading-relaxed font-roboto">

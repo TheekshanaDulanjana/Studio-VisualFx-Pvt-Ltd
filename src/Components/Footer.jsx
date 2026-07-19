@@ -1,4 +1,4 @@
-import { FaFacebookF, FaInstagram, FaWhatsapp, FaTiktok } from "react-icons/fa";
+import { FaFacebookF, FaInstagram, FaWhatsapp, FaTiktok, FaYoutube } from "react-icons/fa";
 import { FaPhone, FaEnvelope } from "react-icons/fa";
 import Finax from "../assets/StudioVisualFX.png";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -66,12 +66,13 @@ export default function Footer() {
           <div className="text-center md:text-left">
             <h3 className="text-white font-belleza text-lg mb-4">Service Coverage</h3>
             <ul className="space-y-2 text-sm md:text-sm font-roboto">
-              <li className="flex items-center justify-center md:justify-start gap-3">
-                <p className="text-white/70 hover:text-white">Matara, Sri Lanka</p>
+                          <li className="flex items-center justify-center md:justify-start gap-3">
+                <p className="text-white/70 hover:text-white">Islandwide Across Sri Lanka</p>
               </li>
               <li className="flex items-center justify-center md:justify-start gap-3">
-                <p className="text-white/70 hover:text-white">Colombo, Sri Lanka </p>
+                <p className="text-white/70 hover:text-white">Matara (Main Hub)</p>
               </li>
+  
             </ul>
           </div>
 
@@ -139,6 +140,17 @@ export default function Footer() {
         Tik Tok
       </a>
     </li>
+        <li className="flex items-center justify-center md:justify-start gap-3">
+      <FaYoutube className="text-white/70" />
+      <a 
+        href="https://www.youtube.com/@studiovisualfx" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        className="text-white/70 hover:text-white"
+      >
+        YouTube
+      </a>
+    </li>
   </ul>
 </div>
 
@@ -168,10 +180,10 @@ export default function Footer() {
              Copyright © {new Date().getFullYear()} Studio VisualFx (Pvt) Ltd. All Rights Reserved.
             </p>
             <div className="flex gap-6">
-              <button onClick={() => { navigate("/privacy-policy"); window.scrollTo(0,0); }} className="text-white/50 hover:text-white text-[9px] md:text-[10px] uppercase tracking-wider ">
+              <button onClick={() => { navigate("/privacy-policy"); window.scrollTo(0,0); }} className="text-white/50 cursor-pointer hover:text-white text-[9px] md:text-[10px] uppercase tracking-wider ">
                 Privacy Policy
               </button>
-              <button onClick={() => { navigate("/terms-conditions"); window.scrollTo(0,0); }} className="text-white/50 hover:text-white text-[9px] md:text-[10px] uppercase tracking-wider">
+              <button onClick={() => { navigate("/terms-conditions"); window.scrollTo(0,0); }} className="text-white/50 hover:text-white cursor-pointer text-[9px] md:text-[10px] uppercase tracking-wider">
                 Terms & Conditions
               </button>
             </div>

@@ -11,9 +11,10 @@ export default function LandingAbout() {
 
   // Video data
   const videos = [
-    { id: "me4-5oFdKpI", thumbnail: "https://i.ytimg.com/vi/me4-5oFdKpI/maxresdefault.jpg" },
+    { id: "v2BLa9HXxeA", thumbnail: "https://img.youtube.com/vi/v2BLa9HXxeA/maxresdefault.jpg" },
     { id: "kkNuwRHeYR4", thumbnail: "https://img.youtube.com/vi/kkNuwRHeYR4/hqdefault.jpg" },
-    { id: "QWDjL8RDfso", thumbnail: "https://img.youtube.com/vi/QWDjL8RDfso/hqdefault.jpg" },
+    { id: "aplPx3YgxOc", thumbnail: "https://img.youtube.com/vi/aplPx3YgxOc/maxresdefault.jpg" },
+
   ];
 
   const openVideo = (videoId) => {
@@ -21,11 +22,11 @@ export default function LandingAbout() {
   };
 
   return (
-    <section className="max-w-7xl mx-auto py-12 md:py-20 px-6 sm:px-6 lg:px-8 font-[Alata] flex flex-col justify-center">
+    <section className="max-w-7xl mx-auto text py-12 md:py-20 px-6 sm:px-6 lg:px-8 font-[Alata] flex flex-col justify-center">
       
       {/* Header Section */}
       <div className="mb-12">
-        <p className="text-white text-xs font-roboto sm:text-xl lg:text-sm  mb-2 uppercase tracking-widest">
+        <p className="text-white text-xs text- font-roboto sm:text-xl lg:text-sm  mb-2 uppercase tracking-widest">
           The eyes behind stories!
         </p>
 
