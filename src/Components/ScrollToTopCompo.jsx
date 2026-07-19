@@ -1,44 +1,64 @@
-import { useState, useEffect } from 'react';
-import { FaArrowUp } from 'react-icons/fa';
+import { useEffect, useState } from "react";
+import { FaArrowUp } from "react-icons/fa";
 
-const ScrollToTop = () => {
-  const [showScrollButton, setShowScrollButton] = useState(false);
+const ScrollToTop = ({ onVisibilityChange }) => {
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    let timeout;
     const handleScroll = () => {
-      if (window.scrollY > 500) {
-        setShowScrollButton(true);
-        clearTimeout(timeout);
-        timeout = setTimeout(() => setShowScrollButton(false), 10000);
-      } else {
-        setShowScrollButton(false);
+      const shouldShow = window.scrollY > 600;
+
+      setVisible(shouldShow);
+
+      if (onVisibilityChange) {
+        onVisibilityChange(shouldShow);
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      clearTimeout(timeout);
-    };
-  }, []);
+    window.addEventListener("scroll", handleScroll);
+
+    handleScroll();
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [onVisibilityChange]);
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
+  if (!visible) return null;
+
   return (
-    showScrollButton && (
-      <button
-        onClick={scrollToTop}
-        className="fixed cursor-pointer rounded-full bottom-8 right-10 w-10 h-10 flex items-center justify-center bg-white text-black transition-transform transform hover:scale-110 group z-60 overflow-hidden"
-        aria-label="Scroll to top"
-      >
-        <span className="relative z-10 transition-colors duration-300">
-          <FaArrowUp className="text-sm font-bold" />
-        </span>
-      </button>
-    )
+    <button
+      onClick={scrollToTop}
+      className="
+        fixed
+        right-4
+        md:right-10
+        bottom-6
+        md:bottom-8
+        z-50
+        w-12
+        h-12
+        rounded-full
+        bg-white
+        text-black
+        shadow-xl
+        flex
+        items-center
+        justify-center
+        transition-all
+        duration-300
+        hover:scale-110
+        animate-fadeInUp
+        cursor-pointer
+      "
+    >
+      <FaArrowUp className="text-lg" />
+    </button>
   );
 };
 

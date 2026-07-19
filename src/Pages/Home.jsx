@@ -34,7 +34,7 @@ const Home = () => {
 
   return (
     <div className="overflow-x-hidden">
-      {/* Hero Section - Updated alignment to items-end for bottom-left positioning */}
+      {/* Hero Section */}
       <section className="relative flex w-screen min-h-screen items-end justify-start px-6 pb-20 md:px-16">
 
         {/* Desktop Fallback Image */}
@@ -94,10 +94,10 @@ const Home = () => {
           }}
         ></div>
 
-        {/* Overlay for better text readability */}
+        {/* Overlay */}
         <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent"></div>
 
-        {/* Content - Bottom Left Positioned */}
+        {/* Content */}
         <motion.div
           className="relative z-10 w-full max-w-3xl flex flex-col items-start text-left"
           initial={{ opacity: 0, y: 30 }}
@@ -105,7 +105,7 @@ const Home = () => {
           transition={{ duration: 1, ease: "easeOut" }}
         >
           <motion.h1
-            className="text-4xl sm:text-5xl md:text-7xl font-belleza text-white leading-tight"
+            className="text-3xl sm:text-5xl md:text-7xl font-belleza text-white leading-tight"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 1 }}
@@ -114,7 +114,7 @@ const Home = () => {
           </motion.h1>
 
           <motion.p
-            className="text-white/90 font-roboto text-base md:text-lg mt-4 max-w-2xl"
+            className="text-white/90 font-roboto font-light text-base  mt-4 max-w-2xl"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 1 }}
@@ -123,21 +123,21 @@ const Home = () => {
           </motion.p>
 
           <motion.div
-            className="flex flex-wrap gap-4 mt-8"
+            className="flex flex-nowrap gap-2 sm:gap-4 mt-8"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 1 }}
           >
             <button
               onClick={() => navigate("/film-gallery")}
-              className="px-8 py-3 bg-white cursor-pointer hover:border hover:boarder-white text-sm text-black font-semibold rounded-full hover:bg-black hover:text-white transition duration-300"
+              className="px-4 sm:px-8 py-3 bg-white cursor-pointer hover:border hover:border-white text-xs sm:text-sm text-black font-semibold rounded-full hover:bg-black hover:text-white transition duration-300 whitespace-nowrap"
             >
               View Portfolio
             </button>
 
             <button
               onClick={scrollToContact}
-              className="px-8 py-3 border cursor-pointer hover:border  hover:boarder-black  border-white text-sm text-white font-semibold rounded-full hover:bg-white hover:text-black transition duration-300"
+              className="px-4 sm:px-8 py-3 border cursor-pointer hover:border hover:border-black border-white text-xs sm:text-sm text-white font-semibold rounded-full hover:bg-white hover:text-black transition duration-300 whitespace-nowrap"
             >
               Book Your Session
             </button>

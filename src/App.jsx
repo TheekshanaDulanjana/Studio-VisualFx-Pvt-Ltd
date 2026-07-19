@@ -9,6 +9,7 @@ import ScrollToTop from "./Components/ScrollToTop";
 import LoadingSpinner from "./Components/LoadingSpinner";
 import WhatsappButton from "./Components/WhatsappButton";
 import SmoothScroll from './Components/SmoothScroll'; 
+import ScrollToTopCompo from "./Components/ScrollToTopCompo";
 
 // Pages
 import Home from "./Pages/Home";
@@ -52,6 +53,7 @@ export default function App() {
 const MainApp = () => {
   const location = useLocation();
   const [pageLoading, setPageLoading] = useState(false);
+  const [showScrollButton, setShowScrollButton] = useState(false);
 
   useEffect(() => {
     const measurementId = import.meta.env.VITE_GA_MEASUREMENT_ID;
@@ -125,7 +127,9 @@ const MainApp = () => {
                 </Routes>
               </main>
 
-              <WhatsappButton />
+              <ScrollToTopCompo onVisibilityChange={setShowScrollButton}
+      /> 
+              <WhatsappButton showScrollButton={showScrollButton} />
               <Footer />
             </div>
           </>
