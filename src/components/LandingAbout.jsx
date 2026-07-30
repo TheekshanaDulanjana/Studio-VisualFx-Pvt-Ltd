@@ -44,7 +44,7 @@ export default function LandingAbout() {
 
           <div className="lg:col-span-5 flex flex-col justify-between items-start">
             <p className="text-gray-200 font-roboto text-sm sm:text-sm leading-relaxed mt-6 sm:mt-0 text-justify lg:text-justify">
-              At Studio VisualFX (Pvt) Ltd., we are driven by a deep passion for storytelling through visuals. 
+              At Studio VisualFX (Pvt) Ltd, we are driven by a deep passion for storytelling through visuals. 
               Every project we take on is a blend of creativity, technical expertise, and attention to 
               detail ensuring each moment is captured with authenticity and purpose. From intimate 
               celebrations to large-scale productions, we transform ideas into compelling visual 

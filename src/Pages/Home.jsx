@@ -199,7 +199,7 @@ const Home = () => {
               leading-tight
               text-white
               sm:text-5xl
-              md:text-7xl
+              md:text-6xl
             "
           >
             Studio VisualFX (Pvt) Ltd.

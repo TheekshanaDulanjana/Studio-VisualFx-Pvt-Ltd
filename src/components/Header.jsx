@@ -179,7 +179,7 @@ const Header = () => {
         }`}
       >
         {/* Background Overlay */}
-        <div className="absolute inset-0 bg-black/90 transform-gpu" />
+        <div className="absolute inset-0 bg-black/75 backdrop-blur-sm transform-gpu" />
 
         {/* Menu Content */}
         <div
