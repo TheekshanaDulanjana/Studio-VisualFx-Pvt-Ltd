@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import TestimonialCard from "../components/TestimonialCard";
 
 import MenoliPeiris from "../assets/Menoli Peiris.jpg";
@@ -74,35 +74,17 @@ export default function Testimonials() {
   const firstThree = testimonials.slice(0, 3);
   const remainingCount = testimonials.length - firstThree.length;
 
-  const [touchStart, setTouchStart] = useState(0);
-
   const scroll = (direction) => {
     if (sliderRef.current) {
-      const scrollAmount = direction === "left" ? -340 : 340;
+      // mobile screen width එක අනුව scroll ප්‍රමාණය ගණනය කරයි
+      const cardWidth = sliderRef.current.querySelector(".testimonial-card-wrapper")?.offsetWidth || 300;
+      const scrollAmount = direction === "left" ? -(cardWidth + 16) : (cardWidth + 16);
       sliderRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
     }
   };
 
-  const handleTouchStart = (e) => {
-    setTouchStart(e.touches[0].clientX);
-  };
-
-  const handleTouchEnd = (e) => {
-    const touchEnd = e.changedTouches[0].clientX;
-    const diff = touchStart - touchEnd;
-
-    if (Math.abs(diff) > 50) {
-      if (diff > 0) {
-        scroll("right");
-      } else {
-        scroll("left");
-      }
-    }
-  };
-
   return (
-    // overflow-x-hidden here stops any child from bulging past the viewport edge on mobile
-    <section className="text-white py-12 sm:py-16 px-6 overflow-x-hidden">
+    <section className="text-white py-12 sm:py-16 px-4 sm:px-6 overflow-x-hidden">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-10 lg:gap-16">
 
         {/* LEFT SIDE */}
@@ -158,16 +140,20 @@ export default function Testimonials() {
           </div>
 
           {/* Slider Container */}
-          {/* px-1 (instead of 0) keeps each card's border fully inside the scroll track on mobile */}
           <div
             ref={sliderRef}
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
-            className="flex gap-4 sm:gap-6 overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory cursor-grab py-2 px-1 -mx-1"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            className="flex gap-4 sm:gap-6 overflow-x-auto scrollbar-hide snap-x snap-mandatory py-2 px-1"
+            style={{ 
+              scrollbarWidth: "none", 
+              msOverflowStyle: "none",
+              WebkitOverflowScrolling: "touch"
+            }}
           >
             {testimonials.map((testimonial) => (
-              <div key={testimonial.username} className="snap-start shrink-0">
+              <div 
+                key={testimonial.username} 
+                className="testimonial-card-wrapper snap-center sm:snap-start shrink-0 w-[85vw] max-w-[320px] sm:w-[320px]"
+              >
                 <TestimonialCard testimonial={testimonial} />
               </div>
             ))}
