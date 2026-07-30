@@ -39,6 +39,17 @@ const Contact = () => {
     setFormValid(isValid);
   }, [formData]);
 
+  // Modal එක open වුණාම තත්පර 5කින් auto close වෙන useEffect එක
+  useEffect(() => {
+    if (modal.show) {
+      const timer = setTimeout(() => {
+        closeModal();
+      }, 5000); // 5000 ms = 5 seconds
+
+      return () => clearTimeout(timer); // Cleanup timer if component unmounts or modal closes early
+    }
+  }, [modal.show]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -66,13 +77,20 @@ const Contact = () => {
   const sendEmail = (e) => {
     e.preventDefault();
 
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+    if (!publicKey) {
+      setModal({
+        show: true,
+        message: "Failed to send message: EmailJS Public Key is missing.",
+      });
+      return;
+    }
+
     emailjs
-      .sendForm(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID,
-        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-        form.current,
-        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
-      )
+      .sendForm(serviceId, templateId, form.current, publicKey)
       .then(
         () => {
           setModal({ show: true, message: "Message sent successfully!" });
@@ -87,9 +105,10 @@ const Contact = () => {
           });
         },
         (error) => {
+          const errorDetails = error?.text || JSON.stringify(error) || "Unknown error";
           setModal({
             show: true,
-            message: `Failed to send message: ${error.message}`,
+            message: `Failed to send message: ${errorDetails}`,
           });
         }
       );
