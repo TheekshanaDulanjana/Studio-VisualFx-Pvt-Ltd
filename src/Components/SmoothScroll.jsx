@@ -13,7 +13,7 @@ import Lenis from "lenis";
 // Lenis only smooth wheel input and leaves native touch scrolling/momentum
 // alone on mobile, which is what you want — see the Lenis maintainer's
 // note that by default Lenis does not take over touch scrolling.
-const SmoothScroll = () => {
+const Smoothscroll = () => {
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.2,
@@ -55,4 +55,4 @@ const SmoothScroll = () => {
   return null;
 };
 
-export default SmoothScroll;
+export default Smoothscroll;
