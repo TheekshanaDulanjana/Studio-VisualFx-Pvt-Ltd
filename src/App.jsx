@@ -68,7 +68,7 @@ const MainApp = () => {
     return () => clearTimeout(endTimer);
   }, [location.pathname]);
 
-  // Tab Title change logic
+  // Tab Title change all the logic
   useEffect(() => {
     const pageTitles = {
       "/": "Home | Studio VisualFX",
