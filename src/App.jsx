@@ -10,7 +10,7 @@ import WhatsappButton from "./Components/WhatsappButton";
 import ScrollToTopCompo from "./Components/ScrollToTopCompo";
 import SmoothScroll from "./Components/Smoothscroll";
 
-// Pages
+// Pages path
 import Home from "./Pages/Home";
 import About from "./Pages/About";
 import FAQ from "./Pages/Faq";
