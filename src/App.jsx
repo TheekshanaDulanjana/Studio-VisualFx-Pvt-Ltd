@@ -8,7 +8,7 @@ import Footer from "./components/Footer";
 import LoadingSpinner from "./components/LoadingSpinner";
 import WhatsappButton from "./components/WhatsappButton";
 import ScrollToTopCompo from "./components/ScrollToTopCompo";
-import Smoothscroll from "./components/Smoothscroll";
+import SmoothScroll from "./components/SmoothScroll";
 
 // Pages path
 import Home from "./Pages/Home";
@@ -89,7 +89,7 @@ const MainApp = () => {
     <>
 
       <div className="flex flex-col min-h-screen antialiased">
-      <Smoothscroll/>
+      <SmoothScroll/>
 
         {pageLoading ? (
           <LoadingSpinner />
