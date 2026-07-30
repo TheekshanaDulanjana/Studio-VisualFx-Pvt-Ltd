@@ -1,5 +1,5 @@
 import React from 'react';
-import TermofConditionDetails from '../Components/TermofConditionDetails';
+import TermofConditionDetails from '../components/TermofConditionDetails';
 
 export default function TermofCondition() {
   return (

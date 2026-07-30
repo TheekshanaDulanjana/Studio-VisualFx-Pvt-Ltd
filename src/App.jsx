@@ -3,12 +3,12 @@ import React, { useState, useEffect } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 
  // Components
-import Header from "./Components/Header";
-import Footer from "./Components/Footer";
-import LoadingSpinner from "./Components/LoadingSpinner";
-import WhatsappButton from "./Components/WhatsappButton";
-import ScrollToTopCompo from "./Components/ScrollToTopCompo";
-import SmoothScroll from "./Components/Smoothscroll";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import LoadingSpinner from "./components/LoadingSpinner";
+import WhatsappButton from "./components/WhatsappButton";
+import ScrollToTopCompo from "./components/ScrollToTopCompo";
+import SmoothScroll from "./components/Smoothscroll";
 
 // Pages path
 import Home from "./Pages/Home";

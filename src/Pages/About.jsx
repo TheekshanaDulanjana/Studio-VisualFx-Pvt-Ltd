@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import Profile from '../Components/Profile';
+import Profile from '../components/Profile';
 
 export default function About() {
 

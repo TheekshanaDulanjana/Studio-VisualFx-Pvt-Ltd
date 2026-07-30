@@ -7,8 +7,8 @@ import HeroLFallback from "../assets/HeroLFallback.jpg";
 import HeroPVideo from "../assets/HeroPVideo.MP4";
 import HeroPFallback from "../assets/HeroPFallback.jpg.jpg";
 
-import LandingAbout from "../Components/LandingAbout";
-import ProductionCategories from "../Components/ProductionCategories";
+import LandingAbout from "../components/LandingAbout";
+import ProductionCategories from "../components/ProductionCategories";
 
 const Home = () => {
   const location = useLocation();

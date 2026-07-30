@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import TestimonialCard from "../Components/TestimonialCard";
+import TestimonialCard from "../components/TestimonialCard";
 
 import MenoliPeiris from "../assets/Menoli Peiris.jpg";
 import Ramitha from "../assets/Ramitha.jpg";
