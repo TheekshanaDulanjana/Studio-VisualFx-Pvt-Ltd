@@ -1,17 +1,26 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 import Lenis from "lenis";
 
+// NOTE ON THE CONFIG BELOW
+// -------------------------
+// `smooth: true`, `direction: 'vertical'`, and `gestureDirection: 'vertical'`
+// are options from the old Lenis v0.x API. The version on npm today (v1.x)
+// doesn't read them — they're silently ignored, so the instance you get at
+// runtime isn't the one the config appears to describe. That mismatch is
+// part of why behavior has felt inconsistent across devices/browsers.
+//
+// `syncTouch` is left at its default (false) intentionally: that makes
+// Lenis only smooth wheel input and leaves native touch scrolling/momentum
+// alone on mobile, which is what you want — see the Lenis maintainer's
+// note that by default Lenis does not take over touch scrolling.
 const SmoothScroll = () => {
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 2.5,
+      duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      direction: 'vertical',
-      gestureDirection: 'vertical',
-      smooth: true,
-      mouseMultiplier: 1,
-      smoothTouch: false,
-      touchMultiplier: 2,
+      wheelMultiplier: 1,
+      touchMultiplier: 1,
+      syncTouch: false,
       infinite: false,
     });
 
@@ -20,7 +29,7 @@ const SmoothScroll = () => {
     let destroyed = false;
 
     function raf(time) {
-      if (destroyed) return; // stop the loop once destroyed
+      if (destroyed) return;
       lenis.raf(time);
       requestAnimationFrame(raf);
     }

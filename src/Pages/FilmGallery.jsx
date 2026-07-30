@@ -27,12 +27,10 @@ const FilmGallery = () => {
     { coupleName: 'Raweesha & Sahan', link: 'https://www.youtube.com/watch?v=sqs5lNAy6GE' },
     { coupleName: 'Dilmi & Sanitha', link: 'https://www.youtube.com/watch?v=Ezo05vzfBbU' },
 
-
     { coupleName: 'Vihangi & Lahiru', link: 'https://youtu.be/j5-crzYuAys' },
     { coupleName: 'Nimmi & Brinoj', link: 'https://youtu.be/v2BLa9HXxeA' },
     { coupleName: 'Raveesha & Sahan', link: 'https://youtu.be/kkNuwRHeYR4' },
-    
-]
+  ];
 
   // Filter based on search term
   const filteredFilms = films.filter(film =>
@@ -55,7 +53,7 @@ const FilmGallery = () => {
   return (
     <div className="w-full">
       {/* Hero Section */}
-      <div className="relative  w-full h-96 md:h-80  overflow-hidden">
+      <div className="relative w-full h-96 md:h-80 overflow-hidden">
         <motion.div
           className="w-full h-full"
           initial={{ opacity: 0, filter: 'blur(5px)' }}
@@ -94,7 +92,7 @@ const FilmGallery = () => {
         </motion.div>
         <div className="absolute inset-0 flex flex-col items-center font-belleza justify-center text-center px-4 z-20 mt-28">
           <motion.h1
-            className="text-3xl md:text-4xl  text-white"
+            className="text-3xl md:text-4xl text-white"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5 }}
@@ -102,20 +100,20 @@ const FilmGallery = () => {
             Our Films
           </motion.h1>
           <motion.p
-            className="text-sm md:text-base font-roboto text-white mt-2  max-w-4xl"
+            className="text-sm md:text-base font-roboto text-white mt-2 max-w-4xl"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.8 }}
           >
             Explore our cinematic journey through weddings, music videos,
-             events, and commercial productions. Each film is crafted with 
-             creativity, passion, and precision to tell stories that inspire,
-              captivate, and leave a lasting impression.
+            events, and commercial productions. Each film is crafted with 
+            creativity, passion, and precision to tell stories that inspire,
+            captivate, and leave a lasting impression.
           </motion.p>
 
           {/* Search Bar */}
           <motion.div
-            className="w-full max-w-md relative mt-6 "
+            className="w-full max-w-md relative mt-6"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1 }}
@@ -126,7 +124,7 @@ const FilmGallery = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
               placeholder="Search your film..."
-              className="w-full font-roboto text-sm tracking-wide border shadow-xl border-gray-400 hover:border-white px-4 py-2  bg-transparent rounded-full text-white backdrop-blur-xs focus:outline-none focus:border-white transition duration-300"
+              className="w-full font-roboto text-sm tracking-wide border shadow-xl border-gray-400 hover:border-white px-4 py-2 bg-transparent rounded-full text-white backdrop-blur-xs focus:outline-none focus:border-white transition duration-300"
             />
             <button
               onClick={handleSearch}
@@ -141,7 +139,8 @@ const FilmGallery = () => {
       {/* Film Cards Section */}
       <div className="max-w-7xl mx-auto px-6 py-12">
         {filmsToShow.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          /* Mobile: 1 card | Tab: 2 cards | Desktop: 3 cards */
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filmsToShow.map((film, index) => {
               const videoId = getVideoId(film.link);
               const thumbnail = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
@@ -161,11 +160,11 @@ const FilmGallery = () => {
                     {/* YouTube Play Button */}
                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                       <div className="w-14 h-8 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center shadow-lg">
-                        <div className="w-0 h-0 border-l-14  border-l-white border-t-6 border-t-transparent border-b-6 border-b-transparent ml-1"></div>
+                        <div className="w-0 h-0 border-l-14 border-l-white border-t-6 border-t-transparent border-b-6 border-b-transparent ml-1"></div>
                       </div>
                     </div>
                   </div>
-                  <div className="p-4 text-center text-sm font-roboto text-white ">{film.coupleName}</div>
+                  <div className="p-4 text-center text-sm font-roboto text-white">{film.coupleName}</div>
                 </div>
               );
             })}

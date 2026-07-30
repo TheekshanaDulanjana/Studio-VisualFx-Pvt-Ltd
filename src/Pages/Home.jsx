@@ -1,152 +1,306 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+
 import HeroLVideo from "../assets/HeroLVideo.MP4";
 import HeroLFallback from "../assets/HeroLFallback.jpg";
 import HeroPVideo from "../assets/HeroPVideo.MP4";
 import HeroPFallback from "../assets/HeroPFallback.jpg.jpg";
-import LandingAbout from "../Components/LandingAbout";
-import ProductionCategories from "../Components/ProductionCategories";
+
+import LandingAbout from "../components/LandingAbout";
+import ProductionCategories from "../components/ProductionCategories";
 
 const Home = () => {
   const location = useLocation();
   const navigate = useNavigate();
+
   const [videoLoaded, setVideoLoaded] = useState(false);
 
   useEffect(() => {
     if (location.hash) {
-      const id = location.hash.substring(1);
+      const id = location.hash.replace("#", "");
+
       const section = document.getElementById(id);
+
       if (section) {
         setTimeout(() => {
-          section.scrollIntoView({ behavior: "smooth" });
+          section.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
         }, 100);
       }
     }
   }, [location]);
 
+
   const scrollToContact = () => {
     const section = document.getElementById("contact");
+
     if (section) {
-      section.scrollIntoView({ behavior: "smooth" });
+      section.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    } else {
+      navigate("/#contact");
     }
   };
 
+
   return (
     <div className="overflow-x-hidden">
-      {/* Hero Section */}
-      <section className="relative flex w-screen min-h-screen items-end justify-start px-6 pb-20 md:px-16">
 
-        {/* Desktop Fallback Image */}
+      <section
+        className="
+          relative isolate
+          flex min-h-screen w-screen
+          items-end justify-start
+          overflow-hidden
+          px-6 pb-20
+          md:px-16
+        "
+      >
+
+        {/* Desktop Image */}
         <motion.img
           src={HeroLFallback}
-          alt="Hero Fallback"
-          className="absolute inset-0 w-full h-full object-cover hidden md:block"
+          alt="Hero Background"
+          className="
+            absolute inset-0
+            hidden h-full w-full
+            object-cover
+            pointer-events-none
+            md:block
+          "
           initial={{ opacity: 1 }}
-          animate={{ opacity: videoLoaded ? 0 : 1 }}
-          transition={{ duration: 1 }}
+          animate={{
+            opacity: videoLoaded ? 0 : 1,
+          }}
+          transition={{
+            duration: 1,
+          }}
         />
 
-        {/* Mobile/Tablet Fallback Image */}
+
+        {/* Mobile Image */}
         <motion.img
           src={HeroPFallback}
-          alt="Hero Fallback Portrait"
-          className="absolute inset-0 w-full h-full object-cover block md:hidden"
+          alt="Hero Background"
+          className="
+            absolute inset-0
+            block h-full w-full
+            object-cover
+            pointer-events-none
+            md:hidden
+          "
           initial={{ opacity: 1 }}
-          animate={{ opacity: videoLoaded ? 0 : 1 }}
-          transition={{ duration: 1 }}
+          animate={{
+            opacity: videoLoaded ? 0 : 1,
+          }}
+          transition={{
+            duration: 1,
+          }}
         />
 
-        {/* Desktop Background Video */}
+
+        {/* Desktop Video */}
         <motion.video
-          className="absolute inset-0 w-full h-full object-cover hidden md:block"
           src={HeroLVideo}
           autoPlay
           loop
           muted
           playsInline
+          preload="auto"
+          className="
+            absolute inset-0
+            hidden h-full w-full
+            object-cover
+            pointer-events-none
+            md:block
+          "
           onCanPlayThrough={() => setVideoLoaded(true)}
           initial={{ opacity: 0 }}
-          animate={{ opacity: videoLoaded ? 1 : 0 }}
-          transition={{ duration: 1.2 }}
+          animate={{
+            opacity: videoLoaded ? 1 : 0,
+          }}
+          transition={{
+            duration: 1.2,
+          }}
         />
 
-        {/* Mobile/Tablet Background Video */}
+
+        {/* Mobile Video */}
         <motion.video
-          className="absolute inset-0 w-full h-full object-cover block md:hidden"
           src={HeroPVideo}
           autoPlay
           loop
           muted
           playsInline
+          preload="auto"
+          className="
+            absolute inset-0
+            block h-full w-full
+            object-cover
+            pointer-events-none
+            md:hidden
+          "
           onCanPlayThrough={() => setVideoLoaded(true)}
           initial={{ opacity: 0 }}
-          animate={{ opacity: videoLoaded ? 1 : 0 }}
-          transition={{ duration: 1.2 }}
+          animate={{
+            opacity: videoLoaded ? 1 : 0,
+          }}
+          transition={{
+            duration: 1.2,
+          }}
         />
 
-        {/* Dot Pattern Noise Layer */}
-        <div 
-          className="absolute inset-0 z-0 pointer-events-none opacity-10"
-          style={{
-            backgroundImage: "radial-gradient(#ffffff 1px, transparent 1px)",
-            backgroundSize: "3px 3px"
-          }}
-        ></div>
 
         {/* Overlay */}
-        <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent"></div>
+        <div
+          className="
+            absolute inset-0
+            pointer-events-none
+            bg-linear-to-t
+            from-black/80
+            via-black/20
+            to-transparent
+          "
+        />
+
 
         {/* Content */}
         <motion.div
-          className="relative z-10 w-full max-w-3xl flex flex-col items-start text-left"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: "easeOut" }}
+          className="
+            relative z-20
+            flex w-full
+            max-w-3xl
+            flex-col
+            items-start
+            text-left
+          "
+          initial={{
+            opacity: 0,
+            y: 30,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          transition={{
+            duration: 1,
+          }}
         >
+
           <motion.h1
-            className="text-3xl sm:text-5xl md:text-7xl font-belleza text-white leading-tight"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 1 }}
+            className="
+              font-belleza
+              text-3xl
+              leading-tight
+              text-white
+              sm:text-5xl
+              md:text-6xl
+            "
           >
-            Studio VisualFX  (Pvt) Ltd.
+            Studio VisualFX (Pvt) Ltd.
           </motion.h1>
 
+
           <motion.p
-            className="text-white/90 font-roboto font-light text-base  mt-4 max-w-2xl"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 1 }}
+            className="
+              mt-4
+              max-w-2xl
+              font-roboto
+              text-base
+              font-light
+              text-white/90
+            "
           >
-            Studio VisualFX is dedicated to producing high-end cinematic visuals that elevate every moment. With a passion for storytelling, we bring your vision to life.
+            Studio VisualFX is dedicated to producing high-end cinematic
+            visuals that elevate every moment. With a passion for storytelling,
+            we bring your vision to life.
           </motion.p>
 
-          <motion.div
-            className="flex flex-nowrap gap-2 sm:gap-4 mt-8"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 1 }}
+
+          {/* Buttons */}
+          <div
+            className="
+              relative z-[999]
+              mt-8
+              flex
+              flex-nowrap
+              gap-2
+              sm:gap-4
+            "
           >
+
             <button
+              type="button"
               onClick={() => navigate("/film-gallery")}
-              className="px-4 sm:px-8 py-3 bg-white cursor-pointer hover:border hover:border-white text-xs sm:text-sm text-black font-semibold rounded-full hover:bg-black hover:text-white transition duration-300 whitespace-nowrap"
+              className="
+                relative z-[999]
+                touch-manipulation
+                min-h-[48px]
+                cursor-pointer
+                whitespace-nowrap
+                rounded-full
+                bg-white
+                px-4
+                py-3
+                text-xs
+                font-semibold
+                text-black
+                transition
+                duration-300
+                hover:bg-black
+                hover:text-white
+                sm:px-8
+                sm:text-sm
+              "
             >
               View Portfolio
             </button>
 
+
             <button
+              type="button"
               onClick={scrollToContact}
-              className="px-4 sm:px-8 py-3 border cursor-pointer hover:border hover:border-black border-white text-xs sm:text-sm text-white font-semibold rounded-full hover:bg-white hover:text-black transition duration-300 whitespace-nowrap"
+              className="
+                relative z-[999]
+                touch-manipulation
+                min-h-[48px]
+                cursor-pointer
+                whitespace-nowrap
+                rounded-full
+                border
+                border-white
+                px-4
+                py-3
+                text-xs
+                font-semibold
+                text-white
+                transition
+                duration-300
+                hover:bg-white
+                hover:text-black
+                sm:px-8
+                sm:text-sm
+              "
             >
               Book Your Session
             </button>
-          </motion.div>
+
+          </div>
+
         </motion.div>
+
       </section>
 
+
       <LandingAbout />
+
       <ProductionCategories />
+
     </div>
   );
 };

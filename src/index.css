@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* =========================================================
+   Base styles
+========================================================= */
+
 @layer base {
   .font-belleza {
     font-family: "Belleza", sans-serif;
@@ -14,113 +18,261 @@
     font-style: normal;
   }
 
-  body, html {
+  html {
+    min-width: 0;
+    min-height: 100%;
+    background-color: #000000;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    min-width: 0;
+    min-height: 100vh;
+    margin: 0;
     overflow-x: hidden;
     background-color: #000000;
 
-    /* Rotated grid + two ash radial circles */
-    background-image: 
-      radial-gradient(circle at 20% 0%, rgba(44, 44, 44, 0.952) 0%, transparent 40%),
-      radial-gradient(circle at 80% 100%, rgba(27, 27, 27, 0.952) 0%, transparent 40%),
-      linear-gradient(45deg, rgb(20, 20, 20) 1px, transparent 1px),
-      linear-gradient(135deg, rgb(20, 20, 20) 1px, transparent 1px);
+    /*
+     * Rotated grid සහ radial circles.
+     */
+    background-image:
+      radial-gradient(
+        circle at 20% 0%,
+        rgba(44, 44, 44, 0.952) 0%,
+        transparent 40%
+      ),
+      radial-gradient(
+        circle at 80% 100%,
+        rgba(27, 27, 27, 0.952) 0%,
+        transparent 40%
+      ),
+      linear-gradient(
+        45deg,
+        rgb(20, 20, 20) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        135deg,
+        rgb(20, 20, 20) 1px,
+        transparent 1px
+      );
 
-    background-size: 100% 100%, 100% 100%, 30px 30px, 30px 30px;
+    background-size:
+      100% 100%,
+      100% 100%,
+      30px 30px,
+      30px 30px;
+
     background-attachment: fixed;
-    animation: verticalCircles 100s linear infinite; /* slow vertical movement */
+
+    animation:
+      verticalCircles 100s linear infinite;
   }
 
-  /* Vertical movement for circles: top→bottom, bottom→top */
-  @keyframes verticalCircles {
-    0% {
-      background-position: 20% 0%, 80% 100%, 0 0, 0 0;
-    }
-    50% {
-      background-position: 20% 100%, 80% 0%, 0 0, 0 0;
-    }
-    100% {
-      background-position: 20% 0%, 80% 100%, 0 0, 0 0;
-    }
+  #root {
+    min-width: 0;
+    min-height: 100vh;
   }
 
-  ::-webkit-scrollbar {
-    width: 5px;
+  /*
+   * Buttons සහ links mobile touch සඳහා.
+   */
+  button,
+  a,
+  [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
 
-  ::-webkit-scrollbar-track {
-    background: #151515;
+  /*
+   * Form fields වල native touch behaviour තබාගන්නවා.
+   */
+  input,
+  select,
+  textarea {
+    touch-action: auto;
   }
 
-  ::-webkit-scrollbar-thumb {
-    background: #000000;
+  button:not(:disabled),
+  a[href],
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
   }
 
-  ::-webkit-scrollbar-thumb:hover {
-    background: #ffffff;
-    opacity: 0.8;
+  button:disabled {
+    cursor: not-allowed;
+  }
+
+  img {
+    max-width: 100%;
   }
 }
+
+/* =========================================================
+   Background animation
+========================================================= */
+
+@keyframes verticalCircles {
+  0% {
+    background-position:
+      20% 0%,
+      80% 100%,
+      0 0,
+      0 0;
+  }
+
+  50% {
+    background-position:
+      20% 100%,
+      80% 0%,
+      0 0,
+      0 0;
+  }
+
+  100% {
+    background-position:
+      20% 0%,
+      80% 100%,
+      0 0,
+      0 0;
+  }
+}
+
+/* =========================================================
+   Loading logo animation
+========================================================= */
+
+@keyframes logoFastZoom {
+  0%,
+  100% {
+    transform: scale(0.85);
+    opacity: 0.8;
+  }
+
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+}
+
+.animate-logo-fast-zoom {
+  animation:
+    logoFastZoom 1.2s ease-in-out infinite;
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+
+/* =========================================================
+   Scrollbar
+========================================================= */
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #151515;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #000000;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ffffff;
+  opacity: 0.8;
+}
+
+Coverletter 
+multiple cv option 
+upload CV delete
+Required 
+Subscriptioin line deatils 
+
+
+
+/* =========================================================
+   Custom responsive height overrides
+========================================================= */
 
 .h-\[50vh\] {
   height: 45vh !important;
 }
+
 .min-h-\[400px\] {
   min-height: 220px !important;
 }
+
 .max-h-\[800px\] {
   max-height: 650px !important;
 }
 
-/* Small screens (sm) */
+/* Small screens */
 @media (min-width: 640px) {
   .h-\[50vh\] {
     height: 60vh !important;
   }
+
   .min-h-\[400px\] {
     min-height: 300px !important;
   }
+
   .max-h-\[800px\] {
     max-height: 800px !important;
   }
 }
 
-/* Medium / large screens (md / lg) */
+/* Medium සහ large screens */
 @media (min-width: 1024px) {
   .h-\[50vh\] {
     height: 70vh !important;
   }
+
   .min-h-\[400px\] {
     min-height: 400px !important;
   }
 }
 
-html.lenis {
-  height: auto;
-}
+/* =========================================================
+   Images
+========================================================= */
 
-.lenis.lenis-smooth {
-  scroll-behavior: auto;
-}
-
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
-
-.lenis.lenis-scrolling iframe {
-  pointer-events: none;
-}
-
-/* Ensure images cover without introducing horizontal scroll */
 .object-cover {
   -o-object-fit: cover;
   object-fit: cover;
 }
 
-/* Small nicety: ensure main wrappers don't overflow on very narrow viewports */
-body, html, #root {
-  min-width: 0;
+/* =========================================================
+   Mobile/touch optimizations
+========================================================= */
+
+@media (pointer: coarse), (hover: none) {
+  body {
+    /*
+     * Mobile Safari/Chrome වල fixed background rendering
+     * සහ touch performance issues අඩු කිරීම.
+     */
+    background-attachment: scroll;
+
+    /*
+     * Continuous background animation mobile එකේ disable
+     * කර performance එක improve කිරීම.
+     */
+    animation: none;
+  }
+}
+
+/* =========================================================
+   Reduced motion accessibility
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  body,
+  .animate-logo-fast-zoom {
+    animation: none !important;
+  }
 }

@@ -22,7 +22,7 @@ const LoadingSpinner = () => {
   }, []);
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black pointer-events-auto">
       <div className="relative">
         {/* Main Logo - Fast animation applied */}
         <img

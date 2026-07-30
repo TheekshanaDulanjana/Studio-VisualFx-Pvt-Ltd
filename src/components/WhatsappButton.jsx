@@ -20,7 +20,7 @@ const WhatsappWidget = ({ showScrollButton }) => {
 
   return (
     <div
-      className={`fixed right-4 md:right-10 z-50  flex flex-col items-end transition-all duration-300 ease-in-out ${
+      className={`fixed right-4 md:right-10 z-50 flex flex-col items-end pointer-events-none transition-all duration-300 ease-in-out ${
         showScrollButton
           ? "bottom-[5.8rem] md:bottom-[6.2rem]"
           : "bottom-6 md:bottom-8"
@@ -28,7 +28,7 @@ const WhatsappWidget = ({ showScrollButton }) => {
     >
       {/* Chat Popup */}
       <div
-        className={`mb-4 transition-all  duration-300 ease-in-out origin-bottom-right ${
+        className={`mb-4 transition-all duration-300 ease-in-out origin-bottom-right ${
           isOpen
             ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
             : "opacity-0 scale-95 translate-y-4 pointer-events-none"
@@ -87,7 +87,7 @@ const WhatsappWidget = ({ showScrollButton }) => {
       {/* Floating WhatsApp Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-white text-black shadow-xl transition-all duration-300 hover:scale-110 hover:bg-green-500 hover:text-white"
+        className="pointer-events-auto flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-white text-black shadow-xl transition-all duration-300 hover:scale-110 hover:bg-green-500 hover:text-white"
       >
         <FaWhatsapp className="text-2xl" />
       </button>
