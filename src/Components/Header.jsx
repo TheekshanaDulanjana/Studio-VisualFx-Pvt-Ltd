@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { FaArrowRight } from "react-icons/fa";
 import Logo from "../assets/StudioVisualFX.png";
 
-const resetScrollPosition = () => {
-  if (typeof window === 'undefined') return;
+const NAV_ITEMS = [
+  { id: "home", label: "Home", path: "/" },
+  { id: "about", label: "About Us", path: "/about" },
+  { id: "film-gallery", label: "Our Films", path: "/film-gallery" },
+  { id: "testimonials", label: "Testimonials", path: "/#testimonials" },
+  { id: "faq", label: "FAQ", path: "/#faq" },
+  { id: "contact", label: "Contact", path: "/#contact" },
+];
 
-  window.scrollTo(0, 0);
-  window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-  document.documentElement.scrollTop = 0;
-  document.body.scrollTop = 0;
-  document.scrollingElement?.scrollTo(0, 0);
-};
+const ROUTE_IDS = new Set(["about", "film-gallery"]);
 
 const Header = () => {
   const navigate = useNavigate();
@@ -20,182 +21,209 @@ const Header = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showHeader, setShowHeader] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
 
+  const lastScrollY = useRef(0);
+
+  // Lock body scroll while menu is open
   useEffect(() => {
-    // Handle body overflow when mobile menu is open
-    document.body.style.overflow = isMenuOpen ? "hidden" : "unset";
-    return () => (document.body.style.overflow = "unset");
+    if (isMenuOpen) {
+      document.body.style.overflow = "hidden";
+      document.body.style.touchAction = "none";
+    } else {
+      document.body.style.overflow = "";
+      document.body.style.touchAction = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+      document.body.style.touchAction = "";
+    };
   }, [isMenuOpen]);
 
+  // Hide header while scrolling down
   useEffect(() => {
-    // Scroll listener for header show/hide
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      if (currentScrollY <= 0) {
-        // At top, always show
+      const currentY = window.scrollY;
+
+      if (currentY <= 0) {
         setShowHeader(true);
-      } else if (currentScrollY > lastScrollY) {
-        // Scrolling down, hide header
-        setShowHeader(false);
+      } else if (currentY < lastScrollY.current) {
+        setShowHeader(true);
       } else {
-        // Scrolling up, show header
-        setShowHeader(true);
+        setShowHeader(false);
       }
-      setLastScrollY(currentScrollY);
+
+      lastScrollY.current = currentY;
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
+    window.addEventListener("scroll", handleScroll, {
+      passive: true,
+    });
 
-  const scrollToSection = (id) => {
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const goTo = useCallback(
+    (id) => {
+      setIsMenuOpen(false);
+
+      if (ROUTE_IDS.has(id)) {
+        navigate(`/${id}`);
+        window.scrollTo({
+          top: 0,
+          behavior: "instant",
+        });
+        return;
+      }
+
+      if (id === "home") {
+        navigate("/");
+        window.scrollTo({
+          top: 0,
+          behavior: "instant",
+        });
+        return;
+      }
+
+      const hash = `#${id}`;
+
+      if (location.pathname !== "/") {
+        navigate(`/${hash}`);
+      } else {
+        const element = document.getElementById(id);
+
+        if (element) {
+          element.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+
+          window.history.replaceState({}, "", hash);
+        }
+      }
+    },
+    [navigate, location.pathname]
+  );
+
+  const goToCommercial = useCallback(() => {
     setIsMenuOpen(false);
 
-    resetScrollPosition();
+    navigate("/commercial");
 
-    if (id === "about") {
-      navigate("/about");
-      return;
-    }
-
-    if (id === "film-gallery") {
-      navigate("/film-gallery");
-      return;
-    }
-
-    const hash = `#${id}`;
-
-    if (location.pathname !== "/") {
-      navigate(`/${hash}`);
-    } else {
-      window.history.pushState(null, "", hash);
-      const section = document.getElementById(id);
-      if (section) section.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
-  const navItems = [
-    { id: "home", label: "Home" },
-    { id: "about", label: "About Us" },
-    { id: "film-gallery", label: "Our Films" },
-    { id: "testimonials", label: "Testimonials" },
-    { id: "faq", label: "FAQ" },
-    { id: "contact", label: "Contact" },
-  ];
+    window.scrollTo({
+      top: 0,
+      behavior: "instant",
+    });
+  }, [navigate]);
 
   return (
     <>
-      {/*DESKTOP HEADER*/}
       <header
-        className={`fixed top-0 left-0 right-0 pt-6 z-50 transition-transform duration-300 ${
+        className={`fixed inset-x-0 top-0 z-40 pointer-events-none pt-6 transition-transform duration-300 ease-out will-change-transform ${
           showHeader ? "translate-y-0" : "-translate-y-full"
         }`}
       >
-        <div className="max-w-7xl mx-4 lg:mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between py-3">
-          {/* Logo */}
-          <div
-            className="flex items-center cursor-pointer"
-            onClick={() => scrollToSection("home")}
+        <div className="pointer-events-auto mx-4 flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:mx-auto lg:px-8">
+          <button
+            onClick={() => goTo("home")}
+            className="touch-manipulation cursor-pointer flex items-center"
           >
-            <img src={Logo} alt="Studio Visual FX" className="h-10 w-auto" />
-          </div>
+            <img
+              src={Logo}
+              alt="Studio Visual FX"
+              className="h-10 w-auto"
+            />
+          </button>
 
-          {/* Desktop Nav */}
-          <nav className="hidden lg:flex space-x-8 xl:space-x-10 text-white  font-roboto">
-            {navItems.map((item) => (
+          <nav className="hidden space-x-8 font-roboto text-white lg:flex xl:space-x-10">
+            {NAV_ITEMS.map(({ id, label }) => (
               <button
-                key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className="hover:text-white cursor-pointer transition-colors duration-200 text-sm xl:text-xs hover:font-semibold uppercase tracking-widest relative"
+                key={id}
+                onClick={() => goTo(id)}
+                className="touch-manipulation cursor-pointer text-sm uppercase tracking-widest transition-all duration-200 hover:font-semibold xl:text-xs"
               >
-                {item.label}
+                {label}
               </button>
             ))}
           </nav>
 
-          {/* Desktop CTA */}
           <button
-            onClick={() => {
-              resetScrollPosition();
-              navigate("/commercial");
-            }}
-            className="group hidden lg:flex items-center gap-3 bg-white 
-                        text-black px-4 py-2 rounded-full 
-                       hover:bg-black hover:text-white 
-                       transition-all duration-200 text-sm xl:text-sm  cursor-pointer"
+            onClick={goToCommercial}
+            className="group hidden touch-manipulation items-center gap-3 rounded-full bg-white px-4 py-2 text-sm text-black transition-all duration-300 hover:bg-black hover:text-white lg:flex"
           >
             <span className="font-roboto">Commercial</span>
-            <span className="flex items-center justify-center w-6 h-6 bg-black rounded-full group-hover:bg-white transition">
-              <FaArrowRight className="text-white text-xs group-hover:text-black transition" />
+
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-black transition-all group-hover:bg-white">
+              <FaArrowRight className="text-xs text-white transition-all group-hover:text-black" />
             </span>
           </button>
 
-          {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(true)}
-            className="lg:hidden p-2 rounded-full hover:bg-white/10 transition"
+            aria-label="Open Menu"
+            className="touch-manipulation rounded-full p-2 transition hover:bg-white/10 lg:hidden"
           >
-            <Menu className="w-6 h-6  text-white" />
+            <Menu className="h-6 w-6 text-white" />
           </button>
         </div>
       </header>
 
-      {/*MOBILE */}
+      {/* Mobile & Tablet Drawer */}
       <div
-        className={`fixed inset-0 z-50 lg:hidden transition-all duration-500 ${
+        className={`fixed inset-0 z-[999] transition-opacity duration-200 ease-out lg:hidden ${
           isMenuOpen
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
+            ? "pointer-events-auto opacity-100"
+            : "pointer-events-none opacity-0"
         }`}
       >
-        {/* Background */}
-        <div className="absolute inset-0 bg-black/60 backdrop-blur-md" />
+        {/* Background Overlay */}
+        <div className="absolute inset-0 bg-black/90 transform-gpu" />
 
-        {/* Content */}
-        <div className="relative flex flex-col h-full px-6 py-8 font-roboto text-white">
-          {/* Top */}
+        {/* Menu Content */}
+        <div
+          className={`relative flex h-full flex-col px-6 py-8 font-roboto text-white transition-transform duration-200 ease-out transform-gpu ${
+            isMenuOpen ? "translate-y-0" : "-translate-y-4"
+          }`}
+        >
           <div className="flex items-center justify-between">
-            <img src={Logo} alt="Studio Visual FX" className="h-10" />
+            <img
+              src={Logo}
+              alt="Studio Visual FX"
+              className="h-10"
+            />
+
             <button
               onClick={() => setIsMenuOpen(false)}
-              className="p-2 rounded-full border border-white/30 hover:bg-white/10 transition"
+              aria-label="Close Menu"
+              className="touch-manipulation rounded-full border border-white/30 p-2 transition hover:bg-white/10"
             >
-              <X className="w-6 h-6" />
+              <X className="h-6 w-6" />
             </button>
           </div>
 
-          {/* Nav Items */}
-          <nav className="flex-1 flex flex-col justify-center items-center space-y-7">
-            {navItems.map((item) => (
+          <nav className="flex flex-1 flex-col items-center justify-center space-y-7">
+            {NAV_ITEMS.map(({ id, label }) => (
               <button
-                key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className="relative group text-sm  font-roboto tracking-widest uppercase transition-all"
+                key={id}
+                onClick={() => goTo(id)}
+                className="touch-manipulation text-sm uppercase tracking-widest transition-transform duration-200 active:scale-95"
               >
-                <span className=" transition">
-                  {item.label}
-                </span>
-                <span className="absolute left-0 -bottom-2 w-0 h-0.5  group-hover:w-full transition-all duration-300" />
+                {label}
               </button>
             ))}
           </nav>
 
-          {/* CTA */}
-          <div className="mb-6 items-center justify-center flex">
+          <div className="mb-6 flex justify-center">
             <button
-              onClick={() => {
-                resetScrollPosition();
-                navigate("/commercial");
-              }}
-              className="w-40 h-12 flex items-center justify-center gap-4 
-                         bg-white text-black 
-                         px-4 py-3 rounded-full 
-                         hover:bg-white transition-all duration-300"
+              onClick={goToCommercial}
+              className="flex h-12 w-40 touch-manipulation items-center justify-center gap-4 rounded-full bg-white px-4 py-3 text-black transition-transform duration-200 active:scale-95"
             >
-              <span className="text-sm  font-roboto">Commercial</span>
-              <span className="flex items-center justify-center w-8 h-8 bg-black rounded-full">
-                <FaArrowRight className="text-white text-sm" />
+              <span className="font-roboto text-sm">Commercial</span>
+
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-black">
+                <FaArrowRight className="text-sm text-white" />
               </span>
             </button>
           </div>

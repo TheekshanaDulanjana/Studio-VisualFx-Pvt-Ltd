@@ -1,74 +1,56 @@
-import React from "react";
+import React, { useState } from "react";
 
 export default function TestimonialCard({ testimonial }) {
   const { username, image, eventType, message, date } = testimonial;
 
+  // Controls the "message open" state.
+  // - Desktop: opens on hover (via group-hover CSS) regardless of this state.
+  // - Mobile/Tablet: hover doesn't exist, so we toggle this on tap/touch.
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleToggle = () => {
+    setIsOpen((prev) => !prev);
+  };
+
   return (
-    <div className="group relative rounded-[16px] overflow-hidden h-72 sm:h-72 flex-none w-[280px] sm:w-[350px] md:w-[380px] lg:w-[400px] snap-center">
-      <img
-        src={image}
-        alt={username}
-        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-      />
-
-      {/* Initial Overlay */}
-      <div className="absolute inset-0 bg-linear-to-t from-white/20 via-transparent to-transparent opacity-100 group-hover:opacity-0 transition-opacity duration-300 flex flex-col justify-end p-4 sm:p-6">
-        <div className="flex items-center gap-2 sm:gap-3">
-          <img
-            src={image}
-            alt={username}
-            className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white object-cover"
-          />
-          <div >
-            <h3 className="text-black text-sm font-belleza sm:text-base  ">{username}</h3>
-            <p className="text-black/80 text-xs sm:text-xs font-roboto  -mt-1">{eventType}</p>
-          </div>
-        </div>
+    <div
+      onClick={handleToggle}
+      className="group relative w-[80vw] xs:w-72 sm:w-80 max-w-[320px] shrink-0 box-border overflow-hidden rounded-2xl border border-white/10 bg-neutral-900 cursor-pointer select-none"
+    >
+      {/* Image */}
+      <div className="relative h-48 w-full overflow-hidden">
+        <img
+          src={image.src}
+          alt={username}
+          className="h-full rounded-2xl w-full object-cover"
+          draggable={false}
+        />
+        <span className="absolute top-3 left-3 rounded-full bg-black/30 backdrop-blur-xs border px-3 py-1 text-xs font-roboto text-white">
+          {eventType}
+        </span>
       </div>
 
-      {/* Hover Content for Desktop */}
-      <div className="absolute inset-0 bg-white/20 backdrop-blur-sm p-4 sm:p-6 flex-col justify-center translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-in-out hidden md:flex">
-        <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-          <img
-            src={image}
-            alt={username}
-            className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover border border-white"
-          />
-          <div>
-            <h3 className=" text-black text-sm font-belleza sm:text-base">{username}</h3>
-            <p className="text-black/70 text-xs sm:text-xs font-roboto -mt-1">{eventType}</p>
-          </div>
-        </div>
-
-        <p className="text-black/80 text-justify font-roboto text-xs sm:text-sm leading-relaxed mb-3 sm:mb-4 line-clamp-5">
-          "{message}"
-        </p>
-
-        <p className="font-roboto text-white text-[10px] sm:text-[10px] absolute bottom-2 sm:bottom-4 right-4 sm:right-6">
-          {date}
-        </p>
+      {/* Basic Info (always visible) */}
+      <div className="p-4">
+        <h3 className="font-belleza text-lg text-white truncate">{username}</h3>
+        <p className="font-roboto text-xs text-gray-400 mb-2">{date}</p>
+        <p className="font-roboto text-sm text-gray-300 line-clamp-2">{message}</p>
       </div>
 
-      {/* Always Visible Content for Mobile + Tablet */}
-      <div className="md:hidden absolute inset-0 bg-white/5 backdrop-blur-sm p-4 flex flex-col justify-center">
-        <div className="flex items-center gap-2 mb-3">
-          <img
-            src={image}
-            alt={username}
-            className="w-10 h-10 rounded-full object-cover border border-white"
-          />
-          <div>
-            <h3 className=" text-black text-sm font-belleza sm:text-base">{username}</h3>
-            <p className="text-black/70 text-xs sm:text-xs font-roboto -mt-1">{eventType}</p>
-          </div>
-        </div>
-
-        <p className="text-black/80 text-justify font-roboto text-xs sm:text-sm  mb-3 sm:mb-4 line-clamp-5">
-          "{message}"
+      {/* Full Message Overlay
+          - opacity-0 -> group-hover:opacity-100 handles desktop hover
+          - isOpen appended manually so mobile/tablet tap also reveals it */}
+      <div
+        className={`absolute inset-0 flex flex-col justify-center bg-black/40 backdrop-blur-md p-5 text-left opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100 ${
+          isOpen ? "opacity-100" : ""
+        }`}
+      >
+        <h3 className="font-belleza text-lg text-white mb-1">{username}</h3>
+        <p className="font-roboto text-xs text-white/70 mb-3">
+          {eventType} • {date}
         </p>
-
-        <p className="font-roboto text-black text-[10px] sm:text-[10px] absolute bottom-2 sm:bottom-4 right-4 sm:right-6">
-          {date}
+        <p className="font-roboto text-sm text-white leading-relaxed overflow-y-auto max-h-40 pr-1">
+          {message}
         </p>
       </div>
     </div>
