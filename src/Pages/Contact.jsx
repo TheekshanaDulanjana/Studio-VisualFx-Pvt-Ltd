@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import emailjs from "@emailjs/browser";
+import { motion, AnimatePresence } from "framer-motion";
 import { FaPhone, FaEnvelope, FaBuilding, FaClock, FaWhatsapp, FaLink } from "react-icons/fa";
 
 const Contact = () => {
@@ -39,21 +40,20 @@ const Contact = () => {
     setFormValid(isValid);
   }, [formData]);
 
-  // Modal එක open වුණාම තත්පර 5කින් auto close වෙන useEffect එක
+  // Modal auto close after 5 seconds
   useEffect(() => {
     if (modal.show) {
       const timer = setTimeout(() => {
         closeModal();
-      }, 5000); // 5000 ms = 5 seconds
+      }, 5000);
 
-      return () => clearTimeout(timer); // Cleanup timer if component unmounts or modal closes early
+      return () => clearTimeout(timer);
     }
   }, [modal.show]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // Mobile validation: Only allow numbers and limit to 10
     if (name === "mobile") {
       const onlyNums = value.replace(/[^0-9]/g, "");
       if (onlyNums.length <= 10) {
@@ -62,7 +62,6 @@ const Contact = () => {
       return;
     }
 
-    // Word count limit for message
     if (name === "message") {
       const words = getWordCount(value);
       if (words <= 250 || value.length < formData.message.length) {
@@ -116,12 +115,59 @@ const Contact = () => {
 
   const closeModal = () => setModal({ show: false, message: "" });
 
+  // Ultra smooth and slow luxury easing curve
+  const luxuryEase = [0.16, 1, 0.3, 1];
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.25,
+        delayChildren: 0.15,
+      },
+    },
+  };
+
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 45 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 1.4,
+        ease: luxuryEase,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 50, scale: 0.95 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 1.3,
+        ease: luxuryEase,
+      },
+    },
+  };
+
   return (
-    <div className="w-full px-6 md:px-6 lg:px-8 pb-16 py-12" style={{ color: "white" }}>
+    <motion.div 
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-100px" }}
+      variants={containerVariants}
+      className="w-full px-6 md:px-6 lg:px-8 pb-16 py-12" 
+      style={{ color: "white" }}
+    >
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row gap-10 lg:gap-16">
+          
           {/* Left Column */}
-          <div className=" space-y-8">
+          <motion.div variants={fadeInUp} className="space-y-8 lg:w-1/3">
             <div>
               <h2 className="text-3xl sm:text-4xl font-belleza lg:text-5xl mb-4">
                 Get in Touch
@@ -143,8 +189,8 @@ const Contact = () => {
                     <span className="font-belleza text-lg">Dial</span>
                   </div>
                   <div className="flex flex-col ml-6 font-roboto space-y-1">
-                    <a className="text-gray-300 hover:text-white transition" href="tel:+94719896981">+94 71 989 6981</a>
                     <a className="text-gray-300 hover:text-white transition" href="tel:+94776996981">+94 77 699 6981</a>
+                    <a className="text-gray-300 hover:text-white transition" href="tel:+94719896981">+94 71 989 6981</a>
                   </div>
                 </div>
 
@@ -180,10 +226,10 @@ const Contact = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Right Column (Form) */}
-          <div className="lg:w-2/3 outline outline-white rounded-[16px] p-6">
+          <motion.div variants={cardVariants} className="lg:w-2/3 outline outline-white rounded-[16px] p-6">
             <h2 className="text-2xl sm:text-3xl font-belleza text-white mb-8">
               Send Message
             </h2>
@@ -260,7 +306,10 @@ const Contact = () => {
                 </p>
               </div>
 
-              <button
+              <motion.button
+                whileHover={formValid ? { scale: 1.01 } : {}}
+                whileTap={formValid ? { scale: 0.98 } : {}}
+                transition={{ duration: 0.3, ease: luxuryEase }}
                 type="submit"
                 disabled={!formValid}
                 className={`w-full py-3 cursor-pointer font-roboto text-black rounded-[8px] transition ${
@@ -268,28 +317,45 @@ const Contact = () => {
                 }`}
               >
                 Send Message
-              </button>
+              </motion.button>
             </form>
-          </div>
+          </motion.div>
         </div>
 
-        {/* Modal */}
-        {modal.show && (
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-50">
-            <div className="bg-transparent backdrop-blur-xl rounded-[16px] outline-2 outline-white p-6 w-80 sm:w-96 text-center">
-              <h2 className="text-xl text-white font-belleza mb-3">Thank You!</h2>
-              <p className="text-white text-xs font-roboto mb-6">{modal.message}</p>
-              <button
-                onClick={closeModal}
-                className="w-40 bg-white font-roboto text-black py-2 rounded-[8px] hover:bg-white cursor-pointer"
+        {/* Animated Modal */}
+        <AnimatePresence>
+          {modal.show && (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.4, ease: luxuryEase }}
+              className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-50"
+            >
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                transition={{ duration: 0.5, ease: luxuryEase }}
+                className="bg-transparent backdrop-blur-xl rounded-[16px] outline-2 outline-white p-6 w-80 sm:w-96 text-center"
               >
-                Ok
-              </button>
-            </div>
-          </div>
-        )}
+                <h2 className="text-xl text-white font-belleza mb-3">Thank You!</h2>
+                <p className="text-white text-xs font-roboto mb-6">{modal.message}</p>
+                <motion.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  transition={{ duration: 0.2, ease: luxuryEase }}
+                  onClick={closeModal}
+                  className="w-40 bg-white font-roboto text-black py-2 rounded-[8px] hover:bg-white cursor-pointer"
+                >
+                  Ok
+                </motion.button>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

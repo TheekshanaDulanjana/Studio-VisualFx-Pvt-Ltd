@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import sasanka from '../assets/sasanka.png';
 import { SiAdobepremierepro, SiDavinciresolve, SiAdobeaftereffects, SiAdobeaudition } from 'react-icons/si';
 import { FaWhatsapp, FaFacebookF, FaInstagram, FaLinkedinIn } from 'react-icons/fa6';
@@ -11,8 +12,65 @@ const ServiceSection = () => {
     { name: 'Adobe Audition', icon: <SiAdobeaudition className="w-8 h-8 md:w-10 md:h-10" /> },
   ];
 
+  // Ultra smooth and slow luxury easing curve
+  const luxuryEase = [0.16, 1, 0.3, 1];
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.25,
+        delayChildren: 0.15,
+      },
+    },
+  };
+
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 45 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 1.4,
+        ease: luxuryEase,
+      },
+    },
+  };
+
+  const imageVariants = {
+    hidden: { opacity: 0, y: 50, scale: 0.95 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 1.5,
+        ease: luxuryEase,
+      },
+    },
+  };
+
+  const toolVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 1.2,
+        ease: luxuryEase,
+      },
+    },
+  };
+
   return (
-    <section className="text-white py-12 md:py-12 px-6 md:px-12 lg:px-6 overflow-hidden">
+    <motion.section 
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-100px" }}
+      variants={containerVariants}
+      className="text-white py-12 md:py-12 px-6 md:px-12 lg:px-6 overflow-hidden"
+    >
       {/* Container to center and limit width */}
       <div className="w-full max-w-7xl mx-auto">
         
@@ -20,7 +78,7 @@ const ServiceSection = () => {
         <div className="flex flex-col lg:flex-row items-center justify-between gap-12 mb-16 lg:mb-24">
           
           {/* Left Side: Text Content */}
-          <div className="flex-1 space-y-8 text-center lg:text-left order-2 lg:order-1 w-full">
+          <motion.div variants={fadeInUp} className="flex-1 space-y-8 text-center lg:text-left order-2 lg:order-1 w-full">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-belleza leading-tight">
               Visionary Director And <br className="hidden sm:block" /> Creative Storyteller
             </h1>
@@ -43,85 +101,106 @@ const ServiceSection = () => {
               <p className="text-sm font-roboto m-0">Let's Connect!</p>
 
               {/* WhatsApp */}
-              <a 
+              <motion.a 
+                whileHover={{ scale: 1.2, y: -2 }}
+                transition={{ duration: 0.3, ease: luxuryEase }}
                 href="https://wa.me/719896981" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="text-gray-300 hover:text-green-500 transition-colors text-lg"
               >
                 <FaWhatsapp />
-              </a>
+              </motion.a>
 
               {/* Facebook */}
-              <a 
+              <motion.a 
+                whileHover={{ scale: 1.2, y: -2 }}
+                transition={{ duration: 0.3, ease: luxuryEase }}
                 href="https://web.facebook.com/sasankadulanjana0" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="text-gray-300 hover:text-blue-600 transition-colors text-lg"
               >
                 <FaFacebookF />
-              </a>
+              </motion.a>
 
               {/* Instagram */}
-              <a 
+              <motion.a 
+                whileHover={{ scale: 1.2, y: -2 }}
+                transition={{ duration: 0.3, ease: luxuryEase }}
                 href="https://www.instagram.com/sasankadulanjana_/" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="text-gray-300 hover:text-pink-500 transition-colors text-lg"
               >
                 <FaInstagram />
-              </a>
+              </motion.a>
 
               {/* LinkedIn */}
-              <a 
+              <motion.a 
+                whileHover={{ scale: 1.2, y: -2 }}
+                transition={{ duration: 0.3, ease: luxuryEase }}
                 href="https://www.linkedin.com/in/sasanka-dulanjana/" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="text-gray-300 hover:text-blue-400 transition-colors text-lg"
               >
                 <FaLinkedinIn />
-              </a>
+              </motion.a>
             </div>
-          </div>
+          </motion.div>
 
           {/* Right Side: Image */}
-          <div className="flex-1 order-1 lg:order-2 w-full">
-            <div className="relative group">
+          <motion.div variants={imageVariants} className="flex-1 order-1 lg:order-2 w-full">
+            <motion.div 
+              whileHover={{ y: -6 }}
+              transition={{ duration: 0.6, ease: luxuryEase }}
+              className="relative group cursor-pointer"
+            >
               <div className="absolute -inset-1 transition duration-1000"></div>
-              <img 
+              <motion.img 
                 src={sasanka} 
                 alt="Sasanka Dulanjana" 
-                className="relative w-full h-auto object-cover rounded-[16px] shadow-2xl transition duration-500"
+                className="relative w-full h-auto object-cover rounded-[16px] shadow-2xl transition duration-700 ease-out group-hover:scale-102"
               />
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
 
         {/* Bottom Icons Section */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-6 md:gap-4 border-t border-gray-800 pt-12 items-center lg:items-start">
+        <motion.div 
+          variants={containerVariants}
+          className="grid grid-cols-2 md:grid-cols-5 gap-6 md:gap-4 border-t border-gray-800 pt-12 items-center lg:items-start"
+        >
           
           {/* Supporting List */}
-          <div className="col-span-2 md:col-span-1 text-center lg:text-left text-sm font-roboto space-y-1 text-white mb-4 md:mb-0">
+          <motion.div variants={toolVariants} className="col-span-2 md:col-span-1 text-center lg:text-left text-sm font-roboto space-y-1 text-white mb-4 md:mb-0">
             <p className="hover:text-white transition-colors cursor-default">Cinematic Storytelling</p>
             <p className="hover:text-white transition-colors cursor-default">Post-Production Mastery</p>
             <p className="hover:text-white transition-colors cursor-default">Audio & Visual Design</p>
-          </div>
+          </motion.div>
 
           {/* Dynamic Tools List */}
           {tools.map((tool, index) => (
-            <div key={index} className="flex flex-col items-center text-center space-y-4 group cursor-pointer">
-              <div className="text-gray-300 hover:text-white transform group-hover:scale-110 transition-all duration-300">
+            <motion.div 
+              key={index} 
+              variants={toolVariants}
+              whileHover={{ y: -4 }}
+              transition={{ duration: 0.3, ease: luxuryEase }}
+              className="flex flex-col items-center text-center space-y-4 group cursor-pointer"
+            >
+              <div className="text-gray-300 hover:text-white transform group-hover:scale-110 transition-all duration-500">
                 {tool.icon}
               </div>
               <p className="font-roboto text-xs uppercase text-gray-300 group-hover:text-white transition-colors">
                 {tool.name}
               </p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
       </div>
-    </section>
+    </motion.section>
   );
 };
 
