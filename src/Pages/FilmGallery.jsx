@@ -191,7 +191,7 @@ const FilmGallery = () => {
           >
             {filmsToShow.map((film, index) => {
               const videoId = getVideoId(film.link);
-              const thumbnail = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+              const thumbnail = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
 
               return (
                 <motion.div
@@ -202,12 +202,21 @@ const FilmGallery = () => {
                   className="bg-white/20 backdrop-blur-sm rounded-[16px] border border-white shadow-lg overflow-hidden cursor-pointer group"
                   onClick={() => window.open(film.link, '_blank')}
                 >
-                  <div className="relative w-full h-50 bg-white/20 backdrop-blur-sm flex items-center justify-center overflow-hidden">
+                  <div className="relative w-full aspect-video bg-black flex items-center justify-center overflow-hidden">
                     <motion.img
                       src={thumbnail}
                       alt={film.coupleName}
-                      className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-108"
+                      className="w-full h-full object-cover scale-105 transition-transform duration-1000 ease-out group-hover:scale-110"
+                      onError={(e) => {
+                        e.target.src = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+                      }}
                     />
+
+                    {/* White Glow/Shine Effect on Hover */}
+                    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                      <div className="absolute top-0 -left-[100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-[-25deg] group-hover:left-[200%] transition-all duration-1000 ease-in-out" />
+                    </div>
+
                     {/* YouTube Play Button */}
                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                       <div className="w-14 h-8 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500">
