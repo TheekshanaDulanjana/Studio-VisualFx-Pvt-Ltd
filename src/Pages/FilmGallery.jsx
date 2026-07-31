@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { FaSearch } from 'react-icons/fa';
 
 import AlbumDefultBanner from '../assets/AlbumDefultBanner.jpg';
@@ -50,15 +50,54 @@ const FilmGallery = () => {
     return '';
   };
 
+  // Ultra smooth and slow luxury easing curve
+  const luxuryEase = [0.16, 1, 0.3, 1];
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.25,
+        delayChildren: 0.15,
+      },
+    },
+  };
+
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 45 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 1.4,
+        ease: luxuryEase,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 50, scale: 0.95 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 1.3,
+        ease: luxuryEase,
+      },
+    },
+  };
+
   return (
     <div className="w-full">
       {/* Hero Section */}
-      <div className="relative w-full h-96 md:h-80 overflow-hidden">
+      <div className="relative w-full h-104 md:h-88 overflow-hidden">
         <motion.div
           className="w-full h-full"
           initial={{ opacity: 0, filter: 'blur(5px)' }}
           animate={{ opacity: 1, filter: 'blur(0px)' }}
-          transition={{ duration: 1.5, ease: [0.42, 0, 0.58, 1] }}
+          transition={{ duration: 1.5, ease: luxuryEase }}
         >
           {/* Mobile Image */}
           <motion.img
@@ -71,7 +110,7 @@ const FilmGallery = () => {
               duration: 10,
               repeat: Infinity,
               repeatType: 'reverse',
-              ease: [0.42, 0, 0.58, 1],
+              ease: luxuryEase,
             }}
           />
           {/* Desktop/Tablet Image */}
@@ -85,25 +124,27 @@ const FilmGallery = () => {
               duration: 10,
               repeat: Infinity,
               repeatType: 'reverse',
-              ease: [0.42, 0, 0.58, 1],
+              ease: luxuryEase,
             }}
           />
           <div className="absolute top-0 left-0 w-full h-full bg-linear-to-t from-black to-transparent opacity-90 z-10" />
         </motion.div>
-        <div className="absolute inset-0 flex flex-col items-center font-belleza justify-center text-center px-4 z-20 mt-28">
+
+        <motion.div 
+          initial="hidden"
+          animate="visible"
+          variants={containerVariants}
+          className="absolute inset-0 flex flex-col items-center font-belleza justify-center text-center px-4 z-20 mt-28"
+        >
           <motion.h1
             className="text-3xl md:text-4xl text-white"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.5 }}
+            variants={fadeInUp}
           >
             Our Films
           </motion.h1>
           <motion.p
             className="text-sm md:text-base font-roboto text-white mt-2 max-w-4xl"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.8 }}
+            variants={fadeInUp}
           >
             Explore our cinematic journey through weddings, music videos,
             events, and commercial productions. Each film is crafted with 
@@ -114,9 +155,7 @@ const FilmGallery = () => {
           {/* Search Bar */}
           <motion.div
             className="w-full max-w-md relative mt-6"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 1 }}
+            variants={fadeInUp}
           >
             <input
               type="text"
@@ -128,58 +167,83 @@ const FilmGallery = () => {
             />
             <button
               onClick={handleSearch}
-              className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-300 hover:text-white"
+              className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-300 hover:text-white cursor-pointer"
             >
               <FaSearch className="h-4 w-4" />
             </button>
           </motion.div>
-        </div>
+        </motion.div>
       </div>
 
       {/* Film Cards Section */}
-      <div className="max-w-7xl mx-auto px-6 py-12">
+      <motion.div 
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={containerVariants}
+        className="max-w-7xl mx-auto px-6 py-12"
+      >
         {filmsToShow.length > 0 ? (
           /* Mobile: 1 card | Tab: 2 cards | Desktop: 3 cards */
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <motion.div 
+            variants={containerVariants}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
             {filmsToShow.map((film, index) => {
               const videoId = getVideoId(film.link);
               const thumbnail = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
 
               return (
-                <div
+                <motion.div
                   key={index}
-                  className="bg-white/20 backdrop-blur-sm rounded-[16px] border border-white shadow-lg overflow-hidden cursor-pointer hover:scale-105 transition transform duration-300"
+                  variants={cardVariants}
+                  whileHover={{ y: -8, scale: 1.02 }}
+                  transition={{ duration: 0.5, ease: luxuryEase }}
+                  className="bg-white/20 backdrop-blur-sm rounded-[16px] border border-white shadow-lg overflow-hidden cursor-pointer group"
                   onClick={() => window.open(film.link, '_blank')}
                 >
                   <div className="relative w-full h-50 bg-white/20 backdrop-blur-sm flex items-center justify-center overflow-hidden">
-                    <img
+                    <motion.img
                       src={thumbnail}
                       alt={film.coupleName}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-108"
                     />
                     {/* YouTube Play Button */}
                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                      <div className="w-14 h-8 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center shadow-lg">
+                      <div className="w-14 h-8 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500">
                         <div className="w-0 h-0 border-l-14 border-l-white border-t-6 border-t-transparent border-b-6 border-b-transparent ml-1"></div>
                       </div>
                     </div>
                   </div>
                   <div className="p-4 text-center text-sm font-roboto text-white">{film.coupleName}</div>
-                </div>
+                </motion.div>
               );
             })}
-          </div>
+          </motion.div>
         ) : (
-          <div className="text-center text-white mt-24 mb-24">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: luxuryEase }}
+            className="text-center text-white mt-24 mb-24"
+          >
             <h2 className="text-2xl font-belleza mb-2">No results found!</h2>
             <p className="text-sm font-roboto">Sorry, we couldn't find anything matching your search!</p>
-          </div>
+          </motion.div>
         )}
 
         {/* See More / Show Less */}
         {filteredFilms.length > 9 && (
-          <div className="mt-8 flex items-center justify-center">
-            <button
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: luxuryEase }}
+            className="mt-8 flex items-center justify-center"
+          >
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              transition={{ duration: 0.3, ease: luxuryEase }}
               onClick={() => setShowMore(!showMore)}
               className="w-35 h-10 flex items-center justify-center gap-2 
                         bg-white text-black font-roboto text-sm  
@@ -194,10 +258,10 @@ const FilmGallery = () => {
                   <FaArrowRight className="text-white text-xs" />
                 )}
               </span>
-            </button>
-          </div>
+            </motion.button>
+          </motion.div>
         )}
-      </div>
+      </motion.div>
     </div>
   );
 };

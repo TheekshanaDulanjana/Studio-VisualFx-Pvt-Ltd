@@ -1,13 +1,30 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaWhatsapp } from "react-icons/fa";
 import whatsappDP from "../assets/WhatsappDP.png";
 import WABD from "../assets/WABD.png";
 
 const WhatsappWidget = ({ showScrollButton }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
 
   const phoneNumber = "94776996981";
   const message = "Hi! I would like to get some information.";
+
+  // Trigger red notification dot after 10 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowNotification(true);
+    }, 7000); // 7000ms = 7 seconds
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleToggleWidget = () => {
+    if (!isOpen) {
+      setShowNotification(false); // Hide notification when user opens widget
+    }
+    setIsOpen(!isOpen);
+  };
 
   const openWhatsApp = () => {
     const fullMessage = `${message}\n\n--- Message from website ---`;
@@ -40,7 +57,7 @@ const WhatsappWidget = ({ showScrollButton }) => {
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
-          className="p-6 rounded-2xl shadow-lg shadow-black/30  w-[90vw] md:w-96 backdrop-blur-md overflow-hidden border border-white/20"
+          className="p-6 rounded-2xl shadow-lg shadow-black/30 w-[90vw] md:w-96 backdrop-blur-md overflow-hidden border border-white/20"
         >
           {/* Header Section */}
           <div className="-mx-6 -mt-6 mb-6 rounded-t-[2xl] bg-[#161717] px-6 py-3 border-b border-white/5 shadow-lg">
@@ -57,7 +74,6 @@ const WhatsappWidget = ({ showScrollButton }) => {
                 </p>
 
                 <p className="text-xs font-roboto text-[#21C063] flex items-center">
-                  
                   Online
                 </p>
               </div>
@@ -76,7 +92,7 @@ const WhatsappWidget = ({ showScrollButton }) => {
           {/* WhatsApp Button */}
           <button
             onClick={openWhatsApp}
-            className="flex w-full cursor-pointer shadow-md shadow-black/30 items-center justify-center gap-2.5 rounded-xl bg-[#21C063] py-3 font-roboto text-white  transition-all duration-300 hover:bg-green-700"
+            className="flex w-full cursor-pointer shadow-md shadow-black/30 items-center justify-center gap-2.5 rounded-xl bg-[#21C063] py-3 font-roboto text-white transition-all duration-300 hover:bg-green-700"
           >
             <FaWhatsapp className="text-xl" />
             Start Chat
@@ -85,12 +101,21 @@ const WhatsappWidget = ({ showScrollButton }) => {
       </div>
 
       {/* Floating WhatsApp Button */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="pointer-events-auto flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-white text-black shadow-xl transition-all duration-300 hover:scale-110 hover:bg-green-500 hover:text-white"
-      >
-        <FaWhatsapp className="text-2xl" />
-      </button>
+      <div className="relative pointer-events-auto">
+        <button
+          onClick={handleToggleWidget}
+          className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-white text-black shadow-xl transition-all duration-300 hover:scale-110 hover:bg-green-500 hover:text-white"
+        >
+          <FaWhatsapp className="text-2xl" />
+        </button>
+
+        {/* Static Red Notification Badge */}
+        {showNotification && (
+          <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs text-white shadow-md pointer-events-none">
+            1
+          </span>
+        )}
+      </div>
     </div>
   );
 };

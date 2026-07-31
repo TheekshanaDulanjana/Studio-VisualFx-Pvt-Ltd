@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { motion } from "framer-motion";
 import TestimonialCard from "../components/TestimonialCard";
 
 import MenoliPeiris from "../assets/Menoli Peiris.jpg";
@@ -76,20 +77,68 @@ export default function Testimonials() {
 
   const scroll = (direction) => {
     if (sliderRef.current) {
-      // mobile screen width එක අනුව scroll ප්‍රමාණය ගණනය කරයි
+      // mobile screen width අනුව scroll ප්‍රමාණය ගණනය කරයි
       const cardWidth = sliderRef.current.querySelector(".testimonial-card-wrapper")?.offsetWidth || 300;
       const scrollAmount = direction === "left" ? -(cardWidth + 16) : (cardWidth + 16);
       sliderRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
     }
   };
 
+  // Ultra smooth and slow luxury easing curve
+  const luxuryEase = [0.16, 1, 0.3, 1];
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.25,
+        delayChildren: 0.15,
+      },
+    },
+  };
+
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 45 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 1.4,
+        ease: luxuryEase,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 50, scale: 0.95 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 1.3,
+        ease: luxuryEase,
+      },
+    },
+  };
+
   return (
-    <section className="text-white py-12 sm:py-16 px-4 sm:px-6 overflow-x-hidden">
+    <motion.section 
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-100px" }}
+      variants={containerVariants}
+      className="text-white py-12 sm:py-16 px-4 sm:px-6 overflow-x-hidden"
+    >
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-10 lg:gap-16">
 
         {/* LEFT SIDE */}
         <div className="lg:w-5/12 flex flex-col justify-center">
-          <div className="flex items-center mb-4 bg-white rounded-full w-fit px-3 py-2">
+          <motion.div 
+            variants={fadeInUp}
+            className="flex items-center mb-4 bg-white rounded-full w-fit px-3 py-2"
+          >
             {firstThree.map((t, i) => (
               <img
                 key={t.username}
@@ -103,23 +152,35 @@ export default function Testimonials() {
                 +{remainingCount} Testimonials
               </span>
             )}
-          </div>
+          </motion.div>
 
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-belleza lg:text-5xl mb-4 sm:mb-6">
+          <motion.h2 
+            variants={fadeInUp}
+            className="text-2xl sm:text-3xl md:text-4xl font-belleza lg:text-5xl mb-4 sm:mb-6"
+          >
             What our clients are <br /> saying about us?
-          </h2>
+          </motion.h2>
 
-          <p className="text-gray-300 max-w-md font-roboto text-justify text-sm leading-relaxed">
+          <motion.p 
+            variants={fadeInUp}
+            className="text-gray-300 max-w-md font-roboto text-justify text-sm leading-relaxed"
+          >
             Hear directly from our clients about their experiences working with Studio VisualFX and how we’ve helped bring their stories to life.
-          </p>
+          </motion.p>
         </div>
 
         {/* RIGHT SIDE */}
         <div className="lg:w-7/12 relative flex flex-col justify-between min-w-0">
 
           {/* Controls */}
-          <div className="flex justify-end gap-2 mb-4">
-            <button
+          <motion.div 
+            variants={fadeInUp}
+            className="flex justify-end gap-2 mb-4"
+          >
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ duration: 0.3, ease: luxuryEase }}
               onClick={() => scroll("left")}
               aria-label="Scroll Left"
               className="w-9 h-9 flex items-center justify-center rounded-full border border-gray-600 bg-black/40 text-white hover:bg-white hover:text-black transition-colors duration-200 cursor-pointer"
@@ -127,8 +188,11 @@ export default function Testimonials() {
               <svg className="w-4 h-4 fill-current" viewBox="0 0 320 512">
                 <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z" />
               </svg>
-            </button>
-            <button
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ duration: 0.3, ease: luxuryEase }}
               onClick={() => scroll("right")}
               aria-label="Scroll Right"
               className="w-9 h-9 flex items-center justify-center rounded-full border border-gray-600 bg-black/40 text-white hover:bg-white hover:text-black transition-colors duration-200 cursor-pointer"
@@ -136,12 +200,13 @@ export default function Testimonials() {
               <svg className="w-4 h-4 fill-current" viewBox="0 0 320 512">
                 <path d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z" />
               </svg>
-            </button>
-          </div>
+            </motion.button>
+          </motion.div>
 
           {/* Slider Container */}
-          <div
+          <motion.div
             ref={sliderRef}
+            variants={containerVariants}
             className="flex gap-4 sm:gap-6 overflow-x-auto scrollbar-hide snap-x snap-mandatory py-2 px-1"
             style={{ 
               scrollbarWidth: "none", 
@@ -150,18 +215,21 @@ export default function Testimonials() {
             }}
           >
             {testimonials.map((testimonial) => (
-              <div 
+              <motion.div 
                 key={testimonial.username} 
+                variants={cardVariants}
+                whileHover={{ y: -6 }}
+                transition={{ duration: 0.5, ease: luxuryEase }}
                 className="testimonial-card-wrapper snap-center sm:snap-start shrink-0 w-[85vw] max-w-[320px] sm:w-[320px]"
               >
                 <TestimonialCard testimonial={testimonial} />
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
 
         </div>
 
       </div>
-    </section>
+    </motion.section>
   );
 }

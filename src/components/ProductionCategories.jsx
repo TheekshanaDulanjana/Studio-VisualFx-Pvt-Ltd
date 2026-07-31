@@ -1,3 +1,5 @@
+import React from "react";
+import { motion } from "framer-motion";
 import wedding from "../assets/wedding.png";
 import event from "../assets/event.png";
 import commercial from "../assets/commercial.png";
@@ -32,8 +34,53 @@ export default function ProductionCategories() {
     ...otherCategories,
   ];
 
+  // Ultra smooth and slow luxury easing curve
+  const luxuryEase = [0.16, 1, 0.3, 1];
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.25,
+        delayChildren: 0.15,
+      },
+    },
+  };
+
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 45 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 1.4,
+        ease: luxuryEase,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 50, scale: 0.95 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 1.3,
+        ease: luxuryEase,
+      },
+    },
+  };
+
   return (
-    <section className=" text-white py-12 md:py-16 px-6">
+    <motion.section 
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-100px" }}
+      variants={containerVariants}
+      className=" text-white py-12 md:py-16 px-6"
+    >
       <div className="max-w-7xl mx-auto">
         
         {/* TOP SECTION: Text and Highlight Card (Laptop View) */}
@@ -41,71 +88,92 @@ export default function ProductionCategories() {
           
           {/* Left Content */}
           <div className="flex flex-col justify-center font-[Alata]">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl leading-tight mb-6 font-belleza  text-center lg:text-left">
+            <motion.h2 
+              variants={fadeInUp}
+              className="text-3xl sm:text-4xl lg:text-5xl leading-tight mb-6 font-belleza text-center lg:text-left"
+            >
               Bringing Your Moments to Life Through Cinematic Vision
-            </h2>
+            </motion.h2>
 
-            <p className="text-gray-300  font-roboto  max-w-2xl mx-auto lg:mx-0 text-sm text-center lg:text-justify sm:text-sm leading-relaxed">
+            <motion.p 
+              variants={fadeInUp}
+              className="text-gray-300 font-roboto max-w-2xl mx-auto lg:mx-0 text-sm text-center lg:text-justify sm:text-sm leading-relaxed"
+            >
               At Studio VisualFX (Pvt) Ltd., we offer a range of
-               creative visual production services designed to capture,
-                create, and elevate your story. With a perfect blend of
-                 innovation, technology, and artistic vision, we deliver
-                  high-quality productions tailored to every unique moment
-                   and purpose.
-            </p>
+              creative visual production services designed to capture,
+              create, and elevate your story. With a perfect blend of
+              innovation, technology, and artistic vision, we deliver
+              high-quality productions tailored to every unique moment
+              and purpose.
+            </motion.p>
           </div>
 
           {/* Wedding Highlight Card - Visible only on Laptop (lg+) */}
-          <div className="hidden lg:block relative rounded-[16px] overflow-hidden outline outline-white/30 shadow-2xl h-[350px] group">
-            <img
+          <motion.div 
+            variants={cardVariants}
+            whileHover={{ y: -8 }}
+            transition={{ duration: 0.6, ease: luxuryEase }}
+            className="hidden lg:block relative rounded-[16px] overflow-hidden outline outline-white/30 shadow-2xl h-[350px] group cursor-pointer"
+          >
+            <motion.img
               src={wedding}
               alt="Creative Wedding Films"
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+              className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-108"
             />
+
+            {/* Glowing Horizontal Sheen Overlay */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden">
+              <div className="w-1/2 h-full bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-[-25deg] -translate-x-[150%] group-hover:translate-x-[300%] transition-transform duration-1000 ease-out" />
+            </div>
+
             <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-transparent flex flex-col justify-end p-8">
               <h3 className="text-2xl mb-2 font-belleza">Creative Wedding Films</h3>
-              <p className="text-[12px] text-gray-200 font-roboto  max-w-lg">
+              <p className="text-[12px] text-gray-200 font-roboto max-w-lg">
                 We turn your special day into a cinematic love story. Every emotion, smile, and moment is beautifully captured and crafted into a timeless wedding film you’ll cherish forever.
               </p>
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* BOTTOM SECTION: The Grid */}
-        {/* Mobile: 1 column (all 4 cards)
-            Tablet: 2x2 grid (all 4 cards same size) 
-            Laptop: 1x3 grid (remaining 3 cards)
-        */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
-          
-          {/* Map through all categories for Mobile and Tablet */}
-          {/* On Laptop (lg), we hide the first item (Wedding) because it's already shown in the top section */}
+        <motion.div 
+          variants={containerVariants}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 "
+        >
           {allCategories.map((item, index) => (
-            <div
+            <motion.div
               key={index}
-              className={`relative rounded-[16px]  overflow-hidden group h-64 sm:h-72 md:h-80 outline outline-white/30 lg:h-64 
+              variants={cardVariants}
+              whileHover={{ y: -8 }}
+              transition={{ duration: 0.6, ease: luxuryEase }}
+              className={`relative rounded-[16px] overflow-hidden group h-64 sm:h-72 md:h-80 outline outline-white/30 lg:h-64 cursor-pointer 
                 ${index === 0 ? "lg:hidden" : "block"}`}
             >
-              <img
+              <motion.img
                 src={item.img}
                 alt={item.title}
-                className="w-full h-full object-cover group-hover:scale-110 transition  duration-700"
+                className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-108"
               />
 
+              {/* Glowing Horizontal Sheen Overlay */}
+              <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                <div className="w-1/2 h-full bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-[-25deg] -translate-x-[150%] group-hover:translate-x-[300%] transition-transform duration-1000 ease-out" />
+              </div>
+
               {/* Gradient Overlay */}
-              <div className="absolute  inset-0 bg-linear-to-t from-black/90 via-black/40 to-transparent p-6 flex flex-col justify-end">
-                <h4 className="text-xl mb-2 font-belleza  transition-colors">
+              <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-transparent p-6 flex flex-col justify-end">
+                <h4 className="text-xl mb-2 font-belleza transition-colors">
                   {item.title}
                 </h4>
                 <p className="text-[12px] text-gray-200 font-roboto leading-snug">
                   {item.desc}
                 </p>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
       </div>
-    </section>
+    </motion.section>
   );
 }
