@@ -2,67 +2,85 @@
 <html lang="en">
 <head>
   <!-- ============================================================
-       CHARSET / VIEWPORT — must be the very first tags in <head>
+       CHARSET / VIEWPORT — must stay first in <head>
   ============================================================= -->
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
   <!-- ============================================================
-       PRECONNECT / DNS-PREFETCH — put before Analytics + Fonts
-       so the browser opens connections early
+       RESOURCE HINTS
+       preconnect = open the TCP/TLS handshake early for origins we
+       WILL use render-critically (fonts, GTM). Kept to 2–3 origins;
+       over-using preconnect wastes the browser's limited early
+       connection budget and can slow other requests down.
+       crossorigin is required on the gstatic preconnect because
+       font files are fetched with CORS.
   ============================================================= -->
-  <link rel="preconnect" href="https://www.googletagmanager.com" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://www.googletagmanager.com" />
+  <!-- dns-prefetch as a cheap fallback for browsers that don't support preconnect -->
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
 
   <!-- ============================================================
-       PRIMARY SEO TAGS
-       NOTE: These are the SITE-WIDE fallback tags. Since this is a
-       client-rendered React SPA, every route (/about, /film-gallery,
-       /commercial, etc.) will show THESE tags to any crawler that
-       does not execute JavaScript (Bing, Facebook, WhatsApp,
-       LinkedIn, X/Twitter). You MUST override title/description/
-       canonical/OG per route using react-helmet-async (or migrate
-       to SSR/SSG with Next.js/Astro) — see notes at the bottom.
+       PRIMARY SEO TAGS (site-wide fallback for non-JS crawlers)
+       Trimmed the description to ~155 characters — Google truncates
+       longer snippets, and a clipped sentence looks unfinished in
+       search results. Title kept under ~60 characters so it doesn't
+       truncate with an ellipsis on the SERP.
+       IMPORTANT: this is still a client-rendered SPA. Crawlers that
+       run JavaScript (Googlebot) will see whatever react-helmet-async
+       injects per route (see /src/seo/SEOHead.jsx). Crawlers that
+       DON'T run JS (Bing, WhatsApp, LinkedIn, X, Facebook's first
+       pass) will only ever see what's in this file — which is why
+       the <noscript> block further down exists: it's the only
+       content those bots get for every single URL on the site.
   ============================================================= -->
-  <title>Studio VisualFX | Wedding, Event & Commercial Videography in Sri Lanka</title>
-  <meta name="description" content="Studio VisualFX is a Sri Lanka-based video production and photography studio crafting cinematic wedding films, event coverage, commercial videos and music videos. Based in Matara, serving island-wide." />
+  <title>Studio VisualFX | Wedding & Commercial Videography, Sri Lanka</title>
+  <meta name="description" content="Cinematic wedding films, event coverage, commercial and music videos by Studio VisualFX — a Matara-based production studio serving all of Sri Lanka." />
   <link rel="canonical" href="https://www.studiovisualfx.com/" />
 
-  <!-- Robots: index + follow, and explicitly allow rich snippets -->
+  <!-- Robots: index + follow, explicit rich-result opt-ins -->
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta name="googlebot" content="index, follow" />
 
   <!-- Author / Publisher -->
   <meta name="author" content="Studio VisualFX" />
+  <meta name="application-name" content="Studio VisualFX" />
+  <!-- Prevents mobile browsers auto-linking phone-number-looking text in body copy -->
+  <meta name="format-detection" content="telephone=no" />
 
   <!-- ============================================================
        FAVICONS / PWA
   ============================================================= -->
   <link rel="icon" type="image/svg+xml" href="/TabIcon.svg" />
-  <link rel="icon" type="image/png" href="/TabIcon.png" sizes="192x192" />
-  <link rel="apple-touch-icon" href="/TabIcon.png" />
+  <link rel="shortcut icon" href="https://www.studiovisualfx.com/WebTab.png" />
+  <link rel="icon" type="image/png" href="https://www.studiovisualfx.com/WebTab.png" sizes="192x192" />
+  <!-- 180x180 is Apple's documented ideal size; reusing WebTab.png works but a
+       purpose-cropped 180x180 PNG will render sharper on iOS home screens -->
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.studiovisualfx.com/WebTab.png" />
+
   <link rel="manifest" href="/site.webmanifest" />
   <meta name="theme-color" content="#000000" />
 
   <!-- ============================================================
        GOOGLE FONTS
-       NOTE: Loading fonts directly from Google's servers sends EU
-       visitors' IP addresses to Google at request time, which has
-       triggered GDPR fines for some EU sites (e.g. a German court
-       ruling in 2022). If you expect EU traffic, self-host these
-       fonts instead (see notes at bottom). font-display: swap is
-       added below regardless, to avoid invisible-text-on-load (FOIT).
+       font-display=swap avoids invisible text on load (FOIT), which
+       directly protects your Lighthouse "Avoid invisible text" audit
+       and your CLS/LCP scores.
+       NOTE (unchanged from before, still worth acting on): serving
+       fonts from Google's CDN sends EU visitors' IPs to Google at
+       request time — a German court fined a site operator over this
+       in 2022. If you expect EU traffic, self-host these 4 families
+       with @font-face + font-display: swap instead of this <link>.
   ============================================================= -->
   <link href="https://fonts.googleapis.com/css2?family=Alata&family=Alatsi&family=Belleza&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
 
   <!-- ============================================================
        OPEN GRAPH (Facebook / WhatsApp / LinkedIn)
-       Image path fixed to ABSOLUTE URL — relative paths are
-       unreliable across social crawlers.
   ============================================================= -->
-  <meta property="og:title" content="Studio VisualFX | Wedding, Event & Commercial Videography in Sri Lanka" />
-  <meta property="og:description" content="Cinematic wedding films, event coverage, commercial and music videos - crafted by Studio VisualFX, Sri Lanka." />
+  <meta property="og:title" content="Studio VisualFX | Wedding & Commercial Videography, Sri Lanka" />
+  <meta property="og:description" content="Cinematic wedding films, event coverage, commercial and music videos — crafted by Studio VisualFX, Sri Lanka." />
   <meta property="og:image" content="https://www.studiovisualfx.com/livepreview.jpg" />
   <meta property="og:image:secure_url" content="https://www.studiovisualfx.com/livepreview.jpg" />
   <meta property="og:image:width" content="1200" />
@@ -76,55 +94,101 @@
 
   <!-- ============================================================
        TWITTER / X CARD
-       NOTE: Replace placeholder handles below with your real
-       @handle, or remove these two lines entirely if you have none
-       — a placeholder handle looks spammy to platform crawlers.
+       Handle lines left commented — uncomment and fill in only once
+       you have real @handles. A placeholder/fake handle reads as
+       spam to the crawler and can suppress the card entirely.
   ============================================================= -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Studio VisualFX | Wedding, Event & Commercial Videography in Sri Lanka" />
-  <meta name="twitter:description" content="Cinematic wedding films, event coverage, commercial and music videos - crafted by Studio VisualFX, Sri Lanka." />
+  <meta name="twitter:title" content="Studio VisualFX | Wedding & Commercial Videography, Sri Lanka" />
+  <meta name="twitter:description" content="Cinematic wedding films, event coverage, commercial and music videos — crafted by Studio VisualFX, Sri Lanka." />
   <meta name="twitter:image" content="https://www.studiovisualfx.com/livepreview.jpg" />
-  <meta name="twitter:image:alt" content="Studio VisualFX - Wedding, Event & Commercial Videos" />
+  <meta name="twitter:image:alt" content="Studio VisualFX — Wedding, Event & Commercial Videos" />
   <!-- <meta name="twitter:site" content="@YourRealHandle" /> -->
   <!-- <meta name="twitter:creator" content="@YourRealHandle" /> -->
 
   <!-- ============================================================
-       STRUCTURED DATA — LocalBusiness (upgraded from Organization)
-       Fill in the real phone number, address, geo-coordinates and
-       social profile URLs below. LocalBusiness is what enables
-       Google's local pack / Maps visibility, which Organization
-       alone does not do as effectively.
+       STRUCTURED DATA
+       Consolidated into a single @graph so all entities share one
+       script tag and can reference each other by @id (this is the
+       pattern Google's own docs and most SEO tooling recommend over
+       several standalone JSON-LD blocks). Added WebSite (enables a
+       sitelinks searchbox eligibility check) linked to the
+       LocalBusiness via @id, and image as an ImageObject so Google
+       can validate its dimensions against og:image:width/height.
+
+       TODO for you to fill in with real values — every one of these
+       meaningfully affects rich-result eligibility or local pack
+       ranking, so don't ship placeholders:
+       - "streetAddress" (Matara address, currently only locality/region)
+       - "geo": { "@type": "GeoCoordinates", "latitude": ..., "longitude": ... }
+       - "openingHoursSpecification"
+       - "founder" (a Person entity) — strengthens E-E-A-T signals
+       - "aggregateRating" / "review" — ONLY add this if you have real,
+         verifiable reviews marked up on the page; fabricated review
+         markup is a Google Rich Results policy violation and can get
+         the whole domain manually penalized.
   ============================================================= -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "name": "Studio VisualFX (Pvt) Ltd",
-    "image": "https://www.studiovisualfx.com/livepreview.jpg",
-    "url": "https://www.studiovisualfx.com",
-    "logo": "https://www.studiovisualfx.com/TabIcon.png",
-    "description": "Studio VisualFX is a dynamic video production and event photography company delivering high-quality visual content for weddings, events, commercials, and music videos.",
-    "telephone": "+94 77 699 6981",
-    "priceRange": "$$",
-    "address": {
-      "addressLocality": "Matara",
-      "addressRegion": "Southern Province",
-      "postalCode": "81000",
-      "addressCountry": "LK"
-    },
-
-    "sameAs": [
-      "https://facebook.com/visualfxsl",
-      "https://www.instagram.com/studiovisualfx",
-      "https://wa.me/94776996981"
+    "@graph": [
+      {
+        "@type": "LocalBusiness",
+        "@id": "https://www.studiovisualfx.com/#business",
+        "name": "Studio VisualFX (Pvt) Ltd",
+        "image": {
+          "@type": "ImageObject",
+          "url": "https://www.studiovisualfx.com/livepreview.jpg",
+          "width": 1200,
+          "height": 630
+        },
+        "url": "https://www.studiovisualfx.com",
+        "logo": "https://www.studiovisualfx.com/WebTab.png",
+        "description": "Studio VisualFX is a dynamic video production and event photography company delivering high-quality visual content for weddings, events, commercials, and music videos.",
+        "telephone": "+94776996981",
+        "priceRange": "$$",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Matara",
+          "addressRegion": "Southern Province",
+          "postalCode": "81000",
+          "addressCountry": "LK"
+        },
+        "sameAs": [
+          "https://facebook.com/visualfxsl",
+          "https://www.instagram.com/studiovisualfx",
+          "https://wa.me/94776996981"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://www.studiovisualfx.com/#website",
+        "url": "https://www.studiovisualfx.com/",
+        "name": "Studio VisualFX",
+        "publisher": { "@id": "https://www.studiovisualfx.com/#business" },
+        "inLanguage": "en-LK"
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://www.studiovisualfx.com/#webpage",
+        "url": "https://www.studiovisualfx.com/",
+        "name": "Studio VisualFX | Wedding & Commercial Videography, Sri Lanka",
+        "isPartOf": { "@id": "https://www.studiovisualfx.com/#website" },
+        "about": { "@id": "https://www.studiovisualfx.com/#business" },
+        "inLanguage": "en-LK"
+      }
     ]
   }
   </script>
 
   <!-- ============================================================
-       Google Analytics (GA4)
-       Consider loading this only after cookie consent is granted
-       if you expect EU visitors (GDPR).
+       GOOGLE ANALYTICS (GA4)
+       `async` already defers execution off the parser, which is the
+       main thing that keeps this from blocking render. If you serve
+       EU visitors, gate the `gtag('config', ...)` call behind a
+       cookie-consent banner instead of firing it unconditionally on
+       load — GDPR requires consent before non-essential analytics
+       cookies are set.
   ============================================================= -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-HGGY56NJ90"></script>
   <script>
@@ -137,6 +201,47 @@
 
 <body>
   <div id="root"></div>
+
+  <!-- ============================================================
+       NOSCRIPT FALLBACK — this is the single biggest SEO gap in a
+       client-only-rendered SPA. Any crawler or share-preview bot
+       that does NOT execute JavaScript (Bing, DuckDuckGo, Facebook's
+       first-pass scraper, WhatsApp/iMessage link previews, some
+       accessibility/reader-mode tools) sees ONLY what's between
+       these tags — for every route on the site, since it's baked
+       into this one shared index.html. Without it, those crawlers
+       see a blank page and either skip indexing it or index it with
+       no content at all.
+       Keep this in sync at a high level whenever your main nav or
+       core service list changes — it doesn't need to be exhaustive,
+       just enough real text + real links that a non-JS crawler has
+       something to index and follow.
+  ============================================================= -->
+  <noscript>
+    <header>
+      <h1>Studio VisualFX — Wedding, Event &amp; Commercial Videography in Sri Lanka</h1>
+      <p>
+        Studio VisualFX is a Matara-based video production and photography
+        studio crafting cinematic wedding films, event coverage, commercial
+        videos, and music videos, serving clients island-wide across Sri Lanka.
+      </p>
+    </header>
+    <nav aria-label="Main">
+      <ul>
+        <li><a href="https://www.studiovisualfx.com/">Home</a></li>
+        <li><a href="https://www.studiovisualfx.com/about">About Studio VisualFX</a></li>
+        <li><a href="https://www.studiovisualfx.com/film-gallery">Wedding &amp; Event Film Gallery</a></li>
+        <li><a href="https://www.studiovisualfx.com/commercial">Commercial &amp; Music Video Production</a></li>
+      </ul>
+    </nav>
+    <p>
+      Please enable JavaScript to view the full interactive experience,
+      or contact us directly on
+      <a href="https://wa.me/94776996981">WhatsApp</a> or by phone at
+      <a href="tel:+94776996981">+94 77 699 6981</a>.
+    </p>
+  </noscript>
+
   <script type="module" src="/src/main.jsx"></script>
 </body>
 </html>
