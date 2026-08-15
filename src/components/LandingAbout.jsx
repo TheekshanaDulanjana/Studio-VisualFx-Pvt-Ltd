@@ -14,7 +14,7 @@ export default function LandingAbout() {
   const videos = [
     { id: "v2BLa9HXxeA", thumbnail: "https://img.youtube.com/vi/v2BLa9HXxeA/maxresdefault.jpg" },
     { id: "kkNuwRHeYR4", thumbnail: "https://img.youtube.com/vi/kkNuwRHeYR4/hqdefault.jpg" },
-    { id: "aplPx3YgxOc", thumbnail: "https://img.youtube.com/vi/aplPx3YgxOc/maxresdefault.jpg" },
+    { id: "KaQCh7E6mg8", thumbnail: "https://img.youtube.com/vi/KaQCh7E6mg8/maxresdefault.jpg" },
   ];
 
   const openVideo = (videoId) => {
