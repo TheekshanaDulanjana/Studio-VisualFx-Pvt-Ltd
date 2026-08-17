@@ -2,11 +2,14 @@ import React, { useState, useRef, useEffect } from "react";
 import emailjs from "@emailjs/browser";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaPhone, FaEnvelope, FaBuilding, FaClock, FaWhatsapp, FaLink } from "react-icons/fa";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const Contact = () => {
   const form = useRef();
+  const recaptchaRef = useRef(null);
   const [modal, setModal] = useState({ show: false, message: "" });
   const [formValid, setFormValid] = useState(false);
+  const [captchaValue, setCaptchaValue] = useState(null);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -25,20 +28,21 @@ const Contact = () => {
     // Basic Sri Lankan mobile check (starts with 0 or 94 or 7, max 10 digits total for simplicity)
     const mobileRegex = /^(?:0|94|\+94)?(?:7(0|1|2|4|5|6|7|8)\d{7})$/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    
+
     const wordCount = getWordCount(formData.message);
     const isMobileValid = /^\d+$/.test(formData.mobile) && formData.mobile.length <= 10;
 
-    const isValid = 
+    const isValid =
       formData.firstName.trim() !== "" &&
       formData.lastName.trim() !== "" &&
       emailRegex.test(formData.email) &&
       isMobileValid &&
       formData.subject.trim() !== "" &&
-      wordCount > 0 && wordCount <= 250;
+      wordCount > 0 && wordCount <= 250 &&
+      captchaValue !== null; // reCAPTCHA must be completed
 
     setFormValid(isValid);
-  }, [formData]);
+  }, [formData, captchaValue]);
 
   // Modal auto close after 5 seconds
   useEffect(() => {
@@ -73,8 +77,20 @@ const Contact = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const handleCaptchaChange = (value) => {
+    setCaptchaValue(value);
+  };
+
   const sendEmail = (e) => {
     e.preventDefault();
+
+    if (!captchaValue) {
+      setModal({
+        show: true,
+        message: "Please verify that you are not a robot.",
+      });
+      return;
+    }
 
     const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
     const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
@@ -102,6 +118,10 @@ const Contact = () => {
             subject: "",
             message: "",
           });
+          setCaptchaValue(null);
+          if (recaptchaRef.current) {
+            recaptchaRef.current.reset();
+          }
         },
         (error) => {
           const errorDetails = error?.text || JSON.stringify(error) || "Unknown error";
@@ -109,6 +129,10 @@ const Contact = () => {
             show: true,
             message: `Failed to send message: ${errorDetails}`,
           });
+          setCaptchaValue(null);
+          if (recaptchaRef.current) {
+            recaptchaRef.current.reset();
+          }
         }
       );
   };
@@ -155,17 +179,17 @@ const Contact = () => {
   };
 
   return (
-    <motion.div 
+    <motion.div
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-100px" }}
       variants={containerVariants}
-      className="w-full px-6 md:px-6 lg:px-8 pb-16 py-12" 
+      className="w-full px-6 md:px-6 lg:px-8 pb-16 py-12"
       style={{ color: "white" }}
     >
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row gap-10 lg:gap-16">
-          
+
           {/* Left Column */}
           <motion.div variants={fadeInUp} className="space-y-8 lg:w-1/3">
             <div>
@@ -173,9 +197,9 @@ const Contact = () => {
                 Get in Touch
               </h2>
               <p className="text-gray-300 font-roboto text-sm sm:text-sm max-w-xl text-justify leading-relaxed mb-8">
-                Let’s craft something extraordinary together. Whether it’s a wedding, event, commercial
-                production, or music video, we’re here to bring your vision to life.
-                Share your details with us, and let’s discuss how Studio VisualFX can
+                Let's craft something extraordinary together. Whether it's a wedding, event, commercial
+                production, or music video, we're here to bring your vision to life.
+                Share your details with us, and let's discuss how Studio VisualFX can
                 transform your ideas into cinematic stories that inspire and captivate.
               </p>
             </div>
@@ -306,18 +330,31 @@ const Contact = () => {
                 </p>
               </div>
 
-              <motion.button
-                whileHover={formValid ? { scale: 1.01 } : {}}
-                whileTap={formValid ? { scale: 0.98 } : {}}
-                transition={{ duration: 0.3, ease: luxuryEase }}
-                type="submit"
-                disabled={!formValid}
-                className={`w-full py-3 cursor-pointer font-roboto text-black rounded-[8px] transition ${
-                  formValid ? "bg-white hover:bg-gray-200" : "bg-gray-500 opacity-60 cursor-not-allowed"
-                }`}
-              >
-                Send Message
-              </motion.button>
+              {/* Google reCAPTCHA v2 checkbox */}
+              <div className="flex justify-start">
+                <ReCAPTCHA
+                  ref={recaptchaRef}
+                  sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+                  onChange={handleCaptchaChange}
+                  theme="dark"
+                />
+              </div>
+
+              {/* Send button now left-aligned instead of full width */}
+              <div className="flex justify-start">
+                <motion.button
+                  whileHover={formValid ? { scale: 1.01 } : {}}
+                  whileTap={formValid ? { scale: 0.98 } : {}}
+                  transition={{ duration: 0.3, ease: luxuryEase }}
+                  type="submit"
+                  disabled={!formValid}
+                  className={`px-8 py-3 cursor-pointer font-roboto text-black rounded-[8px] transition ${
+                    formValid ? "bg-white hover:bg-gray-200" : "bg-gray-500 opacity-60 cursor-not-allowed"
+                  }`}
+                >
+                  Send Message
+                </motion.button>
+              </div>
             </form>
           </motion.div>
         </div>
@@ -325,14 +362,14 @@ const Contact = () => {
         {/* Animated Modal */}
         <AnimatePresence>
           {modal.show && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.4, ease: luxuryEase }}
               className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-50"
             >
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 20 }}
