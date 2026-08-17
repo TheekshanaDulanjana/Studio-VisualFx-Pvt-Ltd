@@ -316,7 +316,7 @@ const Contact = () => {
                 />
               </div>
 
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 -mb-1">
                 <textarea
                   name="message"
                   placeholder="Message"
@@ -331,12 +331,13 @@ const Contact = () => {
               </div>
 
               {/* Google reCAPTCHA v2 checkbox */}
-              <div className="flex justify-start">
+              <div className="flex justify-start mb-4">
                 <ReCAPTCHA
                   ref={recaptchaRef}
                   sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
                   onChange={handleCaptchaChange}
                   theme="dark"
+                  className="transform scale-90 origin-top-left "
                 />
               </div>
 
@@ -348,7 +349,7 @@ const Contact = () => {
                   transition={{ duration: 0.3, ease: luxuryEase }}
                   type="submit"
                   disabled={!formValid}
-                  className={`px-8 py-3 cursor-pointer font-roboto text-black rounded-[8px] transition ${
+                  className={`px-8 py-3 w-full cursor-pointer font-roboto text-black rounded-[8px] transition ${
                     formValid ? "bg-white hover:bg-gray-200" : "bg-gray-500 opacity-60 cursor-not-allowed"
                   }`}
                 >
