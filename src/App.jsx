@@ -1,14 +1,17 @@
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import { Helmet, HelmetProvider } from "react-helmet-async";
+import { HelmetProvider } from "react-helmet-async";
 
- // Components
+// Components
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import LoadingSpinner from "./components/LoadingSpinner";
 import WhatsappButton from "./components/WhatsappButton";
 import ScrollToTopCompo from "./components/ScrollToTopCompo";
 import SmoothScroll from "./components/SmoothScroll";
+
+// SEO
+import RouteSEO from "./seo/RouteSEO";
+import { REDIRECTS } from "./seo/seo.config";
 
 // Pages path
 import Home from "./Pages/Home";
@@ -20,119 +23,76 @@ import Commercial from "./Pages/Commercial";
 import Testimonials from "./Pages/Testimonials";
 import TermofCondition from "./Pages/TermofCondition";
 import PrivacyPolicy from "./Pages/PrivacyPolicy";
-
-//import Maintenance from "./Pages/Maintenance";
+import NotFound from "./Pages/NotFound";
 
 export default function App() {
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1500); 
-
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
     <HelmetProvider>
       <BrowserRouter>
-        {loading ? <LoadingSpinner /> : <MainApp />}
+        <MainApp />
       </BrowserRouter>
     </HelmetProvider>
   );
-
 }
 
 const MainApp = () => {
   const location = useLocation();
-  const [pageLoading, setPageLoading] = useState(false);
   const [showScrollButton, setShowScrollButton] = useState(false);
 
+  // GA4 page views. index.html sets send_page_view:false so the first load isn't counted twice.
   useEffect(() => {
-    const measurementId = import.meta.env.VITE_GA_MEASUREMENT_ID;
-    if (typeof window.gtag === "function" && measurementId) {
+    const measurementId = import.meta.env.VITE_GA_MEASUREMENT_ID || "G-HGGY56NJ90";
+    if (typeof window.gtag !== "function") return;
+    // small delay so react-helmet-async has updated document.title first
+    const t = setTimeout(() => {
       window.gtag("config", measurementId, {
         page_path: location.pathname + location.search,
+        page_title: document.title,
       });
-    }
-  }, [location]);
-
-  // Page loading spinner logic
-  useEffect(() => {
-    setPageLoading(true);
-    const endTimer = setTimeout(() => {
-      setPageLoading(false);
-    }, 500);
-
-    return () => clearTimeout(endTimer);
-  }, [location.pathname]);
-
-  // Tab Title change all the logic
-  useEffect(() => {
-    const pageTitles = {
-      "/": "Home | Studio VisualFX",
-      "/about": "About Us | Studio VisualFX",
-      "/film-gallery": "Film Gallery | Studio VisualFX",
-      "/commercial": "Commercial Projects | Studio VisualFX",
-      "/testimonials": "Testimonials | Studio VisualFX",
-      "/faq": "FAQ | Studio VisualFX",
-      "/contact": "Contact Us | Studio VisualFX",
-      "/privacy-policy": "Privacy Policy | Studio VisualFX",
-      "/terms-conditions": "Terms & Conditions | Studio VisualFX",
-    };
-
-    document.title = pageTitles[location.pathname] || "Studio VisualFX";
-  }, [location.pathname]);
+    }, 150);
+    return () => clearTimeout(t);
+  }, [location.pathname, location.search]);
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen antialiased">
+      <RouteSEO />
+      <SmoothScroll />
+      <Header />
 
-      <div className="flex flex-col min-h-screen antialiased">
-      <SmoothScroll/>
+      <main className="flex-grow">
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <section id="home"> <Home /> </section>
+                <section id="testimonials"> <Testimonials /></section>
+                <section id="faq"> <FAQ /> </section>
+                <section id="contact"> <Contact /> </section>
+              </>
+            }
+          />
 
-        {pageLoading ? (
-          <LoadingSpinner />
-        ) : (
-          <>
-            <div className="flex flex-col min-h-screen antialiased">
-              <Header />
+          <Route path="/about" element={<About />} />
+          <Route path="/film-gallery" element={<FilmGallery />} />
+          <Route path="/commercial" element={<Commercial />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-conditions" element={<TermofCondition />} />
 
-              <main className="flex-grow">
-                <Routes>
-                  <Route
-                    path="/"
-                    element={
-                      <>
-                        <section id="home"> <Home /> </section>
-                        <section id="testimonials"> <Testimonials /></section>
-                        <section id="faq"> <FAQ /> </section>
-                        <section id="contact"> <Contact /> </section>
-                      </>
-                    }
-                  />
+          {Object.entries(REDIRECTS).map(([from, to]) => (
+            <Route key={from} path={from} element={<Navigate to={to} replace />} />
+          ))}
 
-                  <Route path="/about" element={<About />} />
-                  <Route path="/film-gallery" element={<FilmGallery />} />
-                  <Route path="/commercial" element={<Commercial />} />
-                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                  <Route path="/terms-conditions" element={<TermofCondition />} />
-                  <Route path="*" element={<Home />} />
-                </Routes>
-              </main>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
 
-               <ScrollToTopCompo onVisibilityChange={setShowScrollButton}
-      /> 
-              <WhatsappButton showScrollButton={showScrollButton} /> 
-              <Footer />
-            </div>
-          </>
-        )}
-      </div>
-    </>
+      <ScrollToTopCompo onVisibilityChange={setShowScrollButton} />
+      <WhatsappButton showScrollButton={showScrollButton} />
+      <Footer />
+    </div>
   );
 };
-
 
 
 
