@@ -116,7 +116,7 @@ const ServiceSection = () => {
               <motion.a 
                 whileHover={{ scale: 1.2, y: -2 }}
                 transition={{ duration: 0.3, ease: luxuryEase }}
-                href="https://web.facebook.com/sasankadulanjana0" 
+                href="https://web.facebook.com/sasankadula0" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="text-gray-300 hover:text-blue-600 transition-colors text-lg"
