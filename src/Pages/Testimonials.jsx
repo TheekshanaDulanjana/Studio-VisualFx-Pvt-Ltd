@@ -10,9 +10,16 @@ import Malindu from "../assets/Malindu.jpg";
 import Hirushi from "../assets/Hirushi.jpg";
 import Umesha from "../assets/Umesha.jpg";
 import Randika from "../assets/Randika.jpg";
+import Jules from "../assets/Jules.jpg";
 
 const testimonials = [
-  {
+    {
+    username: "Jules Jenkinson",
+    image: { src: Jules },
+    eventType: "Wedding",
+    message: "One of the best Photographers/Videographers I've worked with, and coming from Australia this speaks volumes. Exceptional talent!We are so grateful for the time effort energy you have placed in every photograph and video that you and you're team had taken. The photos are sheer magic, keep sakes for ever with tales of a lifetime. We waited and waited patiently to see Day 1 and Day 2 and they are truly incredible. The video of our Poruwa ceremony felt it was like stepping back in time and watching an old movie, can't wait to see Day 2. You are very talented and gifted thank you for the work you do.",
+    date: "01 September 2026"
+  },{
     username: "Menoli Peiris",
     image: { src: MenoliPeiris },
     eventType: "Wedding",
@@ -51,7 +58,7 @@ const testimonials = [
     username: "Hirushi Kalindi",
     image: { src: Hirushi },
     eventType: "Wedding",
-    message: "Our wedding day was beautifully brought to life thanks to the incredible videography by Sasanka & Team. Your talent, professionalism, and eye for detail made every moment feel magical. The way you captured emotions, laughter, and every little detail was beyond our expectations. We are truly grateful for your hard work and creativity in turning our special day into a timeless film that we can relive again and again. A heartfelt thank you for making our memories last forever. Highly recommended! 🎥❤️",
+    message: "Our wedding day was beautifully brought to life thanks to the incredible videography by Sasanka & Team. Your talent, professionalism, and eye for detail made every moment feel magical. The way you captured emotions, laughter, and every little detail was beyond our expectations. We are truly grateful for your hard work and creativity in turning our special day into a timeless film that we can relive again and again. A heartfelt thank you for making our memories last forever. Highly recommended! 🎥❤️️",
     date: "03 September 2025"
   },
   {
@@ -77,14 +84,12 @@ export default function Testimonials() {
 
   const scroll = (direction) => {
     if (sliderRef.current) {
-      // mobile screen width අනුව scroll ප්‍රමාණය ගණනය කරයි
       const cardWidth = sliderRef.current.querySelector(".testimonial-card-wrapper")?.offsetWidth || 300;
       const scrollAmount = direction === "left" ? -(cardWidth + 16) : (cardWidth + 16);
       sliderRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
     }
   };
 
-  // Ultra smooth and slow luxury easing curve
   const luxuryEase = [0.16, 1, 0.3, 1];
 
   const containerVariants = {
@@ -163,10 +168,25 @@ export default function Testimonials() {
 
           <motion.p 
             variants={fadeInUp}
-            className="text-gray-300 max-w-md font-roboto text-justify text-sm leading-relaxed"
+            className="text-gray-300 max-w-md font-roboto text-justify text-sm leading-relaxed mb-6"
           >
             Hear directly from our clients about their experiences working with Studio VisualFX and how we’ve helped bring their stories to life.
           </motion.p>
+
+          {/* Testimonial References Button */}
+          <motion.div variants={fadeInUp}>
+            <a
+              href="https://www.facebook.com/visualfxsl/reviews/?id=100067077977165&sk=reviews"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-gray-600 bg-black/40 text-white hover:bg-white hover:text-black transition-colors duration-200 text-sm font-roboto cursor-pointer"
+            >
+              Testimonial References
+              <svg className="w-4 h-4 fill-current" viewBox="0 0 320 512">
+                <path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.3 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z" />
+              </svg>
+            </a>
+          </motion.div>
         </div>
 
         {/* RIGHT SIDE */}
