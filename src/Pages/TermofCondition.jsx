@@ -7,8 +7,8 @@ export default function TermofCondition() {
       
       {/* Hero Section */}
       <section className="py-12 md:py-16 px-4">
-        <div className="w-full max-w-7xl mx-auto">
-          <div className="max-w-7xl">
+        <div className="w-full max-w-[1600px] mx-auto">
+          <div className="max-w-[1600px]">
             
             <h1 className="text-5xl text-white md:text-7xl  tracking-tight mb-6 font-belleza">
               Terms of Condition

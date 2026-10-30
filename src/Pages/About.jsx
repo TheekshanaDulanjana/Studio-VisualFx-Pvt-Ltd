@@ -1,75 +1,37 @@
-import React, { useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useRef } from 'react';
+import useScrollFx from '../hooks/useScrollFx';
 import Profile from '../components/Profile';
+import { scrollToTop } from '../lib/scroll';
+import { STATS } from '../data/studio';
 
 export default function About() {
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    scrollToTop({ immediate: true });
   }, []);
 
-  // Ultra smooth and slow luxury easing curve
-  const luxuryEase = [0.16, 1, 0.3, 1];
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.25,
-        delayChildren: 0.15,
-      },
-    },
-  };
-
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 45 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 1.4,
-        ease: luxuryEase,
-      },
-    },
-  };
-
-  const statCardVariants = {
-    hidden: { opacity: 0, y: 35, scale: 0.95 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        duration: 1.2,
-        ease: luxuryEase,
-      },
-    },
-  };
+  const scope = useRef(null);
+  useScrollFx(scope);
 
   return (
-    <div className="pt-24">
+    <div ref={scope} className="pt-24">
       
       {/* Hero Section */}
-      <motion.section 
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
-        variants={containerVariants}
+      <section
         className="py-4 md:py-16 px-6 md:px-12 lg:px-6"
       >
-        <div className="w-full max-w-7xl mx-auto">
-          <div className="max-w-7xl">
+        <div className="w-full max-w-[1600px] mx-auto">
+          <div className="max-w-[1600px]">
             
-            <motion.h1 
-              variants={fadeInUp}
+            <h1
+              data-fx="words"
               className="text-3xl text-white md:text-6xl leading-12 sm:leading-18 tracking-tight mb-6 font-belleza"
             >
               Crafting Timeless Visual Journeys Through Passion, Vision, and Cinematic Creativity
-            </motion.h1>
+            </h1>
 
-            <motion.p 
-              variants={fadeInUp}
+            <p
+              data-fx="up"
               className="text-sm text-white text-justify leading-relaxed font-roboto"
             >
               With over 7 years of experience in visual storytelling, Studio VisualFX (Pvt) Ltd.
@@ -90,48 +52,38 @@ export default function About() {
               creative project, we bring your ideas to life with precision, artistry, and
               unmatched cinematic quality. Join us and let us create visual stories that
               inspire, move, and stay with you forever.
-            </motion.p>
+            </p>
 
           </div>
         </div>
-      </motion.section>
+      </section>
 
       {/* Stats Section */}
-      <motion.section 
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
-        variants={containerVariants}
+      <section
         className="py-12 md:py-16 px-6 md:px-12 lg:px-6"
       >
-        <div className="w-full max-w-7xl mx-auto">
+        <div className="w-full max-w-[1600px] mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
 
-            {[
-              { label: 'Years of Experience', value: '7+' },
-              { label: 'Frames Crafted', value: '150+' },
-              { label: 'Cinematic Hours', value: '400+' },
-              { label: 'Creative Team', value: '4+' },
-            ].map((stat, i) => (
+            {STATS.map((stat, i) => (
               
-              <motion.div 
-                key={i} 
-                variants={statCardVariants}
-                whileHover={{ x: 6 }}
-                transition={{ duration: 0.4, ease: luxuryEase }}
-                className="border-l-4 border-white pl-4"
+              <div
+                key={i}
+                data-fx="up"
+                className="relative pl-4 transition-transform duration-500 hover:translate-x-1.5"
               >
-                <div className="text-3xl font-belleza text-white">{stat.value}</div>
+                <span data-fx="line-y" aria-hidden="true" className="absolute left-0 top-0 h-full w-1 bg-white" />
+                <div data-fx="count" className="text-3xl md:text-5xl font-belleza text-white tabular-nums">{stat.value}</div>
                 <div className="text-[10px] tracking-widest text-white uppercase font-roboto">
                   {stat.label}
                 </div>
-              </motion.div>
+              </div>
 
             ))}
 
           </div>
         </div>
-      </motion.section>
+      </section>
 
       <Profile />
 

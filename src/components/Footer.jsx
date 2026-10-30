@@ -2,72 +2,57 @@ import { FaFacebookF, FaInstagram, FaWhatsapp, FaTiktok, FaYoutube } from "react
 import { FaPhone, FaEnvelope } from "react-icons/fa";
 import Finax from "../assets/StudioVisualFX.png";
 import { useNavigate, useLocation } from "react-router-dom";
+import { scrollToSection, scrollToTop } from "../lib/scroll";
 
 export default function Footer() {
   const navigate = useNavigate();
   const location = useLocation();
 
   const navItems = [
-    { id: "home", label: "Home" },
-    { id: "about", label: "About Us" },
-    { id: "film-gallery", label: "Our Films" },
-    { id: "testimonials", label: "Testimonials" },
-    { id: "faq", label: "FAQ" },
-    { id: "contact", label: "Contact" },
+    { id: "home", label: "Home", href: "/" },
+    { id: "about", label: "About Us", href: "/about" },
+    { id: "film-gallery", label: "Our Films", href: "/film-gallery" },
+    { id: "testimonials", label: "Testimonials", href: "/#testimonials" },
+    { id: "faq", label: "FAQ", href: "/#faq" },
+    { id: "contact", label: "Contact", href: "/#contact" },
   ];
 
   const handleScroll = (id) => {
-    if (id === "film-gallery") {
-      navigate("/film-gallery");
-      window.scrollTo(0, 0); 
-      return;
-    }
-
-    if (id === "about") {
-      navigate("/about");
-      window.scrollTo(0, 0);
+    if (id === "film-gallery" || id === "about") {
+      navigate(`/${id}`);
+      scrollToTop({ immediate: true });
       return;
     }
 
     if (location.pathname !== "/") {
-      navigate("/");
-      
-      setTimeout(() => {
-        if (id === "home") {
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        } else {
-          const section = document.getElementById(id);
-          if (section) {
-            section.scrollIntoView({ behavior: "smooth" });
-          }
-        }
-      }, 800);
-    } else {
       if (id === "home") {
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        navigate("/");
+        scrollToTop({ immediate: true });
       } else {
-        const section = document.getElementById(id);
-        if (section) {
-          section.scrollIntoView({ behavior: "smooth" });
-        }
+        navigate(`/#${id}`);
       }
+      return;
     }
+
+    if (id === "home") scrollToTop();
+    else scrollToSection(id);
   };
 
   return (
     <footer className="text-white">
-      <div className="max-w-7xl mx-auto px-6 lg:px-0 md:py-6">
+      <div className="max-w-[1600px] mx-auto px-6 lg:px-8 md:py-6">
         <div className="border-t border-gray-800"></div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-10 mt-10">
           <div className="sm:col-span-2 lg:col-span-2 flex flex-col items-center md:items-start text-center md:text-left">
-            <button 
-              onClick={() => handleScroll("home")} 
-              className="cursor-pointer focus:outline-none focus:ring-1 focus:ring-white/30 rounded-lg"
-              aria-label="Go to Home"
+            <a
+              href="/"
+              onClick={(e) => { e.preventDefault(); handleScroll("home"); }}
+              className="cursor-pointer rounded-lg"
+              aria-label="Studio VisualFX - Home"
             >
-              <img src={Finax} alt="Logo" className="w-24 md:w-28 mb-4 hover:opacity-80 transition-opacity" />
-            </button>
+              <img src={Finax} alt="Studio VisualFX" loading="lazy" className="w-24 md:w-28 mb-4 hover:opacity-80 transition-opacity" />
+            </a>
             <p className="text-sm md:text-sm leading-relaxed font-roboto max-w-sm text-white/70">
               Studio VisualFX (Pvt) Ltd. brings your stories
               to life through cinematic creativity. Capturing moments,
@@ -93,12 +78,14 @@ export default function Footer() {
             <h3 className="text-white font-belleza text-lg mb-4">Quick Links</h3>
             <ul className="space-y-2 text-sm md:text-sm font-roboto text-white/60">
               {navItems.map((item) => (
-                <li
-                  key={item.id}
-                  className="cursor-pointer hover:text-white transition-colors"
-                  onClick={() => handleScroll(item.id)}
-                >
-                  {item.label}
+                <li key={item.id}>
+                  <a
+                    href={item.href}
+                    onClick={(e) => { e.preventDefault(); handleScroll(item.id); }}
+                    className="cursor-pointer hover:text-white transition-colors"
+                  >
+                    {item.label}
+                  </a>
                 </li>
               ))}
             </ul>
@@ -109,7 +96,7 @@ export default function Footer() {
             <h3 className="text-white font-belleza text-lg mb-4">Social Presence</h3>
             <ul className="space-y-2 text-sm md:text-sm font-roboto">
               <li className="flex items-center justify-center md:justify-start gap-3">
-                <FaWhatsapp className="text-white/70" />
+                <FaWhatsapp className="shrink-0 text-white/70" />
                 <a 
                   href="https://wa.me/94776996981" 
                   target="_blank" 
@@ -120,7 +107,7 @@ export default function Footer() {
                 </a>
               </li>
               <li className="flex items-center justify-center md:justify-start gap-3">
-                <FaFacebookF className="text-white/70" />
+                <FaFacebookF className="shrink-0 text-white/70" />
                 <a 
                   href="https://facebook.com/visualfxsl" 
                   target="_blank" 
@@ -131,7 +118,7 @@ export default function Footer() {
                 </a>
               </li>
               <li className="flex items-center justify-center md:justify-start gap-3">
-                <FaInstagram className="text-white/70" />
+                <FaInstagram className="shrink-0 text-white/70" />
                 <a 
                   href="https://www.instagram.com/studiovisualfx/" 
                   target="_blank" 
@@ -142,7 +129,7 @@ export default function Footer() {
                 </a>
               </li>
               <li className="flex items-center justify-center md:justify-start gap-3">
-                <FaTiktok className="text-white/70" />
+                <FaTiktok className="shrink-0 text-white/70" />
                 <a 
                   href="https://www.tiktok.com/@studiovisualfx" 
                   target="_blank" 
@@ -153,7 +140,7 @@ export default function Footer() {
                 </a>
               </li>
               <li className="flex items-center justify-center md:justify-start gap-3">
-                <FaYoutube className="text-white/70" />
+                <FaYoutube className="shrink-0 text-white/70" />
                 <a 
                   href="https://www.youtube.com/@studiovisualfx" 
                   target="_blank" 
@@ -171,12 +158,12 @@ export default function Footer() {
             <h3 className="text-white font-belleza text-lg mb-4">Contact Us</h3>
             <ul className="space-y-2 text-sm md:text-sm font-roboto">
               <li className="flex items-center justify-center md:justify-start gap-3">
-                <FaPhone className="text-white/70" />
+                <FaPhone className="shrink-0 text-white/70" />
                 <a href="tel:+94776996981" className="text-white/70 hover:text-white">+94 77 699 6981</a> 
               </li>
               <li className="flex items-center justify-center md:justify-start gap-3">
-                <FaEnvelope className="text-white/70" />
-                <a href="mailto:svisualfx@gmail.com" className="text-white/70 hover:text-white">svisualfx@gmail.com</a>
+                <FaEnvelope className="shrink-0 text-white/70" />
+                <a href="mailto:svisualfx@gmail.com" className="min-w-0 break-all text-white/70 hover:text-white">svisualfx@gmail.com</a>
               </li>
             </ul>
           </div>
@@ -189,12 +176,12 @@ export default function Footer() {
               Copyright © {new Date().getFullYear()} Studio VisualFx (Pvt) Ltd. All Rights Reserved.
             </p>
             <div className="flex gap-6">
-              <button onClick={() => { navigate("/privacy-policy"); window.scrollTo(0,0); }} className="text-white/50 cursor-pointer hover:text-white text-[9px] md:text-[10px] uppercase tracking-wider ">
+              <a href="/privacy-policy" onClick={(e) => { e.preventDefault(); navigate("/privacy-policy"); scrollToTop({ immediate: true }); }} className="text-white/50 cursor-pointer hover:text-white text-[9px] md:text-[10px] uppercase tracking-wider">
                 Privacy Policy
-              </button>
-              <button onClick={() => { navigate("/terms-conditions"); window.scrollTo(0,0); }} className="text-white/50 hover:text-white cursor-pointer text-[9px] md:text-[10px] uppercase tracking-wider">
+              </a>
+              <a href="/terms-conditions" onClick={(e) => { e.preventDefault(); navigate("/terms-conditions"); scrollToTop({ immediate: true }); }} className="text-white/50 hover:text-white cursor-pointer text-[9px] md:text-[10px] uppercase tracking-wider">
                 Terms & Conditions
-              </button>
+              </a>
             </div>
           </div>
         </div>

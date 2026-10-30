@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FaSearch } from 'react-icons/fa';
 
-import AlbumDefultBanner from '../assets/AlbumDefultBanner.jpg';
-import AlbumMobileBanner from '../assets/AlbumMobileBanner.jpg';
+import AlbumDefultBanner from '../assets/optimized/AlbumDefultBanner.webp';
+import AlbumMobileBanner from '../assets/optimized/AlbumMobileBanner.webp';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa6';
+import { gsap, useGSAP } from '../lib/gsap';
+import useScrollFx from '../hooks/useScrollFx';
+import { FILMS, getVideoId } from '../data/studio';
 
 const FilmGallery = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -18,18 +21,7 @@ const FilmGallery = () => {
     }
   };
 
-  const films = [
-    { coupleName: 'Jules & Cheshan', link: 'https://www.youtube.com/watch?v=KaQCh7E6mg8' },
-    { coupleName: 'Nethmi & Charuka', link: 'https://www.youtube.com/watch?v=MhENvCuxF0I' },
-    { coupleName: 'Piyumi & Darshana', link: 'https://youtu.be/7JUmj4brDds' },
-    { coupleName: 'Inesha & Randika', link: 'https://youtu.be/aplPx3YgxOc' },
-    { coupleName: 'Meditha & Teran', link: 'https://www.youtube.com/watch?v=0yavt1yQGhc' },
-    { coupleName: 'Raweesha & Sahan', link: 'https://www.youtube.com/watch?v=sqs5lNAy6GE' },
-    { coupleName: 'Dilmi & Sanitha', link: 'https://www.youtube.com/watch?v=Ezo05vzfBbU' },
-    { coupleName: 'Vihangi & Lahiru', link: 'https://youtu.be/j5-crzYuAys' },
-    { coupleName: 'Nimmi & Brinoj', link: 'https://youtu.be/v2BLa9HXxeA' },
-    { coupleName: 'Raveesha & Sahan', link: 'https://youtu.be/kkNuwRHeYR4' },
-  ];
+  const films = FILMS;
 
   const filteredFilms = films.filter(film =>
     film.coupleName.toLowerCase().includes(searchTerm.toLowerCase())
@@ -37,14 +29,27 @@ const FilmGallery = () => {
 
   const filmsToShow = showMore ? filteredFilms : filteredFilms.slice(0, 9);
 
-  const getVideoId = (url) => {
-    if (url.includes('youtu.be')) {
-      return url.split('/').pop().split('?')[0];
-    } else if (url.includes('watch?v=')) {
-      return url.split('watch?v=')[1].split('&')[0];
-    }
-    return '';
-  };
+  const pageRef = useRef(null);
+  const heroRef = useRef(null);
+  const bannerRef = useRef(null);
+  const heroContentRef = useRef(null);
+
+  // New cards (search / show more) get animated, existing ones are left alone
+  useScrollFx(pageRef, [filmsToShow.map((f) => f.link).join('|')]);
+
+  // Banner drifts slower than the page, title floats away
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+      mm.add('(prefers-reduced-motion: no-preference)', () => {
+        const st = { trigger: heroRef.current, start: 'top top', end: 'bottom top', scrub: true };
+        gsap.to(bannerRef.current, { yPercent: 25, ease: 'none', scrollTrigger: st });
+        gsap.to(heroContentRef.current, { y: -80, opacity: 0, ease: 'none', scrollTrigger: { ...st, end: '90% top' } });
+      });
+      return () => mm.revert();
+    },
+    { scope: heroRef }
+  );
 
   const luxuryEase = [0.16, 1, 0.3, 1];
 
@@ -58,15 +63,12 @@ const FilmGallery = () => {
     visible: { opacity: 1, y: 0, transition: { duration: 1.4, ease: luxuryEase } },
   };
 
-  const cardVariants = {
-    hidden: { opacity: 0, y: 50, scale: 0.95 },
-    visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 1.3, ease: luxuryEase } },
-  };
 
   return (
-    <div className="w-full">
+    <div ref={pageRef} className="w-full">
       {/* Hero Section */}
-      <div className="relative w-full h-104 md:h-88 overflow-hidden">
+      <div ref={heroRef} className="relative w-full h-104 md:h-88 overflow-hidden">
+        <div ref={bannerRef} className="w-full h-full will-change-transform">
         <motion.div
           className="w-full h-full"
           initial={{ opacity: 0, filter: 'blur(5px)' }}
@@ -90,7 +92,9 @@ const FilmGallery = () => {
           </picture>
           <div className="absolute top-0 left-0 w-full h-full bg-linear-to-t from-black to-transparent opacity-90 z-10" />
         </motion.div>
+        </div>
 
+        <div ref={heroContentRef} className="absolute inset-0 z-20">
         <motion.div
           initial="hidden"
           animate="visible"
@@ -131,19 +135,13 @@ const FilmGallery = () => {
             </button>
           </motion.div>
         </motion.div>
+        </div>
       </div>
 
       {/* Film Cards Section */}
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
-        variants={containerVariants}
-        className="max-w-7xl mx-auto px-6 py-12"
-      >
+      <div className="max-w-[1600px] mx-auto px-6 py-12">
         {filmsToShow.length > 0 ? (
-          <motion.div
-            variants={containerVariants}
+          <div
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           >
             {filmsToShow.map((film) => {
@@ -152,19 +150,18 @@ const FilmGallery = () => {
 
               return (
                 // Real <a> (crawlable, keyboard accessible) instead of a clickable <div> + window.open
-                <motion.a
+                <a
                   key={videoId}
                   href={film.link}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`Watch ${film.coupleName} wedding film on YouTube`}
-                  variants={cardVariants}
-                  whileHover={{ y: -8, scale: 1.02 }}
-                  transition={{ duration: 0.5, ease: luxuryEase }}
-                  className="block bg-white/20 backdrop-blur-sm rounded-[16px] border border-white shadow-lg overflow-hidden cursor-pointer group"
+                  data-fx="card3d"
+                  data-tilt="8"
+                  className="block will-change-transform bg-white/20 backdrop-blur-sm rounded-[16px] border border-white shadow-lg overflow-hidden cursor-pointer group"
                 >
                   <div className="relative w-full aspect-video bg-black flex items-center justify-center overflow-hidden">
-                    <motion.img
+                    <img
                       src={thumbnail}
                       alt={`${film.coupleName} wedding film by Studio VisualFX`}
                       width="1280"
@@ -189,10 +186,10 @@ const FilmGallery = () => {
                     </div>
                   </div>
                   <h2 className="p-4 text-center text-sm font-roboto text-white">{film.coupleName}</h2>
-                </motion.a>
+                </a>
               );
             })}
-          </motion.div>
+          </div>
         ) : (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -234,7 +231,7 @@ const FilmGallery = () => {
             </motion.button>
           </motion.div>
         )}
-      </motion.div>
+      </div>
     </div>
   );
 };

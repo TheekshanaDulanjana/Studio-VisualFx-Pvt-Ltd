@@ -5,6 +5,7 @@ import { Menu, X } from "lucide-react";
 import { FaArrowRight } from "react-icons/fa";
 import Logo from "../assets/StudioVisualFX.png";
 import LogoBlack from "../assets/StudioVisualFXBlack.png";
+import { scrollToSection, scrollToTop } from "../lib/scroll";
 
 const NAV_ITEMS = [
   { id: "home", label: "Home", path: "/" },
@@ -30,8 +31,18 @@ const Header = () => {
   // Ultra smooth luxury easing curve
   const luxuryEase = [0.16, 1, 0.3, 1];
 
-  // Lock body scroll while menu is open
+  // Esc closes the mobile menu
   useEffect(() => {
+    if (!isMenuOpen) return;
+    const onKey = (e) => e.key === "Escape" && setIsMenuOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isMenuOpen]);
+
+  // Lock body scroll while menu is open (and pause smooth scroll)
+  useEffect(() => {
+    if (isMenuOpen) window.lenis?.stop();
+    else window.lenis?.start();
     if (isMenuOpen) {
       document.body.style.overflow = "hidden";
       document.body.style.touchAction = "none";
@@ -85,37 +96,30 @@ const Header = () => {
 
       if (ROUTE_IDS.has(id)) {
         navigate(`/${id}`);
-        window.scrollTo({
-          top: 0,
-          behavior: "instant",
-        });
+        scrollToTop({ immediate: true });
         return;
       }
 
       if (id === "home") {
-        navigate("/");
-        window.scrollTo({
-          top: 0,
-          behavior: "instant",
-        });
+        if (location.pathname === "/") {
+          scrollToTop();
+          window.history.replaceState({}, "", "/");
+        } else {
+          navigate("/");
+          scrollToTop({ immediate: true });
+        }
         return;
       }
 
       const hash = `#${id}`;
 
       if (location.pathname !== "/") {
+        // Home picks up the hash and scrolls once the section exists
         navigate(`/${hash}`);
       } else {
-        const element = document.getElementById(id);
-
-        if (element) {
-          element.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-          });
-
-          window.history.replaceState({}, "", hash);
-        }
+        // let the mobile drawer close (and unlock scrolling) first
+        requestAnimationFrame(() => scrollToSection(id));
+        window.history.replaceState({}, "", hash);
       }
     },
     [navigate, location.pathname]
@@ -125,11 +129,7 @@ const Header = () => {
     setIsMenuOpen(false);
 
     navigate("/commercial");
-
-    window.scrollTo({
-      top: 0,
-      behavior: "instant",
-    });
+    scrollToTop({ immediate: true });
   }, [navigate]);
 
   // Framer motion variants for mobile menu stagger
@@ -182,27 +182,35 @@ const Header = () => {
           showHeader ? "translate-y-0" : "-translate-y-full"
         } ${isScrolled ? "bg-white shadow-md py-3" : "pt-6 bg-transparent"}`}
       >
-        <div className="pointer-events-auto mx-4 flex max-w-7xl items-center justify-between px-4 py-1 sm:px-6 lg:mx-auto lg:px-8 transition-all duration-300">
+        <div className="pointer-events-auto mx-4 flex max-w-[1600px] items-center justify-between px-4 py-1 sm:px-6 lg:mx-auto lg:px-8 transition-all duration-300">
           
           {/* Logo with dynamic source swap */}
-          <motion.button
+          <motion.a
+            href="/"
+            aria-label="Studio VisualFX - Home"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: luxuryEase }}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            onClick={() => goTo("home")}
+            onClick={(e) => {
+              e.preventDefault();
+              goTo("home");
+            }}
             className="touch-manipulation cursor-pointer flex items-center"
           >
             <img
               src={isScrolled ? LogoBlack : Logo}
-              alt="Studio Visual FX"
+              alt="Studio VisualFX"
+              width="120"
+              height="40"
               className="h-10 w-auto transition-all duration-300"
             />
-          </motion.button>
+          </motion.a>
 
           {/* Desktop Nav Items */}
-          <motion.nav 
+          <motion.nav
+            aria-label="Main"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.15, ease: luxuryEase }}
@@ -210,28 +218,36 @@ const Header = () => {
               isScrolled ? "text-black" : "text-white"
             }`}
           >
-            {NAV_ITEMS.map(({ id, label }) => (
-              <motion.button
+            {NAV_ITEMS.map(({ id, label, path }) => (
+              <motion.a
                 key={id}
+                href={path}
                 whileHover={{ y: -2 }}
                 whileTap={{ y: 0 }}
                 transition={{ duration: 0.2, ease: luxuryEase }}
-                onClick={() => goTo(id)}
-                className="touch-manipulation cursor-pointer text-sm uppercase tracking-widest transition-all duration-200 hover:font-semibold xl:text-xs"
+                onClick={(e) => {
+                  e.preventDefault();
+                  goTo(id);
+                }}
+                className="touch-manipulation cursor-pointer text-sm uppercase tracking-widest transition-opacity duration-200 hover:opacity-60 xl:text-xs"
               >
                 {label}
-              </motion.button>
+              </motion.a>
             ))}
           </motion.nav>
 
           {/* Commercial Button with inverted theme on scroll */}
-          <motion.button
+          <motion.a
+            href="/commercial"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.25, ease: luxuryEase }}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            onClick={goToCommercial}
+            onClick={(e) => {
+              e.preventDefault();
+              goToCommercial();
+            }}
             className={`group hidden touch-manipulation items-center gap-3 rounded-full px-4 py-2 text-sm transition-all duration-300 lg:flex cursor-pointer border ${
               isScrolled
                 ? "bg-black text-white hover:bg-white hover:text-black border-black"
@@ -251,7 +267,7 @@ const Header = () => {
                   : "text-white group-hover:text-black"
               }`} />
             </span>
-          </motion.button>
+          </motion.a>
 
           {/* Mobile Menu Toggle Button */}
           <motion.button
@@ -261,6 +277,7 @@ const Header = () => {
             whileTap={{ scale: 0.9 }}
             onClick={() => setIsMenuOpen(true)}
             aria-label="Open Menu"
+            aria-expanded={isMenuOpen}
             className={`touch-manipulation rounded-full p-2 transition lg:hidden cursor-pointer ${
               isScrolled ? "hover:bg-black/10" : "hover:bg-white/10"
             }`}
@@ -280,6 +297,9 @@ const Header = () => {
             initial="closed"
             animate="open"
             exit="closed"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Site menu"
             className="fixed inset-0 z-[999] lg:hidden pointer-events-auto"
           >
             {/* Background Overlay */}
@@ -298,7 +318,7 @@ const Header = () => {
               <div className="flex items-center justify-between">
                 <img
                   src={Logo}
-                  alt="Studio Visual FX"
+                  alt="Studio VisualFX"
                   className="h-10"
                 />
 
@@ -321,16 +341,20 @@ const Header = () => {
                 exit="closed"
                 className="flex flex-1 flex-col items-center justify-center space-y-7"
               >
-                {NAV_ITEMS.map(({ id, label }) => (
-                  <motion.button
+                {NAV_ITEMS.map(({ id, label, path }) => (
+                  <motion.a
                     key={id}
+                    href={path}
                     variants={navItemVariants}
                     whileTap={{ scale: 0.95 }}
-                    onClick={() => goTo(id)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      goTo(id);
+                    }}
                     className="touch-manipulation text-base uppercase tracking-widest transition-transform duration-200 cursor-pointer"
                   >
                     {label}
-                  </motion.button>
+                  </motion.a>
                 ))}
               </motion.nav>
 
@@ -342,11 +366,15 @@ const Header = () => {
                 transition={{ duration: 0.6, delay: 0.3, ease: luxuryEase }}
                 className="mb-6 flex justify-center"
               >
-                <motion.button
+                <motion.a
+                  href="/commercial"
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.95 }}
                   transition={{ duration: 0.2 }}
-                  onClick={goToCommercial}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    goToCommercial();
+                  }}
                   className="flex h-12 w-40 touch-manipulation items-center justify-center gap-4 rounded-full bg-white px-4 py-3 text-black transition-transform duration-200 cursor-pointer"
                 >
                   <span className="font-roboto text-sm">Commercial</span>
@@ -354,7 +382,7 @@ const Header = () => {
                   <span className="flex h-8 w-8 items-center justify-center rounded-full bg-black">
                     <FaArrowRight className="text-sm text-white" />
                   </span>
-                </motion.button>
+                </motion.a>
               </motion.div>
             </div>
           </motion.div>

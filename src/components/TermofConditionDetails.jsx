@@ -36,7 +36,7 @@ const sections = [
   {
     title: "Delivery Timeline & Revisions",
     points: [
-      "Final edited videos will be delivered approximately 8–12 weeks after the event date.",
+      "Final edited videos will be delivered approximately 8-12 weeks after the event date.",
       "Express delivery may be available upon request for an additional fee.",
       "Each package includes up to two (2) rounds of minor revisions, such as music changes or specific shot replacements, requested within fourteen (14) days of delivery.",
       "Any additional revisions or major re-editing requests will be subject to additional charges."
@@ -87,7 +87,7 @@ const sections = [
 
   return (
     <div className=" py-16 px-4 font-roboto">
-      <div className="max-w-7xl mx-auto relative">
+      <div className="max-w-[1600px] mx-auto relative">
         
         {/* Vertical Center Line */}
         <div className="absolute left-[30%] top-0 bottom-0 w-px bg-white/30 hidden md:block"></div>

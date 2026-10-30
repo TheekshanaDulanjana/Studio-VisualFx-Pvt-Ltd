@@ -1,18 +1,13 @@
 import { useEffect } from "react";
 import Lenis from "lenis";
+import { gsap, ScrollTrigger } from "../lib/gsap";
 
-// NOTE ON THE CONFIG BELOW
-// -------------------------
-// `smooth: true`, `direction: 'vertical'`, and `gestureDirection: 'vertical'`
-// are options from the old Lenis v0.x API. The version on npm today (v1.x)
-// doesn't read them — they're silently ignored, so the instance you get at
-// runtime isn't the one the config appears to describe. That mismatch is
-// part of why behavior has felt inconsistent across devices/browsers.
+// Lenis smooth scroll driven by the GSAP ticker so ScrollTrigger and Lenis
+// stay perfectly in sync (no double requestAnimationFrame loops, no jitter
+// on pinned / scrubbed sections).
 //
-// `syncTouch` is left at its default (false) intentionally: that makes
-// Lenis only smooth wheel input and leaves native touch scrolling/momentum
-// alone on mobile, which is what you want — see the Lenis maintainer's
-// note that by default Lenis does not take over touch scrolling.
+// `syncTouch` stays false: Lenis only smooths wheel input and leaves native
+// touch scrolling/momentum alone on mobile.
 const SmoothScroll = () => {
   useEffect(() => {
     const lenis = new Lenis({
@@ -22,31 +17,36 @@ const SmoothScroll = () => {
       touchMultiplier: 1,
       syncTouch: false,
       infinite: false,
+      autoRaf: false,
     });
 
     window.lenis = lenis;
 
-    let destroyed = false;
+    lenis.on("scroll", ScrollTrigger.update);
 
-    function raf(time) {
-      if (destroyed) return;
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
+    const tick = (time) => lenis.raf(time * 1000);
+    gsap.ticker.add(tick);
+    gsap.ticker.lagSmoothing(0);
 
-    requestAnimationFrame(raf);
-
-    // Remeasure whenever the page content resizes (route changes swap in
-    // content of a different height, and Lenis needs to know that or it
-    // clamps scrollTo(0) against the OLD page's dimensions)
+    // Route changes / lazy images change the page height. Lenis and
+    // ScrollTrigger both need to re-measure or triggers fire at the wrong spot.
+    let t;
     const resizeObserver = new ResizeObserver(() => {
       lenis.resize();
+      clearTimeout(t);
+      t = setTimeout(() => {
+        // child components create their triggers before parents (React
+        // effect order) - re-sort by page position before refreshing pins
+        ScrollTrigger.sort();
+        ScrollTrigger.refresh();
+      }, 200);
     });
     resizeObserver.observe(document.body);
 
     return () => {
-      destroyed = true;
+      clearTimeout(t);
       resizeObserver.disconnect();
+      gsap.ticker.remove(tick);
       window.lenis = null;
       lenis.destroy();
     };

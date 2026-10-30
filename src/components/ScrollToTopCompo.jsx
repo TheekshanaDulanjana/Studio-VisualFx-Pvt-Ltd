@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { FaArrowUp } from "react-icons/fa";
+import { scrollToTop as smoothTop } from "../lib/scroll";
 
 const ScrollToTop = ({ onVisibilityChange }) => {
   const [visible, setVisible] = useState(false);
@@ -23,10 +24,7 @@ const ScrollToTop = ({ onVisibilityChange }) => {
   }, [onVisibilityChange]);
 
   const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    smoothTop();
   };
 
   if (!visible) return null;
@@ -34,6 +32,7 @@ const ScrollToTop = ({ onVisibilityChange }) => {
   return (
     <button
       onClick={scrollToTop}
+      aria-label="Back to top"
       className="
         fixed
         right-4

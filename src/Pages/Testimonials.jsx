@@ -1,16 +1,18 @@
 import React, { useRef } from "react";
-import { motion } from "framer-motion";
+import { FaArrowRight } from "react-icons/fa";
+import useScrollFx from "../hooks/useScrollFx";
+import { gsap, useGSAP } from "../lib/gsap";
 import TestimonialCard from "../components/TestimonialCard";
 
-import MenoliPeiris from "../assets/Menoli Peiris.jpg";
-import Ramitha from "../assets/Ramitha.jpg";
-import Tharu from "../assets/Tharu.jpg";
-import Dilmi from "../assets/Dilmi.jpg";
-import Malindu from "../assets/Malindu.jpg";
-import Hirushi from "../assets/Hirushi.jpg";
-import Umesha from "../assets/Umesha.jpg";
-import Randika from "../assets/Randika.jpg";
-import Jules from "../assets/Jules.jpg";
+import MenoliPeiris from "../assets/optimized/MenoliPeiris.webp";
+import Ramitha from "../assets/optimized/Ramitha.webp";
+import Tharu from "../assets/optimized/Tharu.webp";
+import Dilmi from "../assets/optimized/Dilmi.webp";
+import Malindu from "../assets/optimized/Malindu.webp";
+import Hirushi from "../assets/optimized/Hirushi.webp";
+import Umesha from "../assets/optimized/Umesha.webp";
+import Randika from "../assets/optimized/Randika.webp";
+import Jules from "../assets/optimized/Jules.webp";
 
 const testimonials = [
     {
@@ -79,177 +81,178 @@ const testimonials = [
 
 export default function Testimonials() {
   const sliderRef = useRef(null);
+  const scope = useRef(null);
+  const quoteRef = useRef(null);
+  const barRef = useRef(null);
+  useScrollFx(scope);
+
+  useGSAP(
+    () => {
+      const slider = sliderRef.current;
+      const items = gsap.utils.toArray(".cf-item", slider);
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      // 3D coverflow: cards turn and sink back the further they are from the centre
+      let raf = 0;
+      const update = () => {
+        raf = 0;
+        const max = slider.scrollWidth - slider.clientWidth;
+        const p = max > 0 ? slider.scrollLeft / max : 1;
+        gsap.to(barRef.current, { scaleX: Math.max(0.06, p), duration: 0.4, ease: "power3.out", overwrite: true });
+        if (reduce) return;
+        const sr = slider.getBoundingClientRect();
+        const centre = sr.left + sr.width / 2;
+        items.forEach((item) => {
+          const r = item.getBoundingClientRect();
+          const d = gsap.utils.clamp(-1.4, 1.4, (r.left + r.width / 2 - centre) / r.width);
+          gsap.set(item, {
+            rotationY: d * -22,
+            z: -Math.abs(d) * 140,
+            scale: 1 - Math.min(Math.abs(d), 1) * 0.08,
+            transformPerspective: 1200,
+            transformOrigin: d > 0 ? "0% 50%" : "100% 50%",
+          });
+        });
+      };
+      const onScroll = () => {
+        if (!raf) raf = requestAnimationFrame(update);
+      };
+      update();
+      slider.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("resize", onScroll);
+
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.fromTo(
+          quoteRef.current,
+          { yPercent: 30, rotate: -12, opacity: 0 },
+          {
+            yPercent: -30,
+            rotate: 8,
+            opacity: 1,
+            ease: "none",
+            scrollTrigger: { trigger: scope.current, start: "top bottom", end: "bottom top", scrub: true },
+          }
+        );
+      });
+      return () => {
+        cancelAnimationFrame(raf);
+        slider.removeEventListener("scroll", onScroll);
+        window.removeEventListener("resize", onScroll);
+        mm.revert();
+      };
+    },
+    { scope }
+  );
+
   const firstThree = testimonials.slice(0, 3);
   const remainingCount = testimonials.length - firstThree.length;
 
   const scroll = (direction) => {
     if (sliderRef.current) {
       const cardWidth = sliderRef.current.querySelector(".testimonial-card-wrapper")?.offsetWidth || 300;
-      const scrollAmount = direction === "left" ? -(cardWidth + 16) : (cardWidth + 16);
+      const scrollAmount = direction === "left" ? -(cardWidth + 24) : cardWidth + 24;
       sliderRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
     }
   };
 
-  const luxuryEase = [0.16, 1, 0.3, 1];
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.25,
-        delayChildren: 0.15,
-      },
-    },
-  };
-
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 45 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 1.4,
-        ease: luxuryEase,
-      },
-    },
-  };
-
-  const cardVariants = {
-    hidden: { opacity: 0, y: 50, scale: 0.95 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        duration: 1.3,
-        ease: luxuryEase,
-      },
-    },
-  };
+  const arrowBtn =
+    "w-11 h-11 flex items-center justify-center rounded-full border border-white/30 bg-white/5 text-white backdrop-blur-md hover:bg-white hover:text-black transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer";
 
   return (
-    <motion.section 
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-100px" }}
-      variants={containerVariants}
-      className="text-white py-12 sm:py-16 px-4 sm:px-6 overflow-x-hidden"
-    >
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-10 lg:gap-16">
+    <section ref={scope} className="relative text-white py-16 sm:py-24 overflow-hidden">
+      <span
+        ref={quoteRef}
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-10 right-0 select-none font-belleza text-[16rem] leading-none text-white/[0.05] sm:text-[24rem] lg:right-[6%]"
+      >
+        &ldquo;
+      </span>
 
-        {/* LEFT SIDE */}
-        <div className="lg:w-5/12 flex flex-col justify-center">
-          <motion.div 
-            variants={fadeInUp}
-            className="flex items-center mb-4 bg-white rounded-full w-fit px-3 py-2"
-          >
+      {/* Header */}
+      <div className="relative max-w-[1600px] mx-auto px-6 mb-10 md:mb-14 grid gap-8 lg:grid-cols-12 lg:items-end">
+        <div className="lg:col-span-7">
+          <div data-fx="up" className="flex items-center mb-6 bg-white rounded-full w-fit pl-2 pr-4 py-1.5 shadow-[0_10px_30px_-10px_rgba(255,255,255,0.4)]">
             {firstThree.map((t, i) => (
               <img
                 key={t.username}
                 src={t.image.src}
                 alt={t.username}
-                className={`w-6 h-6 rounded-full border border-black object-cover ${i !== 0 ? "-ml-2" : ""}`}
+                loading="lazy"
+                className={`w-7 h-7 rounded-full border-2 border-white object-cover ${i !== 0 ? "-ml-2.5" : ""}`}
               />
             ))}
             {remainingCount > 0 && (
-              <span className="ml-2 text-sm font-roboto text-black">
-                +{remainingCount} Testimonials
-              </span>
+              <span className="ml-2 text-sm font-roboto text-black">+{remainingCount} Testimonials</span>
             )}
-          </motion.div>
+          </div>
 
-          <motion.h2 
-            variants={fadeInUp}
-            className="text-2xl sm:text-3xl md:text-4xl font-belleza lg:text-5xl mb-4 sm:mb-6"
+          <h2
+            data-fx="words3d"
+            className="text-3xl sm:text-4xl md:text-5xl xl:text-6xl leading-[1.08] font-belleza"
           >
             What our clients are <br /> saying about us?
-          </motion.h2>
+          </h2>
+        </div>
 
-          <motion.p 
-            variants={fadeInUp}
-            className="text-gray-300 max-w-md font-roboto text-justify text-sm leading-relaxed mb-6"
-          >
+        <div className="lg:col-span-5 flex flex-col gap-6 lg:items-end">
+          <p data-fx="up" className="text-gray-300 max-w-md font-roboto text-justify text-sm leading-relaxed lg:text-right">
             Hear directly from our clients about their experiences working with Studio VisualFX and how we’ve helped bring their stories to life.
-          </motion.p>
-
-          {/* Testimonial References Button */}
-          <motion.div variants={fadeInUp}>
+          </p>
+          <div data-fx="up" className="flex items-center gap-3">
             <a
               href="https://www.facebook.com/visualfxsl/reviews/?id=100067077977165&sk=reviews"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-gray-600 bg-black/40 text-white hover:bg-white hover:text-black transition-colors duration-200 text-sm font-roboto cursor-pointer"
+              className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/30 bg-white/5 backdrop-blur-md text-white hover:bg-white hover:text-black transition-colors duration-300 text-sm font-roboto cursor-pointer"
             >
               Testimonial References
-              <svg className="w-4 h-4 fill-current" viewBox="0 0 320 512">
-                <path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.3 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z" />
-              </svg>
+              <FaArrowRight className="text-xs transition-transform duration-300 group-hover:-rotate-45" />
             </a>
-          </motion.div>
-        </div>
-
-        {/* RIGHT SIDE */}
-        <div className="lg:w-7/12 relative flex flex-col justify-between min-w-0">
-
-          {/* Controls */}
-          <motion.div 
-            variants={fadeInUp}
-            className="flex justify-end gap-2 mb-4"
-          >
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ duration: 0.3, ease: luxuryEase }}
-              onClick={() => scroll("left")}
-              aria-label="Scroll Left"
-              className="w-9 h-9 flex items-center justify-center rounded-full border border-gray-600 bg-black/40 text-white hover:bg-white hover:text-black transition-colors duration-200 cursor-pointer"
-            >
+            <button onClick={() => scroll("left")} aria-label="Scroll Left" className={arrowBtn}>
               <svg className="w-4 h-4 fill-current" viewBox="0 0 320 512">
                 <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z" />
               </svg>
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ duration: 0.3, ease: luxuryEase }}
-              onClick={() => scroll("right")}
-              aria-label="Scroll Right"
-              className="w-9 h-9 flex items-center justify-center rounded-full border border-gray-600 bg-black/40 text-white hover:bg-white hover:text-black transition-colors duration-200 cursor-pointer"
-            >
+            </button>
+            <button onClick={() => scroll("right")} aria-label="Scroll Right" className={arrowBtn}>
               <svg className="w-4 h-4 fill-current" viewBox="0 0 320 512">
                 <path d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z" />
               </svg>
-            </motion.button>
-          </motion.div>
-
-          {/* Slider Container */}
-          <motion.div
-            ref={sliderRef}
-            variants={containerVariants}
-            className="flex gap-4 sm:gap-6 overflow-x-auto scrollbar-hide snap-x snap-mandatory py-2 px-1"
-            style={{ 
-              scrollbarWidth: "none", 
-              msOverflowStyle: "none",
-              WebkitOverflowScrolling: "touch"
-            }}
-          >
-            {testimonials.map((testimonial) => (
-              <motion.div 
-                key={testimonial.username} 
-                variants={cardVariants}
-                whileHover={{ y: -6 }}
-                transition={{ duration: 0.5, ease: luxuryEase }}
-                className="testimonial-card-wrapper snap-center sm:snap-start shrink-0 w-[85vw] max-w-[320px] sm:w-[320px]"
-              >
-                <TestimonialCard testimonial={testimonial} />
-              </motion.div>
-            ))}
-          </motion.div>
-
+            </button>
+          </div>
         </div>
-
       </div>
-    </motion.section>
+
+      {/* 3D coverflow slider */}
+      <div className="relative max-w-[1600px] mx-auto">
+        <div
+          ref={sliderRef}
+          className="flex gap-6 overflow-x-auto snap-x snap-mandatory py-8 px-[10vw] md:px-[calc(50%-160px)] [transform-style:preserve-3d]"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none", WebkitOverflowScrolling: "touch" }}
+        >
+          {testimonials.map((testimonial) => (
+            <div
+              key={testimonial.username}
+              data-fx="card-side"
+              className="testimonial-card-wrapper snap-center shrink-0 w-[80vw] max-w-[320px] sm:w-[320px]"
+            >
+              <div className="cf-item will-change-transform">
+                <TestimonialCard testimonial={testimonial} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Slider progress */}
+      <div aria-hidden="true" className="max-w-[1600px] mx-auto px-6 mt-4">
+        <div className="mx-auto h-px w-full max-w-md bg-white/15">
+          <div ref={barRef} className="h-px w-full origin-left scale-x-[0.06] bg-white" />
+        </div>
+        <p className="mt-3 text-center font-roboto text-[10px] uppercase tracking-[0.3em] text-white/40">
+          Hover or tap a card to read the full story
+        </p>
+      </div>
+    </section>
   );
 }
