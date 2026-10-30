@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preconnect" href="https://www.googletagmanager.com" />
   <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+  <link rel="preconnect" href="https://img.youtube.com" />
 
   <!--
     DEFAULT head tags for crawlers/share bots that don't run JS.
@@ -17,20 +18,23 @@
     homepage canonical on every route tells Google every page is the homepage.
     VERIFY in DevTools that only one of each tag exists after navigating.
   -->
-  <title>Studio VisualFX | Wedding Videography &amp; Photography Sri Lanka</title>
-  <meta data-rh="true" name="description" content="Cinematic wedding films, event coverage, music videos and commercial video production by Studio VisualFX, a Matara-based studio serving all of Sri Lanka." />
+  <title>Studio VisualFX</title>
+  <meta data-rh="true" name="description" content="Cinematic wedding videography &amp; photography in Matara, Colombo and across Sri Lanka by Sasanka Dulanjana. Wedding films, events, music videos &amp; commercials." />
+  <meta name="geo.region" content="LK-32" />
+  <meta name="geo.placename" content="Matara, Sri Lanka" />
   <meta data-rh="true" name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta name="author" content="Studio VisualFX" />
   <meta name="application-name" content="Studio VisualFX" />
   <meta name="format-detection" content="telephone=no" />
 
-  <link rel="icon" type="image/svg+xml" href="/TabIcon.svg" />
-  <link rel="icon" type="image/png" href="https://www.studiovisualfx.com/WebTab.png" sizes="192x192" />
-  <link rel="apple-touch-icon" sizes="180x180" href="https://www.studiovisualfx.com/WebTab.png" />
+  <!-- One icon everywhere: browser tab, Google search results, home-screen -->
+  <link rel="icon" type="image/png" sizes="64x64" href="/TabIcon.png" />
+  <link rel="shortcut icon" href="/TabIcon.png" />
+  <link rel="apple-touch-icon" href="/TabIcon.png" />
   <link rel="manifest" href="/site.webmanifest" />
   <meta name="theme-color" content="#000000" />
 
-  <link href="https://fonts.googleapis.com/css2?family=Alata&family=Alatsi&family=Belleza&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Alata&family=Belleza&family=Roboto:wght@300..700&display=swap" rel="stylesheet" />
 
   <meta data-rh="true" property="og:type" content="website" />
   <meta data-rh="true" property="og:site_name" content="Studio VisualFX" />
@@ -63,9 +67,13 @@
         "@type": "ProfessionalService",
         "@id": "https://www.studiovisualfx.com/#business",
         "name": "Studio VisualFX",
+        "alternateName": ["Studio VisualFX (Pvt) Ltd", "Studio Visual FX", "VisualFX Sri Lanka"],
         "legalName": "Studio VisualFX (Pvt) Ltd",
+        "slogan": "The eyes behind stories!",
+        "founder": { "@id": "https://www.studiovisualfx.com/#sasanka-dulanjana" },
+        "knowsAbout": ["Wedding videography", "Wedding photography", "Cinematography", "Video editing", "Colour grading", "Event videography", "Music video production", "Commercial video production"],
         "url": "https://www.studiovisualfx.com/",
-        "logo": "https://www.studiovisualfx.com/WebTab.png",
+        "logo": "https://www.studiovisualfx.com/TabIcon.png",
         "image": "https://www.studiovisualfx.com/livepreview.jpg",
         "description": "Studio VisualFX is a Matara-based video production and photography studio creating cinematic wedding films, event coverage, music videos and commercial productions across Sri Lanka.",
         "telephone": "+94776996981",
@@ -80,7 +88,9 @@
         "areaServed": [
           { "@type": "Country", "name": "Sri Lanka" },
           { "@type": "City", "name": "Matara" },
-          { "@type": "City", "name": "Colombo" }
+          { "@type": "City", "name": "Colombo" },
+          { "@type": "AdministrativeArea", "name": "Southern Province" },
+          { "@type": "AdministrativeArea", "name": "Western Province" }
         ],
         "makesOffer": [
           { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Wedding videography" } },
@@ -94,7 +104,14 @@
         "sameAs": [
           "https://facebook.com/visualfxsl",
           "https://www.instagram.com/studiovisualfx"
-        ]
+        ],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+94776996981",
+          "contactType": "customer service",
+          "areaServed": "LK",
+          "availableLanguage": ["English", "Sinhala"]
+        }
       },
       {
         "@type": "WebSite",
@@ -108,8 +125,16 @@
         "@type": "Person",
         "@id": "https://www.studiovisualfx.com/#sasanka-dulanjana",
         "name": "Sasanka Dulanjana",
+        "jobTitle": "Director & Videographer",
+        "description": "Wedding videographer, director and creative storyteller behind Studio VisualFX in Matara, Sri Lanka.",
         "url": "https://www.studiovisualfx.com/about",
-        "worksFor": { "@id": "https://www.studiovisualfx.com/#business" }
+        "worksFor": { "@id": "https://www.studiovisualfx.com/#business" },
+        "knowsAbout": ["Wedding videography", "Cinematography", "Video editing", "Adobe Premiere Pro", "DaVinci Resolve", "Adobe After Effects"],
+        "sameAs": [
+          "https://web.facebook.com/sasankadula0",
+          "https://www.instagram.com/sasankadulanjana_/",
+          "https://www.linkedin.com/in/sasanka-dulanjana/"
+        ]
       }
     ]
   }

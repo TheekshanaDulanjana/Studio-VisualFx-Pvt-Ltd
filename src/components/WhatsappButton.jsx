@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { FaWhatsapp } from "react-icons/fa";
 import whatsappDP from "../assets/WhatsappDP.png";
-import WABD from "../assets/WABD.png";
+import WABD from "../assets/optimized/WABD.webp";
 
 const WhatsappWidget = ({ showScrollButton }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,7 +32,8 @@ const WhatsappWidget = ({ showScrollButton }) => {
       fullMessage
     )}`;
 
-    window.open(url, "_blank");
+    if (typeof window.gtag === "function") window.gtag("event", "whatsapp_click", { location: "widget" });
+    window.open(url, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -65,6 +66,7 @@ const WhatsappWidget = ({ showScrollButton }) => {
               <img
                 src={whatsappDP}
                 alt="Studio VisualFX"
+                loading="lazy"
                 className="w-10 h-10 rounded-full object-cover"
               />
 
@@ -104,6 +106,8 @@ const WhatsappWidget = ({ showScrollButton }) => {
       <div className="relative pointer-events-auto">
         <button
           onClick={handleToggleWidget}
+          aria-label={isOpen ? "Close WhatsApp chat" : "Chat with us on WhatsApp"}
+          aria-expanded={isOpen}
           className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-white text-black shadow-xl transition-all duration-300 hover:scale-110 hover:bg-green-500 hover:text-white"
         >
           <FaWhatsapp className="text-2xl" />

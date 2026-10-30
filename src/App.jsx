@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 import { HelmetProvider } from "react-helmet-async";
 
 // Components
@@ -8,6 +8,9 @@ import Footer from "./components/Footer";
 import WhatsappButton from "./components/WhatsappButton";
 import ScrollToTopCompo from "./components/ScrollToTopCompo";
 import SmoothScroll from "./components/SmoothScroll";
+import CinematicOverlay from "./components/CinematicOverlay";
+import WelcomeAudio from "./components/WelcomeAudio";
+import { scrollToTop } from "./lib/scroll";
 
 // SEO
 import RouteSEO from "./seo/RouteSEO";
@@ -15,15 +18,17 @@ import { REDIRECTS } from "./seo/seo.config";
 
 // Pages path
 import Home from "./Pages/Home";
-import About from "./Pages/About";
 import FAQ from "./Pages/Faq";
 import Contact from "./Pages/Contact";
-import FilmGallery from "./Pages/FilmGallery";
-import Commercial from "./Pages/Commercial";
 import Testimonials from "./Pages/Testimonials";
-import TermofCondition from "./Pages/TermofCondition";
-import PrivacyPolicy from "./Pages/PrivacyPolicy";
-import NotFound from "./Pages/NotFound";
+
+// Other pages load on demand (smaller first download for the home page)
+const About = lazy(() => import("./Pages/About"));
+const FilmGallery = lazy(() => import("./Pages/FilmGallery"));
+const Commercial = lazy(() => import("./Pages/Commercial"));
+const TermofCondition = lazy(() => import("./Pages/TermofCondition"));
+const PrivacyPolicy = lazy(() => import("./Pages/PrivacyPolicy"));
+const NotFound = lazy(() => import("./Pages/NotFound"));
 
 export default function App() {
   return (
@@ -38,6 +43,11 @@ export default function App() {
 const MainApp = () => {
   const location = useLocation();
   const [showScrollButton, setShowScrollButton] = useState(false);
+
+  // New page (no #section) always starts at the top
+  useEffect(() => {
+    if (!location.hash) scrollToTop({ immediate: true });
+  }, [location.pathname]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // GA4 page views. index.html sets send_page_view:false so the first load isn't counted twice.
   useEffect(() => {
@@ -55,11 +65,20 @@ const MainApp = () => {
 
   return (
     <div className="flex flex-col min-h-screen antialiased">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[10002] focus:rounded-full focus:bg-white focus:px-4 focus:py-2 focus:text-black"
+      >
+        Skip to content
+      </a>
       <RouteSEO />
       <SmoothScroll />
+      <CinematicOverlay />
+      <WelcomeAudio />
       <Header />
 
-      <main className="flex-grow">
+      <main id="main" className="flex-grow">
+        <Suspense fallback={<div className="min-h-screen" aria-busy="true" />}>
         <Routes>
           <Route
             path="/"
@@ -85,6 +104,7 @@ const MainApp = () => {
 
           <Route path="*" element={<NotFound />} />
         </Routes>
+        </Suspense>
       </main>
 
       <ScrollToTopCompo onVisibilityChange={setShowScrollButton} />

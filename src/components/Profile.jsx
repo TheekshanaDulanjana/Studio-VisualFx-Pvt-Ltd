@@ -1,6 +1,6 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import sasanka from '../assets/sasanka.png';
+import React, { useRef } from 'react';
+import useScrollFx from '../hooks/useScrollFx';
+import sasanka from '../assets/optimized/sasanka.webp';
 import { SiAdobepremierepro, SiDavinciresolve, SiAdobeaftereffects, SiAdobeaudition } from 'react-icons/si';
 import { FaWhatsapp, FaFacebookF, FaInstagram, FaLinkedinIn } from 'react-icons/fa6';
 
@@ -12,77 +12,26 @@ const ServiceSection = () => {
     { name: 'Adobe Audition', icon: <SiAdobeaudition className="w-8 h-8 md:w-10 md:h-10" /> },
   ];
 
-  // Ultra smooth and slow luxury easing curve
-  const luxuryEase = [0.16, 1, 0.3, 1];
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.25,
-        delayChildren: 0.15,
-      },
-    },
-  };
-
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 45 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 1.4,
-        ease: luxuryEase,
-      },
-    },
-  };
-
-  const imageVariants = {
-    hidden: { opacity: 0, y: 50, scale: 0.95 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        duration: 1.5,
-        ease: luxuryEase,
-      },
-    },
-  };
-
-  const toolVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 1.2,
-        ease: luxuryEase,
-      },
-    },
-  };
+  const scope = useRef(null);
+  useScrollFx(scope);
 
   return (
-    <motion.section 
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-100px" }}
-      variants={containerVariants}
+    <section
+      ref={scope}
       className="text-white py-12 md:py-12 px-6 md:px-12 lg:px-6 overflow-hidden"
     >
       {/* Container to center and limit width */}
-      <div className="w-full max-w-7xl mx-auto">
+      <div className="w-full max-w-[1600px] mx-auto">
         
         {/* Top Content Layout */}
         <div className="flex flex-col lg:flex-row items-center justify-between gap-12 mb-16 lg:mb-24">
           
           {/* Left Side: Text Content */}
-          <motion.div variants={fadeInUp} className="flex-1 space-y-8 text-center lg:text-left order-2 lg:order-1 w-full">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-belleza leading-tight">
+          <div className="flex-1 space-y-8 text-center lg:text-left order-2 lg:order-1 w-full">
+            <h2 data-fx="words" className="text-4xl sm:text-5xl md:text-6xl font-belleza leading-tight">
               Visionary Director And <br className="hidden sm:block" /> Creative Storyteller
-            </h1>
-            <p className="text-white font-roboto leading-relaxed max-w-full lg:max-w-xl mx-auto lg:mx-0 text-sm md:text-sm text-justify lg:text-justify">
+            </h2>
+            <p data-fx="up" className="text-white font-roboto leading-relaxed max-w-full lg:max-w-xl mx-auto lg:mx-0 text-sm md:text-sm text-justify lg:text-justify">
               Mr. Sasanka Dulanjana is the driving creative force behind Studio VisualFX (Pvt) Ltd., 
               bringing over 10 years of experience in visual storytelling to every project. With 
               a keen eye for detail and a passion for cinematic excellence, he transforms ideas 
@@ -97,96 +46,89 @@ const ServiceSection = () => {
               captures emotion, beauty, and meaning, creating timeless cinematic journeys that 
               resonate with audiences and leave a lasting impression.
             </p>
-            <div className="pt-4 flex items-center justify-center lg:justify-start gap-2">
+            <div data-fx="up" className="pt-4 flex items-center justify-center lg:justify-start gap-2">
               <p className="text-sm font-roboto m-0">Let's Connect!</p>
 
               {/* WhatsApp */}
-              <motion.a 
-                whileHover={{ scale: 1.2, y: -2 }}
-                transition={{ duration: 0.3, ease: luxuryEase }}
-                href="https://wa.me/719896981" 
+              <a
+                href="https://wa.me/94719896981"
+                aria-label="WhatsApp Sasanka Dulanjana" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="text-gray-300 hover:text-green-500 transition-colors text-lg"
+                className="text-gray-300 hover:text-green-500 transition-all duration-300 hover:-translate-y-0.5 hover:scale-120 text-lg"
               >
                 <FaWhatsapp />
-              </motion.a>
+              </a>
 
               {/* Facebook */}
-              <motion.a 
-                whileHover={{ scale: 1.2, y: -2 }}
-                transition={{ duration: 0.3, ease: luxuryEase }}
-                href="https://web.facebook.com/sasankadula0" 
+              <a
+                href="https://web.facebook.com/sasankadula0"
+                aria-label="Sasanka Dulanjana on Facebook" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="text-gray-300 hover:text-blue-600 transition-colors text-lg"
+                className="text-gray-300 hover:text-blue-600 transition-all duration-300 hover:-translate-y-0.5 hover:scale-120 text-lg"
               >
                 <FaFacebookF />
-              </motion.a>
+              </a>
 
               {/* Instagram */}
-              <motion.a 
-                whileHover={{ scale: 1.2, y: -2 }}
-                transition={{ duration: 0.3, ease: luxuryEase }}
-                href="https://www.instagram.com/sasankadulanjana_/" 
+              <a
+                href="https://www.instagram.com/sasankadulanjana_/"
+                aria-label="Sasanka Dulanjana on Instagram" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="text-gray-300 hover:text-pink-500 transition-colors text-lg"
+                className="text-gray-300 hover:text-pink-500 transition-all duration-300 hover:-translate-y-0.5 hover:scale-120 text-lg"
               >
                 <FaInstagram />
-              </motion.a>
+              </a>
 
               {/* LinkedIn */}
-              <motion.a 
-                whileHover={{ scale: 1.2, y: -2 }}
-                transition={{ duration: 0.3, ease: luxuryEase }}
-                href="https://www.linkedin.com/in/sasanka-dulanjana/" 
+              <a
+                href="https://www.linkedin.com/in/sasanka-dulanjana/"
+                aria-label="Sasanka Dulanjana on LinkedIn" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="text-gray-300 hover:text-blue-400 transition-colors text-lg"
+                className="text-gray-300 hover:text-blue-400 transition-all duration-300 hover:-translate-y-0.5 hover:scale-120 text-lg"
               >
                 <FaLinkedinIn />
-              </motion.a>
+              </a>
             </div>
-          </motion.div>
+          </div>
 
           {/* Right Side: Image */}
-          <motion.div variants={imageVariants} className="flex-1 order-1 lg:order-2 w-full">
-            <motion.div 
-              whileHover={{ y: -6 }}
-              transition={{ duration: 0.6, ease: luxuryEase }}
-              className="relative group cursor-pointer"
+          <div className="flex-1 order-1 lg:order-2 w-full">
+            <div
+              data-fx="clip"
+              className="relative group cursor-pointer overflow-hidden rounded-[16px] pt-8 sm:pt-12"
             >
-              <div className="absolute -inset-1 transition duration-1000"></div>
-              <motion.img 
-                src={sasanka} 
-                alt="Sasanka Dulanjana" 
-                className="relative w-full h-auto object-cover rounded-[16px] shadow-2xl transition duration-700 ease-out group-hover:scale-102"
+              <img
+                src={sasanka}
+                loading="lazy"
+                decoding="async"
+                alt="Sasanka Dulanjana, wedding videographer and director at Studio VisualFX"
+                className="relative block w-full h-auto object-cover origin-top transition-[scale] duration-700 ease-out group-hover:scale-102"
               />
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         </div>
 
         {/* Bottom Icons Section */}
-        <motion.div 
-          variants={containerVariants}
+        <div
           className="grid grid-cols-2 md:grid-cols-5 gap-6 md:gap-4 border-t border-gray-800 pt-12 items-center lg:items-start"
         >
           
           {/* Supporting List */}
-          <motion.div variants={toolVariants} className="col-span-2 md:col-span-1 text-center lg:text-left text-sm font-roboto space-y-1 text-white mb-4 md:mb-0">
+          <div data-fx="up" className="col-span-2 md:col-span-1 text-center lg:text-left text-sm font-roboto space-y-1 text-white mb-4 md:mb-0">
             <p className="hover:text-white transition-colors cursor-default">Cinematic Storytelling</p>
             <p className="hover:text-white transition-colors cursor-default">Post-Production Mastery</p>
             <p className="hover:text-white transition-colors cursor-default">Audio & Visual Design</p>
-          </motion.div>
+          </div>
 
           {/* Dynamic Tools List */}
           {tools.map((tool, index) => (
-            <motion.div 
-              key={index} 
-              variants={toolVariants}
-              whileHover={{ y: -4 }}
-              transition={{ duration: 0.3, ease: luxuryEase }}
+            <div
+              key={index}
+              data-fx="card3d"
               className="flex flex-col items-center text-center space-y-4 group cursor-pointer"
             >
               <div className="text-gray-300 hover:text-white transform group-hover:scale-110 transition-all duration-500">
@@ -195,12 +137,12 @@ const ServiceSection = () => {
               <p className="font-roboto text-xs uppercase text-gray-300 group-hover:text-white transition-colors">
                 {tool.name}
               </p>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
 
       </div>
-    </motion.section>
+    </section>
   );
 };
 

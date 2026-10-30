@@ -1,5 +1,5 @@
 // api/verify-recaptcha.js
-// Vercel Serverless Function — reCAPTCHA token eka Google server eketa yawala
+// Vercel Serverless Function - reCAPTCHA token eka Google server eketa yawala
 // verify karanawa. Secret Key eka methanin witharai use wenne (client ekata yanne na).
 
 export default async function handler(req, res) {
@@ -23,7 +23,7 @@ export default async function handler(req, res) {
     const verifyResponse = await fetch("https://www.google.com/recaptcha/api/siteverify", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: `secret=${secretKey}&response=${token}`,
+      body: new URLSearchParams({ secret: secretKey, response: String(token) }).toString(),
     });
 
     const data = await verifyResponse.json();
@@ -37,7 +37,7 @@ export default async function handler(req, res) {
       message: "reCAPTCHA verification failed",
       errors: data["error-codes"] || [],
     });
-  } catch (err) {
+  } catch {
     return res.status(500).json({ success: false, message: "Verification request failed" });
   }
 }
