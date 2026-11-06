@@ -157,7 +157,7 @@ const Home = () => {
         ref={heroRef}
         className="
           relative isolate
-          flex min-h-screen w-screen
+          flex min-h-screen min-h-svh w-screen
           items-end justify-start
           overflow-hidden
           px-6 pb-20

@@ -1,0 +1,33 @@
+{
+  "specVersion": "1.0",
+  "publisher": {
+    "name": "Studio VisualFX (Pvt) Ltd",
+    "url": "https://www.studiovisualfx.com/"
+  },
+  "entries": [
+    {
+      "identifier": "urn:air:studiovisualfx.com:website:llms-txt",
+      "displayName": "Studio VisualFX - site guide for AI agents",
+      "description": "Summary of Studio VisualFX, a Matara-based wedding videography and video production studio in Sri Lanka, with links to its services, films, about page and contact details.",
+      "type": "application/vnd.llms-txt+markdown",
+      "url": "https://www.studiovisualfx.com/llms.txt",
+      "representativeQueries": [
+        "wedding videographer in Matara",
+        "wedding videography in Colombo Sri Lanka",
+        "Sasanka Dulanjana videographer",
+        "how to book Studio VisualFX for a wedding film"
+      ]
+    },
+    {
+      "identifier": "urn:air:studiovisualfx.com:website:sitemap",
+      "displayName": "Studio VisualFX sitemap",
+      "description": "XML sitemap listing all public pages of www.studiovisualfx.com.",
+      "type": "application/xml",
+      "url": "https://www.studiovisualfx.com/sitemap.xml",
+      "representativeQueries": [
+        "Studio VisualFX wedding films portfolio",
+        "Studio VisualFX contact page"
+      ]
+    }
+  ]
+}

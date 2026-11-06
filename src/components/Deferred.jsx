@@ -6,6 +6,11 @@ import { onEntered, hasEntered } from "../lib/entrance";
 // much faster, and the rest of the page is still in place long before anyone
 // scrolls to it (the welcome screen is up meanwhile). Search engines still get
 // the full page - this only spreads the work out.
+const UA = typeof navigator !== "undefined" ? navigator.userAgent : "";
+const IS_CRAWLER =
+  /bot|crawler|spider|crawling|slurp|bingpreview|facebookexternalhit|embedly|whatsapp|telegram|linkedin/i.test(UA) &&
+  !/Chrome-Lighthouse/i.test(UA);
+
 export default function Deferred({ children, order = 0, minHeight = "60vh" }) {
   const [ready, setReady] = useState(false);
 
@@ -29,10 +34,12 @@ export default function Deferred({ children, order = 0, minHeight = "60vh" }) {
       }, order * (quick ? 20 : 80));
     };
 
-    // Begin when the visitor taps Entrance, or shortly after the page has
-    // loaded if they haven't yet (search engines never tap anything).
+    // Begin when the visitor taps Entrance. Search engines never tap anything,
+    // so for them render straight away; anyone else who doesn't tap gets the
+    // full page after a few seconds anyway.
     const off = onEntered(start);
-    const afterLoad = () => (fallback = setTimeout(start, 2500));
+    if (IS_CRAWLER) start();
+    const afterLoad = () => (fallback = setTimeout(start, 8000));
     if (document.readyState === "complete") afterLoad();
     else window.addEventListener("load", afterLoad, { once: true });
 

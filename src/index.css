@@ -6,13 +6,13 @@
 
 @layer base {
   .font-belleza {
-    font-family: "Belleza", sans-serif;
+    font-family: "Belleza", system-ui, sans-serif;
     font-weight: 400;
     font-style: normal;
   }
 
   .font-roboto {
-    font-family: "Roboto", sans-serif;
+    font-family: "Roboto Variable", "Roboto", system-ui, sans-serif;
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
@@ -298,7 +298,7 @@ html.svfx-entered .film-grain {
 
 #welcome-static .welcome-inner {
   /* transform-only entrance: text is painted immediately (good for LCP) */
-  animation: welcomeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: welcomeIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
   transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), filter 0.9s ease;
 }
 
