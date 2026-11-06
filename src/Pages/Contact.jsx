@@ -1,10 +1,13 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, lazy, Suspense } from "react";
 import emailjs from "@emailjs/browser";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaPhone, FaEnvelope, FaWhatsapp, FaLink } from "react-icons/fa";
-import ReCAPTCHA from "react-google-recaptcha";
 import useScrollFx from "../hooks/useScrollFx";
 import { CONTACT, track } from "../data/studio";
+
+// reCAPTCHA (and Google's script behind it) only loads when the form is
+// about to be used - it is heavy and would otherwise slow the first page load.
+const ReCAPTCHA = lazy(() => import("react-google-recaptcha"));
 
 // Quick-pick enquiry types - they only fill the existing Subject field,
 // so the EmailJS template does not need any change.
@@ -21,6 +24,18 @@ const Contact = () => {
   const scope = useRef(null);
   useScrollFx(scope);
   const recaptchaRef = useRef(null);
+  const [showCaptcha, setShowCaptcha] = useState(false);
+
+  // Mount reCAPTCHA when the form gets close to the screen (or is touched)
+  useEffect(() => {
+    if (showCaptcha || !form.current) return;
+    const io = new IntersectionObserver(
+      (entries) => entries.some((e) => e.isIntersecting) && setShowCaptcha(true),
+      { rootMargin: "300px 0px" }
+    );
+    io.observe(form.current);
+    return () => io.disconnect();
+  }, [showCaptcha]);
   const [modal, setModal] = useState({ show: false, ok: true, message: "" });
   const [sending, setSending] = useState(false);
   const [captchaValue, setCaptchaValue] = useState(null);
@@ -314,7 +329,13 @@ const Contact = () => {
               </div>
             </div>
 
-            <form ref={form} onSubmit={sendEmail} className="space-y-4 font-roboto" noValidate>
+            <form
+              ref={form}
+              onSubmit={sendEmail}
+              onFocus={() => setShowCaptcha(true)}
+              className="space-y-4 font-roboto"
+              noValidate
+            >
               {/* Honeypot (hidden from people, bots fill it) */}
               <input
                 type="text"
@@ -408,14 +429,18 @@ const Contact = () => {
               </div>
 
               {/* Google reCAPTCHA v2 checkbox */}
-              <div className="flex justify-start mb-4">
-                <ReCAPTCHA
-                  ref={recaptchaRef}
-                  sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
-                  onChange={handleCaptchaChange}
-                  theme="dark"
-                  className="transform scale-90 origin-top-left "
-                />
+              <div className="flex justify-start mb-4 min-h-[70px]">
+                {showCaptcha && (
+                  <Suspense fallback={null}>
+                    <ReCAPTCHA
+                      ref={recaptchaRef}
+                      sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+                      onChange={handleCaptchaChange}
+                      theme="dark"
+                      className="transform scale-90 origin-top-left "
+                    />
+                  </Suspense>
+                )}
               </div>
 
               {/* Send button now left-aligned instead of full width */}

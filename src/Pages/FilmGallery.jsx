@@ -6,9 +6,10 @@ import { FaSearch } from 'react-icons/fa';
 import AlbumDefultBanner from '../assets/optimized/AlbumDefultBanner.webp';
 import AlbumMobileBanner from '../assets/optimized/AlbumMobileBanner.webp';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa6';
-import { gsap, useGSAP } from '../lib/gsap';
+import { gsap } from '../lib/gsap';
 import useScrollFx from '../hooks/useScrollFx';
 import { FILMS, getVideoId } from '../data/studio';
+import useEnteredGSAP from "../hooks/useEnteredGSAP";
 
 const FilmGallery = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -38,7 +39,7 @@ const FilmGallery = () => {
   useScrollFx(pageRef, [filmsToShow.map((f) => f.link).join('|')]);
 
   // Banner drifts slower than the page, title floats away
-  useGSAP(
+  useEnteredGSAP(
     () => {
       const mm = gsap.matchMedia();
       mm.add('(prefers-reduced-motion: no-preference)', () => {

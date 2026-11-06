@@ -1,9 +1,10 @@
 import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa";
-import { gsap, ScrollTrigger, useGSAP, EASE } from "../lib/gsap";
+import { gsap, ScrollTrigger, EASE } from "../lib/gsap";
 import useScrollFx from "../hooks/useScrollFx";
 import { FILMS, getVideoId } from "../data/studio";
+import useEnteredGSAP from "../hooks/useEnteredGSAP";
 
 // Pinned horizontal film reel (desktop) / swipeable reel (mobile).
 const FEATURED = FILMS.slice(0, 6);
@@ -14,7 +15,7 @@ export default function FeaturedFilms() {
   const progress = useRef(null);
   useScrollFx(section);
 
-  useGSAP(
+  useEnteredGSAP(
     () => {
       const mm = gsap.matchMedia();
       mm.add(

@@ -1,8 +1,9 @@
 import React, { useRef } from "react";
 import { FaArrowRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { gsap, useGSAP } from "../lib/gsap";
+import { gsap } from "../lib/gsap";
 import useScrollFx from "../hooks/useScrollFx";
+import useEnteredGSAP from "../hooks/useEnteredGSAP";
 
 export default function LandingAbout() {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ export default function LandingAbout() {
   };
 
   // 3D "fan" of film cards that folds flat as you scroll into it
-  useGSAP(
+  useEnteredGSAP(
     () => {
       const mm = gsap.matchMedia();
       mm.add(

@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { FaArrowRight } from "react-icons/fa";
 import useScrollFx from "../hooks/useScrollFx";
-import { gsap, useGSAP } from "../lib/gsap";
+import { gsap } from "../lib/gsap";
 import TestimonialCard from "../components/TestimonialCard";
 
 import MenoliPeiris from "../assets/optimized/MenoliPeiris.webp";
@@ -13,6 +13,7 @@ import Hirushi from "../assets/optimized/Hirushi.webp";
 import Umesha from "../assets/optimized/Umesha.webp";
 import Randika from "../assets/optimized/Randika.webp";
 import Jules from "../assets/optimized/Jules.webp";
+import useEnteredGSAP from "../hooks/useEnteredGSAP";
 
 const testimonials = [
     {
@@ -86,7 +87,7 @@ export default function Testimonials() {
   const barRef = useRef(null);
   useScrollFx(scope);
 
-  useGSAP(
+  useEnteredGSAP(
     () => {
       const slider = sliderRef.current;
       const items = gsap.utils.toArray(".cf-item", slider);

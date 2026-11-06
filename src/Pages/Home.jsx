@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useSyncExternalStore, useCallback } from "react";
+import React, { useState, useEffect, useRef, useSyncExternalStore, useCallback, lazy } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -7,16 +7,18 @@ import HeroLFallback from "../assets/optimized/HeroLFallback.webp";
 import HeroPVideo from "../assets/HeroPVideo.MP4";
 import HeroPFallback from "../assets/optimized/HeroPFallback.webp";
 
-import { gsap, SplitText, useGSAP, EASE } from "../lib/gsap";
-import ServiceMarquee from "../components/ServiceMarquee";
+import { gsap, SplitText, EASE } from "../lib/gsap";
+const ServiceMarquee = lazy(() => import("../components/ServiceMarquee"));
+import Deferred from "../components/Deferred";
 import { scrollToSection, scrollToSectionWhenReady } from "../lib/scroll";
-import { onEntered } from "../lib/entrance";
-import LandingAbout from "../components/LandingAbout";
-import ProductionCategories from "../components/ProductionCategories";
-import StatsBand from "../components/StatsBand";
-import FeaturedFilms from "../components/FeaturedFilms";
-import Process from "../components/Process";
-import ServiceAreas from "../components/ServiceAreas";
+import { onEntered, hasEntered } from "../lib/entrance";
+const LandingAbout = lazy(() => import("../components/LandingAbout"));
+const ProductionCategories = lazy(() => import("../components/ProductionCategories"));
+const StatsBand = lazy(() => import("../components/StatsBand"));
+const FeaturedFilms = lazy(() => import("../components/FeaturedFilms"));
+const Process = lazy(() => import("../components/Process"));
+const ServiceAreas = lazy(() => import("../components/ServiceAreas"));
+import useEnteredGSAP from "../hooks/useEnteredGSAP";
 
 // Render only the hero variant that matches the viewport so the other
 // (large) video is never downloaded.
@@ -56,6 +58,11 @@ const Home = () => {
 
   const videoLoaded = loadedVideo === heroVideo;
 
+  // Hero media + text stay hidden behind the welcome screen and only load
+  // once the visitor taps Entrance (keeps the first page load small and fast).
+  const [entered, setEntered] = useState(hasEntered);
+  useEffect(() => onEntered(() => setEntered(true)), []);
+
   // /#faq, /#contact … (from other pages or shared links)
   useEffect(() => {
     if (!location.hash) return;
@@ -67,7 +74,7 @@ const Home = () => {
   };
 
   // Hero: cinematic intro + 3D "screen pull-back" while scrolling
-  useGSAP(
+  useEnteredGSAP(
     () => {
       const mm = gsap.matchMedia();
       mm.add(
@@ -163,6 +170,8 @@ const Home = () => {
           className="absolute inset-0 overflow-hidden will-change-transform"
         >
         <div ref={mediaInnerRef} className="absolute inset-0 will-change-transform">
+        {entered && (
+        <>
         {/* Fallback image (decorative background -> empty alt) */}
         <motion.img
           key={heroFallback}
@@ -195,6 +204,8 @@ const Home = () => {
           animate={{ opacity: videoLoaded ? 1 : 0 }}
           transition={{ duration: 1.2 }}
         />
+        </>
+        )}
 
         </div>
 
@@ -205,7 +216,7 @@ const Home = () => {
         {/* Content */}
         <div
           ref={contentRef}
-          className="relative z-20 flex w-full max-w-3xl flex-col items-start text-left"
+          className={`relative z-20 flex w-full max-w-3xl flex-col items-start text-left ${entered ? "" : "invisible"}`}
         >
           <p
             data-hero="fade"
@@ -280,13 +291,14 @@ const Home = () => {
         </div>
       </section>
 
-      <ServiceMarquee />
-      <LandingAbout />
-      <StatsBand />
-      <ProductionCategories />
-      <FeaturedFilms />
-      <Process />
-      <ServiceAreas />
+      {/* below the first screen: rendered right after load, section by section */}
+      <Deferred order={0} minHeight="20vh"><ServiceMarquee /></Deferred>
+      <Deferred order={1}><LandingAbout /></Deferred>
+      <Deferred order={2} minHeight="30vh"><StatsBand /></Deferred>
+      <Deferred order={3} minHeight="200vh"><ProductionCategories /></Deferred>
+      <Deferred order={4} minHeight="100vh"><FeaturedFilms /></Deferred>
+      <Deferred order={5} minHeight="120vh"><Process /></Deferred>
+      <Deferred order={6} minHeight="100vh"><ServiceAreas /></Deferred>
     </div>
   );
 };

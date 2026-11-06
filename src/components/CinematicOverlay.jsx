@@ -1,11 +1,12 @@
 import React, { useRef } from "react";
-import { gsap, useGSAP } from "../lib/gsap";
+import { gsap } from "../lib/gsap";
+import useEnteredGSAP from "../hooks/useEnteredGSAP";
 
 // Site-wide finishing layer: thin scroll-progress line + subtle film grain.
 export default function CinematicOverlay() {
   const bar = useRef(null);
 
-  useGSAP(() => {
+  useEnteredGSAP(() => {
     gsap.fromTo(
       bar.current,
       { scaleX: 0 },

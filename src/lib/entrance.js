@@ -8,6 +8,7 @@ export const hasEntered = () => entered;
 export function markEntered() {
   if (entered) return;
   entered = true;
+  document.documentElement.classList.add("svfx-entered");
   listeners.forEach((fn) => fn());
   listeners.clear();
 }

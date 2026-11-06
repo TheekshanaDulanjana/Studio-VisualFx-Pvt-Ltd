@@ -4,12 +4,14 @@ import { HelmetProvider } from "react-helmet-async";
 
 // Components
 import Header from "./components/Header";
-import Footer from "./components/Footer";
-import WhatsappButton from "./components/WhatsappButton";
-import ScrollToTopCompo from "./components/ScrollToTopCompo";
+// not needed for the first screen -> separate small files, rendered after load
+const Footer = lazy(() => import("./components/Footer"));
+const WhatsappButton = lazy(() => import("./components/WhatsappButton"));
+const ScrollToTopCompo = lazy(() => import("./components/ScrollToTopCompo"));
 import SmoothScroll from "./components/SmoothScroll";
 import CinematicOverlay from "./components/CinematicOverlay";
 import WelcomeAudio from "./components/WelcomeAudio";
+import Deferred from "./components/Deferred";
 import { scrollToTop } from "./lib/scroll";
 
 // SEO
@@ -18,12 +20,13 @@ import { REDIRECTS } from "./seo/seo.config";
 
 // Pages path
 import Home from "./Pages/Home";
-import FAQ from "./Pages/Faq";
-import Contact from "./Pages/Contact";
-import Testimonials from "./Pages/Testimonials";
 
 // Other pages load on demand (smaller first download for the home page)
 const About = lazy(() => import("./Pages/About"));
+// home-page sections below the first screen (rendered after load via <Deferred>)
+const Testimonials = lazy(() => import("./Pages/Testimonials"));
+const FAQ = lazy(() => import("./Pages/Faq"));
+const Contact = lazy(() => import("./Pages/Contact"));
 const FilmGallery = lazy(() => import("./Pages/FilmGallery"));
 const Commercial = lazy(() => import("./Pages/Commercial"));
 const TermofCondition = lazy(() => import("./Pages/TermofCondition"));
@@ -85,9 +88,9 @@ const MainApp = () => {
             element={
               <>
                 <section id="home"> <Home /> </section>
-                <section id="testimonials"> <Testimonials /></section>
-                <section id="faq"> <FAQ /> </section>
-                <section id="contact"> <Contact /> </section>
+                <section id="testimonials"><Deferred order={7} minHeight="100vh"><Testimonials /></Deferred></section>
+                <section id="faq"><Deferred order={8} minHeight="80vh"><FAQ /></Deferred></section>
+                <section id="contact"><Deferred order={9} minHeight="100vh"><Contact /></Deferred></section>
               </>
             }
           />
@@ -107,9 +110,13 @@ const MainApp = () => {
         </Suspense>
       </main>
 
-      <ScrollToTopCompo onVisibilityChange={setShowScrollButton} />
-      <WhatsappButton showScrollButton={showScrollButton} />
-      <Footer />
+      <Deferred order={10} minHeight="0">
+        <ScrollToTopCompo onVisibilityChange={setShowScrollButton} />
+        <WhatsappButton showScrollButton={showScrollButton} />
+      </Deferred>
+      <Deferred order={11} minHeight="40vh">
+        <Footer />
+      </Deferred>
     </div>
   );
 };
