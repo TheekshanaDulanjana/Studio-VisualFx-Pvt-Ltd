@@ -6,7 +6,6 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preconnect" href="https://www.googletagmanager.com" />
   <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
   <link rel="preconnect" href="https://img.youtube.com" />
 
@@ -34,7 +33,9 @@
   <link rel="manifest" href="/site.webmanifest" />
   <meta name="theme-color" content="#000000" />
 
-  <link href="https://fonts.googleapis.com/css2?family=Alata&family=Belleza&family=Roboto:wght@300..700&display=swap" rel="stylesheet" />
+  <!-- Fonts load without blocking the first paint (text shows in a fallback font, then swaps) -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alata&family=Belleza&family=Roboto:wght@300..700&display=swap" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alata&family=Belleza&family=Roboto:wght@300..700&display=swap" /></noscript>
 
   <meta data-rh="true" property="og:type" content="website" />
   <meta data-rh="true" property="og:site_name" content="Studio VisualFX" />
@@ -141,16 +142,47 @@
   </script>
 
   <!-- GA4: send_page_view:false because App.jsx sends the page view (avoids a duplicate on first load) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HGGY56NJ90"></script>
+  <!-- gtag() queues events right away; the GA library itself loads after the
+       page has finished loading so it never slows the first paint. -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-HGGY56NJ90', { send_page_view: false });
+    (function () {
+      function loadGA() {
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-HGGY56NJ90';
+        document.head.appendChild(s);
+      }
+      function later() { setTimeout(loadGA, 1500); }
+      if (document.readyState === 'complete') later();
+      else window.addEventListener('load', later, { once: true });
+    })();
   </script>
 </head>
 
 <body>
+  <!--
+    Welcome screen as plain HTML so it paints instantly, before JavaScript.
+    src/components/WelcomeAudio.jsx wires up the button (music + close).
+    Edit the welcome text/design right here.
+  -->
+  <div id="welcome-static" class="fixed inset-0 z-[10003] flex items-center justify-center bg-black px-6" role="dialog" aria-modal="true" aria-labelledby="welcome-static-title">
+    <div class="welcome-inner flex w-full max-w-md flex-col items-center text-center text-white">
+      <img src="/src/assets/StudioVisualFX.png" alt="Studio VisualFX" width="405" height="235" fetchpriority="high" class="mb-8 h-auto w-32 sm:w-40" />
+      <p class="mb-3 font-roboto text-[10px] uppercase tracking-[0.4em] text-white/60 sm:text-xs">Welcome to</p>
+      <h2 id="welcome-static-title" class="mb-3 font-belleza text-4xl sm:text-5xl">Studio VisualFX</h2>
+      <p class="mb-10 font-roboto text-sm text-white/70">We Bring Your Stories to Life!</p>
+      <button type="button" data-enter onclick="window.__svfxEnter=1" class="group inline-flex min-h-[52px] cursor-pointer items-center gap-4 rounded-full bg-white py-2 pl-7 pr-2 font-roboto text-sm font-semibold uppercase text-black transition-all duration-500 hover:bg-black hover:text-white hover:outline hover:outline-white">
+        Entrance
+        <span class="flex h-9 w-9 items-center justify-center rounded-full bg-black text-white transition-all duration-500 group-hover:-rotate-45 group-hover:bg-white group-hover:text-black">
+          <svg aria-hidden="true" class="text-xs" width="12" height="12" viewBox="0 0 448 512" fill="currentColor"><path d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"/></svg>
+        </span>
+      </button>
+    </div>
+  </div>
   <div id="root"></div>
 
   <noscript>

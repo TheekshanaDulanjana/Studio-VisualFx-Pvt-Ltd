@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
-import { gsap, ScrollTrigger, useGSAP } from "../lib/gsap";
+import { gsap, ScrollTrigger } from "../lib/gsap";
+import useEnteredGSAP from "../hooks/useEnteredGSAP";
 
 // Decorative, scroll-reactive ticker of the studio's services.
 // Speeds up and skews with scroll velocity, flips direction with scroll direction.
@@ -9,7 +10,7 @@ export default function ServiceMarquee() {
   const root = useRef(null);
   const track = useRef(null);
 
-  useGSAP(
+  useEnteredGSAP(
     () => {
       const mm = gsap.matchMedia();
       mm.add("(prefers-reduced-motion: no-preference)", () => {

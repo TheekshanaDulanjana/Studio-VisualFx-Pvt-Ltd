@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaWhatsapp } from 'react-icons/fa';
 import useScrollFx from '../hooks/useScrollFx';
 import { FAQS, CONTACT, track } from '../data/studio';
-import { gsap, useGSAP } from '../lib/gsap';
+import { gsap } from '../lib/gsap';
+import useEnteredGSAP from "../hooks/useEnteredGSAP";
 
 const luxuryEase = [0.16, 1, 0.3, 1];
 
@@ -83,7 +84,7 @@ const FAQSection = () => {
   useScrollFx(scope);
 
   // big question mark slowly turns in 3D as the section scrolls by
-  useGSAP(
+  useEnteredGSAP(
     () => {
       const mm = gsap.matchMedia();
       mm.add('(prefers-reduced-motion: no-preference)', () => {

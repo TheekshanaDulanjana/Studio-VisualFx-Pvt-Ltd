@@ -3,8 +3,9 @@ import wedding from "../assets/optimized/wedding.webp";
 import event from "../assets/optimized/event.webp";
 import commercial from "../assets/optimized/commercial.webp";
 import music from "../assets/optimized/music.webp";
-import { gsap, useGSAP } from "../lib/gsap";
+import { gsap } from "../lib/gsap";
 import useScrollFx from "../hooks/useScrollFx";
+import useEnteredGSAP from "../hooks/useEnteredGSAP";
 
 const CATEGORIES = [
   {
@@ -36,7 +37,7 @@ export default function ProductionCategories() {
   const stack = useRef(null);
   useScrollFx(scope);
 
-  useGSAP(
+  useEnteredGSAP(
     () => {
       const mm = gsap.matchMedia();
       mm.add("(prefers-reduced-motion: no-preference)", () => {

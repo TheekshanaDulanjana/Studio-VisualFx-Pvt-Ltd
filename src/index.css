@@ -276,6 +276,11 @@
   opacity: 0.06;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   animation: grain 0.8s steps(4) infinite;
+  display: none; /* switched on after the welcome screen (saves work on first load) */
+}
+
+html.svfx-entered .film-grain {
+  display: block;
 }
 
 @keyframes grain {
@@ -284,6 +289,32 @@
   50% { transform: translate(2%, -3%); }
   75% { transform: translate(-2%, -1%); }
   100% { transform: translate(0, 0); }
+}
+
+/* Welcome screen (plain HTML in index.html) */
+#welcome-static {
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#welcome-static .welcome-inner {
+  /* transform-only entrance: text is painted immediately (good for LCP) */
+  animation: welcomeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), filter 0.9s ease;
+}
+
+#welcome-static.is-leaving {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#welcome-static.is-leaving .welcome-inner {
+  transform: scale(1.06);
+  filter: blur(6px);
+}
+
+@keyframes welcomeIn {
+  from { transform: translateY(24px) scale(0.97); }
+  to { transform: none; }
 }
 
 /* Light reflection that follows the mouse on [data-tilt] cards */
@@ -334,7 +365,8 @@
   body,
   .animate-logo-fast-zoom,
   .film-grain,
-  .animate-scroll-hint {
+  .animate-scroll-hint,
+  #welcome-static .welcome-inner {
     animation: none !important;
   }
 }

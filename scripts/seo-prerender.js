@@ -64,7 +64,51 @@ export default function seoPrerender() {
       outDir = path.resolve(cfg.root, cfg.build.outDir);
     },
     closeBundle() {
-      const template = fs.readFileSync(path.join(outDir, "index.html"), "utf8");
+      let template = fs.readFileSync(path.join(outDir, "index.html"), "utf8");
+
+      // Start the app JavaScript right after the first paint instead of in
+      // parallel with it: the (plain-HTML) welcome screen paints immediately,
+      // then the scripts load. Faster FCP/LCP on slow mobile connections.
+      const preloads = [];
+      template = template.replace(/\s*<link rel="modulepreload"[^>]*href="([^"]+)"[^>]*>/g, (_, href) => {
+        preloads.push(href);
+        return "";
+      });
+      template = template.replace(
+        /<script type="module" crossorigin src="([^"]+)"><\/script>/,
+        (_, src) => `<script>
+    (function () {
+      function load() {
+        ${JSON.stringify(preloads)}.forEach(function (h) {
+          var l = document.createElement("link");
+          l.rel = "modulepreload"; l.crossOrigin = ""; l.href = h;
+          document.head.appendChild(l);
+        });
+        var s = document.createElement("script");
+        s.type = "module"; s.crossOrigin = ""; s.src = ${JSON.stringify(src)};
+        document.head.appendChild(s);
+      }
+      var started = false;
+      function once() { if (!started) { started = true; load(); } }
+      // after the first frame; the timeout covers background tabs (no frames there)
+      function afterPaint() { requestAnimationFrame(function () { setTimeout(once, 0); }); setTimeout(once, 250); }
+      if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", afterPaint);
+      else afterPaint();
+    })();
+  </script>`
+      );
+
+      // Inline the site CSS (about 12 KB gzipped) straight into each page so the
+      // first paint doesn't wait for a separate CSS download (faster FCP/LCP).
+      template = template.replace(
+        /<link rel="stylesheet"[^>]*href="(\/assets\/[^"]+\.css)"[^>]*>/,
+        (tag, href) => {
+          const file = path.join(outDir, href);
+          if (!fs.existsSync(file)) return tag;
+          const css = fs.readFileSync(file, "utf8").replace(/<\/style/gi, "<\\/style");
+          return `<style>${css}</style>`;
+        }
+      );
 
       for (const [route, page] of Object.entries(PAGES)) {
         const url = route === "/" ? `${SITE.url}/` : `${SITE.url}${route}`;

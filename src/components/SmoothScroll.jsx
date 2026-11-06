@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import Lenis from "lenis";
 import { gsap, ScrollTrigger } from "../lib/gsap";
+import { hasEntered } from "../lib/entrance";
 
 // Lenis smooth scroll driven by the GSAP ticker so ScrollTrigger and Lenis
 // stay perfectly in sync (no double requestAnimationFrame loops, no jitter
@@ -34,6 +35,7 @@ const SmoothScroll = () => {
     const resizeObserver = new ResizeObserver(() => {
       lenis.resize();
       clearTimeout(t);
+      if (!hasEntered()) return; // no scroll animations exist before the welcome screen closes
       t = setTimeout(() => {
         // child components create their triggers before parents (React
         // effect order) - re-sort by page position before refreshing pins

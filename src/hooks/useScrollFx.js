@@ -1,4 +1,5 @@
-import { gsap, ScrollTrigger, SplitText, useGSAP, EASE } from "../lib/gsap";
+import { gsap, ScrollTrigger, SplitText, EASE } from "../lib/gsap";
+import useEnteredGSAP from "./useEnteredGSAP";
 
 /*
   Declarative scroll animations. Add a data attribute in JSX, the hook does the rest.
@@ -27,7 +28,7 @@ const seen = new WeakSet();
 
 export default function useScrollFx(scope, dependencies = []) {
 
-  useGSAP(
+  useEnteredGSAP(
     () => {
       const root = scope.current;
       if (!root) return;

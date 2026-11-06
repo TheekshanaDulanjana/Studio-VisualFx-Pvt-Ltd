@@ -1,9 +1,10 @@
 import React, { useRef } from "react";
 import { FaArrowRight, FaWhatsapp } from "react-icons/fa";
-import { gsap, useGSAP } from "../lib/gsap";
+import { gsap } from "../lib/gsap";
 import useScrollFx from "../hooks/useScrollFx";
 import { scrollToSection } from "../lib/scroll";
 import { CONTACT, track } from "../data/studio";
+import useEnteredGSAP from "../hooks/useEnteredGSAP";
 
 // "How we work" - steps light up one by one while a progress line draws down.
 const STEPS = [
@@ -35,7 +36,7 @@ export default function Process() {
   const fill = useRef(null);
   useScrollFx(scope);
 
-  useGSAP(
+  useEnteredGSAP(
     () => {
       const mm = gsap.matchMedia();
       mm.add("(prefers-reduced-motion: no-preference)", () => {

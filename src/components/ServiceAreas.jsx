@@ -1,7 +1,8 @@
 import React, { useRef } from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import { gsap, useGSAP } from "../lib/gsap";
+import { gsap } from "../lib/gsap";
 import useScrollFx from "../hooks/useScrollFx";
+import useEnteredGSAP from "../hooks/useEnteredGSAP";
 
 // Local-SEO section: real, crawlable text about where the studio works.
 const AREAS = [
@@ -32,7 +33,7 @@ export default function ServiceAreas() {
   const bigText = useRef(null);
   useScrollFx(scope);
 
-  useGSAP(
+  useEnteredGSAP(
     () => {
       const mm = gsap.matchMedia();
       mm.add("(prefers-reduced-motion: no-preference)", () => {
