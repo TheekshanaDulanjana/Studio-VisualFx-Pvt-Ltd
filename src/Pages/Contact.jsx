@@ -335,6 +335,9 @@ const Contact = () => {
               onFocus={() => setShowCaptcha(true)}
               className="space-y-4 font-roboto"
               noValidate
+              // WebMCP: describes this form to AI agents/browsers
+              toolname="book_studio_visualfx"
+              tooldescription="Send a booking or enquiry message to Studio VisualFX, a wedding videography and video production studio in Matara, Sri Lanka. A person still has to complete the reCAPTCHA check before it is sent."
             >
               {/* Honeypot (hidden from people, bots fill it) */}
               <input
@@ -349,6 +352,7 @@ const Contact = () => {
                 <input
                   type="text"
                   name="firstName"
+                  toolparamdescription="Client's first name"
                   aria-label="First name"
                   autoComplete="given-name"
                   maxLength={30}
@@ -361,6 +365,7 @@ const Contact = () => {
                 <input
                   type="text"
                   name="lastName"
+                  toolparamdescription="Client's last name"
                   aria-label="Last name"
                   autoComplete="family-name"
                   maxLength={30}
@@ -376,6 +381,7 @@ const Contact = () => {
                 <input
                   type="text"
                   name="mobile"
+                  toolparamdescription="Mobile or WhatsApp number, digits only (e.g. 0771234567 or with country code)"
                   placeholder="Mobile / WhatsApp (e.g. 0771234567)"
                   inputMode="numeric"
                   autoComplete="tel"
@@ -388,6 +394,7 @@ const Contact = () => {
                 <input
                   type="email"
                   name="email"
+                  toolparamdescription="Client's email address"
                   aria-label="Email address"
                   autoComplete="email"
                   placeholder="Email"
@@ -402,6 +409,7 @@ const Contact = () => {
                 <input
                   type="text"
                   name="subject"
+                  toolparamdescription="Short subject, e.g. 'Wedding Film Enquiry'"
                   aria-label="Subject"
                   autoComplete="off"
                   maxLength={100}
@@ -416,6 +424,7 @@ const Contact = () => {
               <div className="flex flex-col gap-2 -mb-1">
                 <textarea
                   name="message"
+                  toolparamdescription="Details: event date, venue, type of coverage and any questions (max 250 words)"
                   aria-label="Message"
                   placeholder="Message - tell us your date, venue and the story you want to tell"
                   className="w-full h-32 p-3 text-base sm:text-sm font-roboto bg-transparent placeholder:text-white/50 hover:outline-white rounded-[8px] border border-white/40 focus:outline-white transition"

@@ -6,6 +6,7 @@
 // complete page without having to run JavaScript.
 import fs from "node:fs";
 import path from "node:path";
+import crypto from "node:crypto";
 import { SITE, PAGES } from "../src/seo/seo.config.js";
 import { FAQS, FILMS, STATS } from "../src/data/studio.js";
 
@@ -53,6 +54,33 @@ ${FILMS.map((f) => `  <li><a href="${esc(f.link)}">${esc(f.coupleName)} - Weddin
 
 function setTag(html, re, replacement) {
   return re.test(html) ? html.replace(re, replacement) : html.replace("</head>", `  ${replacement}\n</head>`);
+}
+
+// Content-Security-Policy as a <meta> tag. Inline scripts are allowed only by
+// their exact SHA-256 hash (computed here at build time), so injected scripts
+// can't run. Add a domain here if you add a new third-party service.
+function withCsp(html) {
+  const hashes = [];
+  html.replace(/<script(?![^>]*\bsrc=)(?![^>]*type="application\/ld\+json")[^>]*>([\s\S]*?)<\/script>/g, (_, code) => {
+    hashes.push(`'sha256-${crypto.createHash("sha256").update(code).digest("base64")}'`);
+    return _;
+  });
+  const csp = [
+    "default-src 'self'",
+    `script-src 'self' ${hashes.join(" ")} https://www.googletagmanager.com https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/`,
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data: blob: https://img.youtube.com https://i.ytimg.com https://www.googletagmanager.com https://*.google-analytics.com https://www.google.com https://www.gstatic.com https://*.doubleclick.net",
+    "font-src 'self' data:",
+    "media-src 'self' blob:",
+    "connect-src 'self' https://api.emailjs.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://www.google.com https://*.doubleclick.net",
+    "frame-src https://www.google.com/recaptcha/ https://recaptcha.google.com/recaptcha/",
+    "worker-src 'self' blob:",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "upgrade-insecure-requests",
+  ].join("; ");
+  return html.replace(/<meta charset="UTF-8" \/>/i, (m) => `${m}\n  <meta http-equiv="Content-Security-Policy" content="${csp}" />`);
 }
 
 export default function seoPrerender() {
@@ -110,6 +138,15 @@ export default function seoPrerender() {
         }
       );
 
+      // Preload the self-hosted heading/body fonts so text never waits on them
+      const fontFiles = fs
+        .readdirSync(path.join(outDir, "assets"))
+        .filter((f) => /^(belleza-latin-400-normal|roboto-latin-wght-normal)-.*\.woff2$/.test(f));
+      const fontPreloads = fontFiles
+        .map((f) => `  <link rel="preload" href="/assets/${f}" as="font" type="font/woff2" crossorigin />`)
+        .join("\n");
+      template = template.replace("</head>", `${fontPreloads}\n</head>`);
+
       for (const [route, page] of Object.entries(PAGES)) {
         const url = route === "/" ? `${SITE.url}/` : `${SITE.url}${route}`;
         let html = template;
@@ -137,7 +174,7 @@ ${NAV}
 
         const file = route === "/" ? path.join(outDir, "index.html") : path.join(outDir, route.slice(1), "index.html");
         fs.mkdirSync(path.dirname(file), { recursive: true });
-        fs.writeFileSync(file, html);
+        fs.writeFileSync(file, withCsp(html));
       }
     },
   };

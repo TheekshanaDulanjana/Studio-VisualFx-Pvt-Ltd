@@ -1,5 +1,9 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+// self-hosted fonts (latin only where possible -> small files)
+import '@fontsource/belleza/latin.css'
+import '@fontsource/alata/latin.css'
+import '@fontsource-variable/roboto/wght.css'
 import './index.css'
 import App from './App.jsx'
 
